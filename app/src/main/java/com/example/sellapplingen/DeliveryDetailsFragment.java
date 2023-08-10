@@ -9,8 +9,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 public class DeliveryDetailsFragment extends Fragment {
+
+
+
 
     private Order order;
 
@@ -36,19 +40,6 @@ public class DeliveryDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delivery_details, container, false);
-
-        Button backToFragmentButton = view.findViewById(R.id.backToFragmentButton);
-        backToFragmentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HandlingInfoFragment handlingInfoFragment = new HandlingInfoFragment();
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame_layout, handlingInfoFragment);
-                transaction.commit();
-            }
-        });
-
 
         // Hole das Order-Objekt aus den Fragment-Argumenten
         Bundle args = getArguments();

@@ -104,83 +104,148 @@ public class HandlingInfoFragment extends Fragment {
         //backToScannerFragmentButton = view.findViewById(R.id.backToScannerFragmentButton);
         small.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                packageSizeInfo.append("small");
-                packageSizeInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!packageSizeInfo.toString().contains("small")) {
+                    packageSizeInfo.append("small");
+                    packageSizeInfo.append(", ");
+                }
+                medium.setChecked(false);
+                large.setChecked(false);
+                xlarge.setChecked(false);
+            } else {
+                packageSizeInfo.replace(packageSizeInfo.indexOf("small"), packageSizeInfo.indexOf("small") + "small".length() + 2, "");
             }
         });
+
         medium.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                packageSizeInfo.append("medium");
-                packageSizeInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!packageSizeInfo.toString().contains("medium")) {
+                    packageSizeInfo.append("medium");
+                    packageSizeInfo.append(", ");
+                }
+                small.setChecked(false);
+                large.setChecked(false);
+                xlarge.setChecked(false);
+            } else {
+                packageSizeInfo.replace(packageSizeInfo.indexOf("medium"), packageSizeInfo.indexOf("medium") + "medium".length() + 2, "");
             }
         });
+
         large.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                packageSizeInfo.append("large");
-                packageSizeInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!packageSizeInfo.toString().contains("large")) {
+                    packageSizeInfo.append("large");
+                    packageSizeInfo.append(", ");
+                }
+                small.setChecked(false);
+                medium.setChecked(false);
+                xlarge.setChecked(false);
+            } else {
+                packageSizeInfo.replace(packageSizeInfo.indexOf("large"), packageSizeInfo.indexOf("large") + "large".length() + 2, "");
             }
         });
+
         xlarge.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                packageSizeInfo.append("Extra large");
-                packageSizeInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!packageSizeInfo.toString().contains("Extra large")) {
+                    packageSizeInfo.append("Extra large");
+                    packageSizeInfo.append(", ");
+                }
+                small.setChecked(false);
+                medium.setChecked(false);
+                large.setChecked(false);
+            } else {
+                packageSizeInfo.replace(packageSizeInfo.indexOf("Extra large"), packageSizeInfo.indexOf("Extra large") + "Extra large".length() + 2, "");
             }
         });
+
+
 
 
         chkOption1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                selectedInfo.append("Flüssig");
-                selectedInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!selectedInfo.toString().contains("Flüssig")) {
+                    selectedInfo.append("Flüssig");
+                    selectedInfo.append(", ");
+                }
+                if (chkOption4.isChecked()) {
+                    chkOption4.setChecked(false);
+                }
+            } else {
+                selectedInfo.replace(selectedInfo.indexOf("Flüssig"), selectedInfo.indexOf("Flüssig") + "Flüssig".length() + 2, "");
             }
         });
 
         chkOption2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                selectedInfo.append("Zerbrechlich");
-                selectedInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!selectedInfo.toString().contains("Zerbrechlich")) {
+                    selectedInfo.append("Zerbrechlich");
+                    selectedInfo.append(", ");
+                }
+                if (chkOption4.isChecked()) {
+                    chkOption4.setChecked(false);
+                }
+            } else {
+                selectedInfo.replace(selectedInfo.indexOf("Zerbrechlich"), selectedInfo.indexOf("Zerbrechlich") + "Zerbrechlich".length() + 2, "");
             }
         });
 
         chkOption3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                selectedInfo.append("Glas");
-                selectedInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!selectedInfo.toString().contains("Glas")) {
+                    selectedInfo.append("Glas");
+                    selectedInfo.append(", ");
+                }
+                if (chkOption4.isChecked()) {
+                    chkOption4.setChecked(false);
+                }
+            } else {
+                selectedInfo.replace(selectedInfo.indexOf("Glas"), selectedInfo.indexOf("Glas") + "Glas".length() + 2, "");
             }
         });
 
         chkOption4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                selectedInfo.append("Keine besondere Eigenschaft");
-                selectedInfo.append(", "); // Füge ein Trennzeichen hinzu, um die verschiedenen Optionen zu trennen
+                if (!selectedInfo.toString().contains("Keine besondere Eigenschaft")) {
+                    selectedInfo.append("Keine besondere Eigenschaft");
+                    selectedInfo.append(", ");
+                }
+                // Deaktiviere andere CheckBoxen
+                chkOption1.setChecked(false);
+                chkOption2.setChecked(false);
+                chkOption3.setChecked(false);
+            } else {
+                selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 2, "");
             }
         });
 
 
         confirmButton.setOnClickListener(v -> {
-            Order order1 = new Order();
-            order1.setLastName(clientInfo.getLastName());
-            order1.setFirstName(clientInfo.getFirstName());
-            order1.setStreet(clientInfo.getStreet());
-            order1.setHouseNumber(clientInfo.getHouseNumber());
-            order1.setZip(clientInfo.getZip());
-            order1.setCity(clientInfo.getCity());
+            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
+                Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
+            } else {
+                Order order1 = new Order();
+                order1.setLastName(clientInfo.getLastName());
+                order1.setFirstName(clientInfo.getFirstName());
+                order1.setStreet(clientInfo.getStreet());
+                order1.setHouseNumber(clientInfo.getHouseNumber());
+                order1.setZip(clientInfo.getZip());
+                order1.setCity(clientInfo.getCity());
 
-            order1.setPackageSize(packageSizeInfo.toString());
-            order1.setHandlingInfo(selectedInfo.toString());
-            order1.setDeliveryDate(setDate);
-            order1.setNumberPackage(reciptname.getText().toString());
-            order1.setTimestamp(getTime);
-            String info = selectedInfo.toString();
-            Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
-            DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
-            Bundle args = new Bundle();
-            args.putSerializable("order", order1);
-            fragment.setArguments(args);
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.frame_layout, fragment);
-            transaction.commit();
+                order1.setPackageSize(packageSizeInfo.toString());
+                order1.setHandlingInfo(selectedInfo.toString());
+                order1.setDeliveryDate(setDate);
+                order1.setNumberPackage(reciptname.getText().toString());
+                order1.setTimestamp(getTime);
+                String info = selectedInfo.toString();
+                Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
+                DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("order", order1);
+                fragment.setArguments(args);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_layout, fragment);
+                transaction.commit();
 /*            if (!info.isEmpty()) {
                 info = info.substring(0, info.length() - 2); // Entferne das letzte Trennzeichen ", "
                 order.setHandlingInfo(info); // Speichere die ausgewählten Informationen in handlingInfo der Order-Instanz
@@ -189,6 +254,7 @@ public class HandlingInfoFragment extends Fragment {
             } else {
                 showToast("No option was selected yet.");
             }*/
+            }
         });
 
 /*        backToScannerFragmentButton.setOnClickListener(v -> {
