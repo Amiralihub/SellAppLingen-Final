@@ -2,7 +2,13 @@
     <item
         android:id="@+id/action_scanner"
         android:icon="@drawable/baseline_qr_code_scanner_24"
-        android:title="Scanner" />
+        android:title="Neue Bestellung" />
+
+    <item
+        android:id="@+id/action_orders"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Aufgegebene Bestellungen" />
+
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/baseline_settings_24"

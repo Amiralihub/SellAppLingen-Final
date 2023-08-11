@@ -49,9 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_scanner:
                     replaceFragment(ScannerFragment.newInstance(getCurrentOrder()));
                     break;
-                /*case R.id.action_settings:
+                case R.id.action_orders:
                     replaceFragment(new SettingFragment());
-                    break;*/
+                    break;
+                case R.id.action_settings:
+                    replaceFragment(new SettingFragment());
+                    break;
             }
             return true;
         });
