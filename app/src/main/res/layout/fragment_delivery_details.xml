@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,18 +86,39 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/packageCountLabel"
+                android:id="@+id/firstNameLabel"
                 style="@style/Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Anzahl Pakete :" />
+                android:text="Vorname :" />
 
             <TextView
-                android:id="@+id/packageCountValue"
+                android:id="@+id/firstNameValue"
                 style="@style/Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lastNameLabel"
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nachname :" />
+
+            <TextView
+                android:id="@+id/lastNameValue"
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -159,14 +183,34 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/deliveryAddressLabel"
+                android:id="@+id/streetNameLabel"
                 style="@style/Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lieferadresse :" />
+                android:text="Straßennamen :" />
 
             <TextView
-                android:id="@+id/deliveryAddressValue"
+                android:id="@+id/streetNameValue"
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/houseNumberLabel"
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hausnummer :" />
+
+            <TextView
+                android:id="@+id/houseNumberValue"
                 style="@style/Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -210,6 +254,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/confirmButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Bestätigen" />
+
 
 
 

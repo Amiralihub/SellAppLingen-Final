@@ -11,6 +11,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class DeliveryDetailsFragment extends Fragment {
 
 
@@ -36,10 +39,45 @@ public class DeliveryDetailsFragment extends Fragment {
         return testOrder;
     }
 
+    private void sendOrderDataToServer() {
+        // Erstelle JSON-Objekt mit den Order-Daten
+        JSONObject orderJson = new JSONObject();
+        try {
+            orderJson.put("token", order.getToken());
+            orderJson.put("timestamp", order.getTimestamp());
+            orderJson.put("employeeName", order.getEmployeeName());
+            orderJson.put("firstName", order.getEmployeeName());
+            orderJson.put("lastName", order.getEmployeeName());
+            // Füge die anderen Order-Daten hinzu
+
+            // Erstelle JSON-Web-Token (hardcodiert)
+            String jsonWebToken = "dein_hardcodierter_token";
+
+            // Füge das JSON-Web-Token dem JSON-Objekt hinzu
+            orderJson.put("jsonWebToken", jsonWebToken);
+
+            // Sende das JSON-Objekt an den Server (zum Beispiel mit einer HTTP-Anfrage)
+            // Hier müsstest du deinen eigenen Code zur Serverkommunikation einfügen
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delivery_details, container, false);
+
+        Button confirmButton = view.findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendOrderDataToServer();
+            }
+        });
+
 
         // Hole das Order-Objekt aus den Fragment-Argumenten
         Bundle args = getArguments();
@@ -59,8 +97,11 @@ public class DeliveryDetailsFragment extends Fragment {
             TextView employeeIdValue = view.findViewById(R.id.employeeIdValue);
             employeeIdValue.setText(order.getEmployeeName());
 
-            TextView packageCountValue = view.findViewById(R.id.packageCountValue);
-            packageCountValue.setText(order.getNumberPackage());
+            TextView firstNameValue = view.findViewById(R.id.firstNameValue);
+            firstNameValue.setText(order.getFirstName());
+
+            TextView lastNameValue = view.findViewById(R.id.lastNameValue);
+            lastNameValue.setText(order.getLastName());
 
             TextView packageSizeValue = view.findViewById(R.id.packageSizeValue);
             packageSizeValue.setText(order.getPackageSize());
@@ -71,10 +112,12 @@ public class DeliveryDetailsFragment extends Fragment {
             TextView deliveryDateValue = view.findViewById(R.id.deliveryDateValue);
             deliveryDateValue.setText(order.getDeliveryDate());
 
-            TextView deliveryAddressValue = view.findViewById(R.id.deliveryAddressValue);
-            String deliveryAddress = order.getStreet() + " " + order.getHouseNumber() + ", " +
-                    order.getZip() + " " + order.getCity();
-            deliveryAddressValue.setText(deliveryAddress);
+            TextView streetNameValue = view.findViewById(R.id.streetNameValue);
+            streetNameValue.setText(order.getStreet());
+
+
+            TextView housenNumberValue = view.findViewById(R.id.houseNumberValue);
+            housenNumberValue.setText(order.getHouseNumber());
 
             TextView cityLabel = view.findViewById(R.id.cityValue);
             cityLabel.setText(order.getCity());

@@ -1,7 +1,6 @@
 package com.example.sellapplingen;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -24,7 +22,7 @@ import java.util.Locale;
 
 public class HandlingInfoFragment extends Fragment {
 
-    CheckBox chkOption1, chkOption2, chkOption3, chkOption4, chkOption5, small, medium, large, xlarge;
+    CheckBox chkOption1, chkOption2, chkOption3, chkOption4, chkOption5, S, M, L, XL;
     Button confirmButton, backToScannerFragmentButton;
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -50,13 +48,13 @@ public class HandlingInfoFragment extends Fragment {
 
 //        order = ((MainActivity) requireActivity()).getCurrentOrder();
 
-        small = view.findViewById(R.id.small);
+        S = view.findViewById(R.id.small);
         reciptname = view.findViewById(R.id.recipientNameEditText);
         date = view.findViewById(R.id.calendarView);
         time = view.findViewById(R.id.timeview);
-        medium = view.findViewById(R.id.medium);
-        large = view.findViewById(R.id.large);
-        xlarge = view.findViewById(R.id.xlarge);
+        M = view.findViewById(R.id.medium);
+        L = view.findViewById(R.id.large);
+        XL = view.findViewById(R.id.xlarge);
 //        clientInfo = (Order) requireActivity().getIntent().getSerializableExtra("order");
 
         chkOption1 = view.findViewById(R.id.fluentOption);
@@ -102,59 +100,59 @@ public class HandlingInfoFragment extends Fragment {
 
 
         //backToScannerFragmentButton = view.findViewById(R.id.backToScannerFragmentButton);
-        small.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        S.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!packageSizeInfo.toString().contains("small")) {
-                    packageSizeInfo.append("small");
+                if (!packageSizeInfo.toString().contains("S")) {
+                    packageSizeInfo.append("S");
                     packageSizeInfo.append(", ");
                 }
-                medium.setChecked(false);
-                large.setChecked(false);
-                xlarge.setChecked(false);
+                M.setChecked(false);
+                L.setChecked(false);
+                XL.setChecked(false);
             } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("small"), packageSizeInfo.indexOf("small") + "small".length() + 2, "");
+                packageSizeInfo.replace(packageSizeInfo.indexOf("S"), packageSizeInfo.indexOf("S") + "S".length() + 2, "");
             }
         });
 
-        medium.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        M.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!packageSizeInfo.toString().contains("medium")) {
-                    packageSizeInfo.append("medium");
+                if (!packageSizeInfo.toString().contains("M")) {
+                    packageSizeInfo.append("M");
                     packageSizeInfo.append(", ");
                 }
-                small.setChecked(false);
-                large.setChecked(false);
-                xlarge.setChecked(false);
+                S.setChecked(false);
+                L.setChecked(false);
+                XL.setChecked(false);
             } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("medium"), packageSizeInfo.indexOf("medium") + "medium".length() + 2, "");
+                packageSizeInfo.replace(packageSizeInfo.indexOf("M"), packageSizeInfo.indexOf("M") + "M".length() + 2, "");
             }
         });
 
-        large.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        L.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!packageSizeInfo.toString().contains("large")) {
-                    packageSizeInfo.append("large");
+                if (!packageSizeInfo.toString().contains("L")) {
+                    packageSizeInfo.append("L");
                     packageSizeInfo.append(", ");
                 }
-                small.setChecked(false);
-                medium.setChecked(false);
-                xlarge.setChecked(false);
+                S.setChecked(false);
+                M.setChecked(false);
+                XL.setChecked(false);
             } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("large"), packageSizeInfo.indexOf("large") + "large".length() + 2, "");
+                packageSizeInfo.replace(packageSizeInfo.indexOf("L"), packageSizeInfo.indexOf("L") + "L".length() + 2, "");
             }
         });
 
-        xlarge.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        XL.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!packageSizeInfo.toString().contains("Extra large")) {
-                    packageSizeInfo.append("Extra large");
+                if (!packageSizeInfo.toString().contains("XL")) {
+                    packageSizeInfo.append("XL");
                     packageSizeInfo.append(", ");
                 }
-                small.setChecked(false);
-                medium.setChecked(false);
-                large.setChecked(false);
+                S.setChecked(false);
+                M.setChecked(false);
+                L.setChecked(false);
             } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("Extra large"), packageSizeInfo.indexOf("Extra large") + "Extra large".length() + 2, "");
+                packageSizeInfo.replace(packageSizeInfo.indexOf("XL"), packageSizeInfo.indexOf("XL") + "XL".length() + 2, "");
             }
         });
 
@@ -230,11 +228,11 @@ public class HandlingInfoFragment extends Fragment {
                 order1.setHouseNumber(clientInfo.getHouseNumber());
                 order1.setZip(clientInfo.getZip());
                 order1.setCity(clientInfo.getCity());
+                order1.setEmployeeName(reciptname.getText().toString());
 
                 order1.setPackageSize(packageSizeInfo.toString());
                 order1.setHandlingInfo(selectedInfo.toString());
                 order1.setDeliveryDate(setDate);
-                order1.setNumberPackage(reciptname.getText().toString());
                 order1.setTimestamp(getTime);
                 String info = selectedInfo.toString();
                 Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);

@@ -87,10 +87,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            style="@style/Text"
             android:id="@+id/editTelephone"
             android:layout_width="134dp"
-            android:backgroundTint="@color/lavender"
             android:layout_height="wrap_content"
             android:text="edit Telephone" />
 

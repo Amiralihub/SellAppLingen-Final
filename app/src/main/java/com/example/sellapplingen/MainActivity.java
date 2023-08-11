@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         // Verwende den ApplicationContext für den LoginManager
         loginManager = LoginManager.getInstance(getApplicationContext());
 
-        if (loginManager.isLoggedIn()) {
+        if (!loginManager.isLoggedIn()) {
             // Wenn der Benutzer nicht angemeldet ist, starte die LoginActivity
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_scanner:
                     replaceFragment(ScannerFragment.newInstance(getCurrentOrder()));
                     break;
-                case R.id.action_settings:
+                /*case R.id.action_settings:
                     replaceFragment(new SettingFragment());
-                    break;
+                    break;*/
             }
             return true;
         });
@@ -71,4 +71,5 @@ public class MainActivity extends AppCompatActivity {
     public Order getCurrentOrder() {
         return currentOrder;
     }
+
 }
