@@ -38,12 +38,12 @@ public class OrderHistoryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    @Override
+    /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         placedOrders = new ArrayList<>();
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext());
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,14 +99,14 @@ public class OrderHistoryFragment extends Fragment {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+   /* @SuppressLint("NotifyDataSetChanged")
     private void updateUI(ArrayList<Order> result) {
         placedOrders.clear();
         placedOrders.addAll(result);
         if (orderHistoryAdapter != null) {
             orderHistoryAdapter.notifyDataSetChanged();
         }
-    }
+    }*/
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
