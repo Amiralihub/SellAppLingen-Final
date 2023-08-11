@@ -72,7 +72,7 @@ public class DeliveryDetailsFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://131.173.65.77:8080/order");
+                    URL url = new URL("http://131.173.65.77:8080/api/order");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
