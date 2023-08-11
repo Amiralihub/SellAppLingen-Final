@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         // Verwende den ApplicationContext für den LoginManager
         loginManager = LoginManager.getInstance(getApplicationContext());
 
-        if (!loginManager.isLoggedIn()) {
+        if (loginManager.isLoggedIn()) {
             // Wenn der Benutzer nicht angemeldet ist, starte die LoginActivity
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
