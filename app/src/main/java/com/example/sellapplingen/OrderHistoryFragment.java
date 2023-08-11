@@ -28,11 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OrderHistoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class OrderHistoryFragment extends Fragment {
     private ArrayList<Order> placedOrders;
     private OrderHistoryFragment orderHistoryAdapter;
