@@ -16,10 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoginManager {
-
-    // Die URL des Servers, auf dem die Benutzerdaten überprüft werden sollen
-    private static final String SERVER_URL = "http://131.173.65.77:5000/auth/login";
-
     public static final String PREF_NAME = "LoginPrefs";
     public String username;
     public String password;
