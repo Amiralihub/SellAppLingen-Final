@@ -141,7 +141,7 @@ public class SettingFragment extends Fragment {
                             String owner = jsonResponse.getString("owner");
                             String street = jsonResponse.getString("street");
                             String houseNumber = jsonResponse.getString("houseNumber");
-                            //Integer zip = jsonResponse.getInt("zip");
+                            String zip = jsonResponse.getString("zip");
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
@@ -149,7 +149,7 @@ public class SettingFragment extends Fragment {
                             editOwner.setText(owner);
                             editStreet.setText(street);
                             editHouseNumber.setText(houseNumber);
-                            //editZip.setText(zip);
+                            editZip.setText(zip);
                             editTelephone.setText(telephone);
                             editEmail.setText(email);
                         } catch (JSONException e) {
