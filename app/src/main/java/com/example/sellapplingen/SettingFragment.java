@@ -2,6 +2,7 @@ package com.example.sellapplingen;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,20 +69,43 @@ public class SettingFragment extends Fragment {
                 }).start();
             }
         });
-
         saveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showConfirmationDialog();
+            }
+
+        });
+
+        return view;
+    }
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Daten speichern");
+        builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
+
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         setSettings();
                     }
                 }).start();
+                dialog.dismiss();
             }
         });
 
-        return view;
+        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void sendDataToServer() {
@@ -220,7 +244,7 @@ public class SettingFragment extends Fragment {
             Log.i("MSG", conn.getResponseMessage());
 
             System.out.println(conn.getResponseCode());
-            if (conn.getResponseCode() == 200) {
+            if (conn.getResponseCode() == 403) {
 
                 showSuccessPopup();
             } else {
@@ -255,4 +279,8 @@ public class SettingFragment extends Fragment {
             }
         });
     }
+
+
+
+
 }
