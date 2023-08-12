@@ -104,7 +104,6 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!packageSizeInfo.toString().contains("S")) {
                     packageSizeInfo.append("S");
-                    packageSizeInfo.append(", ");
                 }
                 M.setChecked(false);
                 L.setChecked(false);
@@ -118,7 +117,7 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!packageSizeInfo.toString().contains("M")) {
                     packageSizeInfo.append("M");
-                    packageSizeInfo.append(", ");
+
                 }
                 S.setChecked(false);
                 L.setChecked(false);
@@ -132,7 +131,6 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!packageSizeInfo.toString().contains("L")) {
                     packageSizeInfo.append("L");
-                    packageSizeInfo.append(", ");
                 }
                 S.setChecked(false);
                 M.setChecked(false);
@@ -146,7 +144,6 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!packageSizeInfo.toString().contains("XL")) {
                     packageSizeInfo.append("XL");
-                    packageSizeInfo.append(", ");
                 }
                 S.setChecked(false);
                 M.setChecked(false);
@@ -163,7 +160,7 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!selectedInfo.toString().contains("Flüssig")) {
                     selectedInfo.append("Flüssig");
-                    selectedInfo.append(", ");
+                    selectedInfo.append("&");
                 }
                 if (chkOption4.isChecked()) {
                     chkOption4.setChecked(false);
@@ -177,7 +174,7 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!selectedInfo.toString().contains("Zerbrechlich")) {
                     selectedInfo.append("Zerbrechlich");
-                    selectedInfo.append(", ");
+                    selectedInfo.append("&");
                 }
                 if (chkOption4.isChecked()) {
                     chkOption4.setChecked(false);
@@ -191,7 +188,7 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!selectedInfo.toString().contains("Glas")) {
                     selectedInfo.append("Glas");
-                    selectedInfo.append(", ");
+                    selectedInfo.append("&");
                 }
                 if (chkOption4.isChecked()) {
                     chkOption4.setChecked(false);
@@ -205,7 +202,7 @@ public class HandlingInfoFragment extends Fragment {
             if (isChecked) {
                 if (!selectedInfo.toString().contains("Keine besondere Eigenschaft")) {
                     selectedInfo.append("Keine besondere Eigenschaft");
-                    selectedInfo.append(", ");
+                    selectedInfo.append("&");
                 }
                 // Deaktiviere andere CheckBoxen
                 chkOption1.setChecked(false);

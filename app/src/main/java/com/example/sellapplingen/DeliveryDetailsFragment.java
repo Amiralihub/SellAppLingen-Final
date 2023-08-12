@@ -23,9 +23,6 @@ import java.net.URL;
 
 public class DeliveryDetailsFragment extends Fragment {
 
-
-
-
     private Order order;
 
     public DeliveryDetailsFragment() {
@@ -47,25 +44,9 @@ public class DeliveryDetailsFragment extends Fragment {
     }
 
     private void sendOrderDataToServer() {
-        // Erstelle die Zeichenkette mit den Order-Daten im gewünschten Format
-        String orderDataString = order.getToken() + "&" +
-                order.getTimestamp() + "&" +
-                order.getEmployeeName() + "&" +
-                order.getFirstName() + "&" +
-                order.getLastName() + "&" +
-                order.getStreet() + "&" +
-                order.getHouseNumber() + "&" +
-                order.getZip() + "&" +
-                order.getCity() + "&" +
-                order.getPackageSize() + "&" +
-                order.getHandlingInfo() + "&" +
-                order.getDeliveryDate();
 
         // Erstelle JSON-Web-Token (hardcodiert)
-        String jsonWebToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc0OTg5MSwic3ViIjoiYXV0aF90b2tlbiJ9.SDmBJs2yV6g5hOk0ZgziCf4Vli5V-cigNKVMclFvTNw";
-
-        // Kombiniere Order-Daten und JSON-Web-Token
-        final String combinedData = orderDataString + "&" + jsonWebToken;
+        String jsonWebToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
 
         // Verwende die kombinierten Daten innerhalb der inneren Klasse
         Thread thread = new Thread(new Runnable() {
@@ -75,14 +56,68 @@ public class DeliveryDetailsFragment extends Fragment {
                     URL url = new URL("http://131.173.65.77:8080/api/order");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("token", jsonWebToken);
+                        jsonObject.put("timestamp", "12-08-2023:01-39");
+                        jsonObject.put("employeeName", order.getEmployeeName());
+                        jsonObject.put("firstName", order.getFirstName());
+                        jsonObject.put("lastName", order.getLastName());
+                        jsonObject.put("street", order.getStreet());
+                        jsonObject.put("houseNumber", order.getHouseNumber());
+                        jsonObject.put("zip", order.getZip());
+                        jsonObject.put("city", order.getCity());
+                        jsonObject.put("numberPackage", order.getNumberPackage());
+                        jsonObject.put("packageSize", order.getPackageSize());
+                        jsonObject.put("handlingInfo", order.getHandlingInfo());
+                        jsonObject.put("deliveryDate", "16-08-23");
+    /*
+                        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
+                        String timestamp = "12-08-2023:01-39";
+                        String employeeName = "Ryba";
+                        String firstName = "Sadik";
+                        String lastName = "Jobs";
+                        String street = "Am Pulverturm";
+                        String houseNumber = "12";
+                        String zip = "49808";
+                        String city = "Lingen";
+                        String packageSize = "M";
+                        String handlingInfo = "Zerbrechlich";
+                        String deliveryDate = "16-08-23";
+                        String customDropOffPlace = "";
+
+                        jsonObject = new JSONObject();
+                        jsonObject.put("token", token);
+                        jsonObject.put("timestamp", timestamp);
+                        jsonObject.put("employeeName", employeeName);
+                        jsonObject.put("firstName", firstName);
+                        jsonObject.put("lastName", lastName);
+                        jsonObject.put("street", street);
+                        jsonObject.put("houseNumber", houseNumber);
+                        jsonObject.put("zip", zip);
+                        jsonObject.put("city", city);
+                        jsonObject.put("packageSize", packageSize);
+                        jsonObject.put("handlingInfo", handlingInfo);
+                        jsonObject.put("deliveryDate", deliveryDate);
+                        jsonObject.put("customDropOffPlace", customDropOffPlace);
+
+*/
+                        System.out.println(jsonObject.toString());
+
+                        // Jetzt kannst du jsonString verwenden, um es zu übertragen oder zu speichern
+                    } catch (JSONException e) {
+                        // Behandlung von JSON-Fehler
+                    }
+
                     // Verwende die kombinierten Daten innerhalb der inneren Klasse
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    os.writeBytes(combinedData);
+                    os.writeBytes(jsonObject.toString());
                     os.flush();
                     os.close();
 
