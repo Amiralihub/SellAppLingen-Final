@@ -1,5 +1,6 @@
 package com.example.sellapplingen;
-
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,10 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-
-import com.example.sellapplingen.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -28,9 +27,11 @@ import java.net.URL;
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
-    private Button btnSubmit;
+    private Button updateData;
+    private Button saveData;
     private String token;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -42,13 +43,15 @@ public class SettingFragment extends Fragment {
         editZip = view.findViewById(R.id.editZip);
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
+        updateData = view.findViewById(R.id.updateData);
+        saveData = view.findViewById(R.id.saveData);
 
 
         // Lese den Token aus den SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        updateData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendDataToServer();
@@ -56,6 +59,18 @@ public class SettingFragment extends Fragment {
                     @Override
                     public void run() {
                         getSettings();  // Rufe die Methode zum Abrufen der Einstellungen vom Server auf
+                    }
+                }).start();
+            }
+        });
+
+        saveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setSettings();
                     }
                 }).start();
             }
@@ -73,7 +88,6 @@ public class SettingFragment extends Fragment {
         final String telephone = editTelephone.getText().toString();
         final String email = editEmail.getText().toString();
 
-        // Hier kannst du den Code für das Senden der Daten zum Server einfügen
     }
 
     private String getSavedToken() {
@@ -82,9 +96,8 @@ public class SettingFragment extends Fragment {
     }
 
 
-
     private void getSettings() {
-        String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjozLCJzdG9yZU5hbWUiOiJUd2l0dGVyIiwib3duZXIiOiJFbG9uX3N1Y2tzIiwibG9nbyI6ImVsb24iLCJ0ZWxlcGhvbmUiOiIwOTg3NjQzMjEiLCJlbWFpbCI6InNkZnNkLnNkZnNkQHR3aXR0ZXIuY29tIiwiaWF0IjoxNjkxNjc1NjA5LCJzdWIiOiJhdXRoX3Rva2VuIn0._c2pnpuPlGCFE6ah5uosnhabaCQdRKCuoH13GSS4fRM";
+        String testToken = token;
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
             return;
@@ -119,7 +132,7 @@ public class SettingFragment extends Fragment {
 
                 final JSONObject jsonResponse = new JSONObject(response.toString());
 
-                // Verarbeite die Antwort und setze die Daten in die EditText-Felder im UI-Thread
+
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -156,6 +169,76 @@ public class SettingFragment extends Fragment {
     }
 
     public void setSettings() {
-        // Hier der Code zum Aktualisieren der Einstellungen auf dem Server
+        try {
+            String storeName = editStoreName.getText().toString();
+            String owner = editOwner.getText().toString();
+            String street = editStreet.getText().toString();
+            String houseNumber = editHouseNumber.getText().toString();
+            String zip = editZip.getText().toString();
+            String telephone = editTelephone.getText().toString();
+            String email = editEmail.getText().toString();
+
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("storeName", storeName);
+            jsonParam.put("owner", owner);
+            jsonParam.put("street", street);
+            jsonParam.put("houseNumber", houseNumber);
+            jsonParam.put("zip", zip);
+            jsonParam.put("telephone", telephone);
+            jsonParam.put("email", email);
+
+            URL url = new URL("http://131.173.65.77:8080/api/setSettings");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            if (token != null) {
+                conn.setRequestProperty("Authorization", "Bearer " + token);
+            }
+            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(jsonParam.toString());
+            os.flush();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 200) {
+                // Erfolgreiche Verarbeitung der Einstellungen auf dem Server
+                Log.d("Settings", "Einstellungen erfolgreich aktualisiert");
+                showSuccessPopup();
+            } else {
+                // Fehlerbehandlung
+                Log.d("Settings", "Fehler beim Aktualisieren der Einstellungen. Statuscode: " + responseCode);
+            }
+
+            conn.disconnect();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void showSuccessPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        View popupView = getLayoutInflater().inflate(R.layout.popup_message, null);
+        builder.setView(popupView);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Finde die Views innerhalb des Popups
+        TextView popupMessageText = popupView.findViewById(R.id.popupMessageText);
+        Button popupOkButton = popupView.findViewById(R.id.popupOkButton);
+
+        // Setze den Text und den Klick-Listener
+        popupMessageText.setText("Daten erfolgreich gespeichert!");
+
+        popupOkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Schließe den Popup
+                dialog.dismiss();
+            }
+        });
     }
 }
