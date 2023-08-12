@@ -169,6 +169,11 @@ public class SettingFragment extends Fragment {
     }
 
     public void setSettings() {
+        String testToken = token;
+        if (getSavedToken() == null) {
+            Log.d("Settings", "Kein Token");
+            return;
+        }
         try {
             String storeName = editStoreName.getText().toString();
             String owner = editOwner.getText().toString();
@@ -179,7 +184,9 @@ public class SettingFragment extends Fragment {
             String email = editEmail.getText().toString();
 
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("token", testToken);
             jsonParam.put("storeName", storeName);
+            jsonParam.put("password", "password");
             jsonParam.put("owner", owner);
             jsonParam.put("street", street);
             jsonParam.put("houseNumber", houseNumber);
@@ -218,6 +225,8 @@ public class SettingFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+
     private void showSuccessPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View popupView = getLayoutInflater().inflate(R.layout.popup_message, null);

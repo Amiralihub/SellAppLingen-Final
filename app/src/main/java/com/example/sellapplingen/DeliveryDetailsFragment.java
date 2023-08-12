@@ -144,7 +144,7 @@ public class DeliveryDetailsFragment extends Fragment {
         thread.start();
     }
 
-    private void showSuccessMessage() {
+    public void showSuccessMessage() {
         requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
