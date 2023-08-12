@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
@@ -10,10 +9,10 @@
         android:id="@+id/popupMessageText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daten erfolgreich gespeichert!"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"/>
+        android:textColor="@android:color/black"
+        android:text="Daten erfolgreich gespeichert!"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/popupOkButton"
@@ -21,6 +20,5 @@
         android:layout_height="wrap_content"
         android:text="OK"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"/>
-
+        android:layout_marginTop="16dp" />
 </LinearLayout>

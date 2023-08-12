@@ -13,7 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -174,6 +179,7 @@ public class SettingFragment extends Fragment {
             Log.d("Settings", "Kein Token");
             return;
         }
+
         try {
             String storeName = editStoreName.getText().toString();
             String owner = editOwner.getText().toString();
@@ -204,49 +210,48 @@ public class SettingFragment extends Fragment {
             if (token != null) {
                 conn.setRequestProperty("Authorization", "Bearer " + token);
             }
+
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
             os.writeBytes(jsonParam.toString());
             os.flush();
             os.close();
 
-            int responseCode = conn.getResponseCode();
+            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+            Log.i("MSG", conn.getResponseMessage());
 
-            if (responseCode == 200) {
-                // Erfolgreiche Verarbeitung der Einstellungen auf dem Server
-                Log.d("Settings", "Einstellungen erfolgreich aktualisiert");
+            System.out.println(conn.getResponseCode());
+            if (conn.getResponseCode() == 200) {
+
                 showSuccessPopup();
             } else {
-                // Fehlerbehandlung
-                Log.d("Settings", "Fehler beim Aktualisieren der Einstellungen. Statuscode: " + responseCode);
+
+                showErrorPopup();
             }
 
             conn.disconnect();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
+            showErrorPopup();
         }
     }
 
 
-    private void showSuccessPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        View popupView = getLayoutInflater().inflate(R.layout.popup_message, null);
-        builder.setView(popupView);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        // Finde die Views innerhalb des Popups
-        TextView popupMessageText = popupView.findViewById(R.id.popupMessageText);
-        Button popupOkButton = popupView.findViewById(R.id.popupOkButton);
-
-        // Setze den Text und den Klick-Listener
-        popupMessageText.setText("Daten erfolgreich gespeichert!");
-
-        popupOkButton.setOnClickListener(new View.OnClickListener() {
+    public void showSuccessPopup() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                // Schließe den Popup
-                dialog.dismiss();
+            public void run() {
+                // Show the success message using a Toast on the main UI thread
+                Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showErrorPopup() {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Show the error message using a Toast on the main UI thread
+                Toast.makeText(requireContext(), "Keine Verbindung zum Server.", Toast.LENGTH_SHORT).show();
             }
         });
     }
