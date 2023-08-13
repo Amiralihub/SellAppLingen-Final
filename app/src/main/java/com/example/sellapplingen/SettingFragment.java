@@ -14,13 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -34,10 +29,12 @@ import java.net.URL;
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
-    private Button updateData;
     private Button saveData;
     private String token;
     private Button logoutButton;
+
+    private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,7 +48,6 @@ public class SettingFragment extends Fragment {
         editZip = view.findViewById(R.id.editZip);
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
-        updateData = view.findViewById(R.id.updateData);
         saveData = view.findViewById(R.id.saveData);
         logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
 
@@ -60,24 +56,27 @@ public class SettingFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
-        updateData.setOnClickListener(new View.OnClickListener() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getSettings();
+            }
+        }).start();
+
+        Button editDataButton = view.findViewById(R.id.editDataButton);
+        editDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendDataToServer();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSettings();  // Rufe die Methode zum Abrufen der Einstellungen vom Server auf
-                    }
-                }).start();
+                isEditMode = true; // Aktivieren Sie den Bearbeitungsmodus
+                enableEditMode(); // Aktivieren Sie die Bearbeitung der Daten
             }
         });
+
         saveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showConfirmationDialog();
             }
-
 
         });
 
@@ -87,36 +86,47 @@ public class SettingFragment extends Fragment {
                 showLogoutConfirmationDialog();
             }
 
-    });
+        });
         return view;
 
     }
 
-
-
-        private void showLogoutConfirmationDialog() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setTitle("Abmelden");
-            builder.setMessage("Sind Sie sicher, dass Sie sich abmelden möchten?");
-
-            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Call the log out method here
-                    performLogout();
-                }
-            });
-
-            builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+    private void enableEditMode() {
+        // Aktivieren Sie die Bearbeitung der Daten
+        if (isEditMode) {
+            editStoreName.setEnabled(true);
+            editOwner.setEnabled(true);
+            editStreet.setEnabled(true);
+            editHouseNumber.setEnabled(true);
+            editZip.setEnabled(true);
+            editTelephone.setEnabled(true);
+            editEmail.setEnabled(true);
         }
+    }
+
+    private void showLogoutConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Abmelden");
+        builder.setMessage("Sind Sie sicher, dass Sie sich abmelden möchten?");
+
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Call the log out method here
+                performLogout();
+            }
+        });
+
+        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private void performLogout() {
         // Clear session data (token) from SharedPreferences
@@ -130,7 +140,6 @@ public class SettingFragment extends Fragment {
         startActivity(intent);
         requireActivity().finish(); // Optional, um die aktuelle Aktivität zu schließen
     }
-
 
 
 
@@ -163,16 +172,7 @@ public class SettingFragment extends Fragment {
         dialog.show();
     }
 
-    private void sendDataToServer() {
-        final String storeName = editStoreName.getText().toString();
-        final String owner = editOwner.getText().toString();
-        final String street = editStreet.getText().toString();
-        final String houseNumber = editHouseNumber.getText().toString();
-        final String zip = editZip.getText().toString();
-        final String telephone = editTelephone.getText().toString();
-        final String email = editEmail.getText().toString();
 
-    }
 
     private String getSavedToken() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
@@ -229,13 +229,28 @@ public class SettingFragment extends Fragment {
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
-                            editStoreName.setText(storeName);
-                            editOwner.setText(owner);
-                            editStreet.setText(street);
-                            editHouseNumber.setText(houseNumber);
-                            editZip.setText(zip);
-                            editTelephone.setText(telephone);
-                            editEmail.setText(email);
+                            if (!isEditMode) {
+                                editStoreName.setEnabled(false);
+                                editOwner.setEnabled(false);
+                                editStreet.setEnabled(false);
+                                editHouseNumber.setEnabled(false);
+                                editZip.setEnabled(false);
+                                editTelephone.setEnabled(false);
+                                editEmail.setEnabled(false);
+                            }
+
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    editStoreName.setText(storeName);
+                                    editOwner.setText(owner);
+                                    editStreet.setText(street);
+                                    editHouseNumber.setText(houseNumber);
+                                    editZip.setText(zip);
+                                    editTelephone.setText(telephone);
+                                    editEmail.setText(email);
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -250,6 +265,8 @@ public class SettingFragment extends Fragment {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public void setSettings() {

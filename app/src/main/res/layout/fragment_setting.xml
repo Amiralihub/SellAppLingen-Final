@@ -6,69 +6,124 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Geschäftsname:" />
+
     <EditText
         android:id="@+id/editStoreName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Geschäftsname bearbeiten"/>
+        android:hint="Geschäftsname bearbeiten"
+        android:enabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eigentümer*Innen:" />
 
     <EditText
         android:id="@+id/editOwner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Eingentümer bearbeiten"/>
+        android:hint="Eigentümer*Innen bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Straße:" />
 
     <EditText
         android:id="@+id/editStreet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Straße bearbeiten"/>
+        android:hint="Straße bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
+
+    <!-- Fügen Sie hier ähnliche TextViews und EditTexts für andere Datenfelder hinzu -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hausnummber:" />
 
     <EditText
         android:id="@+id/editHouseNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Hausnummer bearbeiten"/>
+        android:hint="Hausnummer bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLZ:" />
 
     <EditText
         android:id="@+id/editZip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Plz bearbeiten"/>
+        android:hint="Plz bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TelefoneNr.:" />
 
     <EditText
         android:id="@+id/editTelephone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="TelephoneNr. bearbeiten"/>
+        android:hint="TelefoneNr. bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:" />
 
     <EditText
         android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email bearbeiten"/>
+        android:hint="Email bearbeiten"
+        android:enabled="false" /> <!-- Deaktiviere Bearbeitung standardmäßig -->
 
-    <Button
-        android:id="@+id/updateData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Daten Anfordern"/>
+
 
     <Button
         android:id="@+id/saveData"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Daten Aktualisieren"/>
+        android:backgroundTint="@color/lavender"
+        android:text="Daten Aktualisieren" />
+
+    <Button
+        android:id="@+id/editDataButton"
+        android:layout_width="379dp"
+        android:backgroundTint="@color/lavender"
+        android:layout_height="wrap_content"
+        android:text="Daten bearbeiten" />
+
+
+
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="382dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lavender"
         android:text="Abmelden"
-        android:layout_marginTop="16dp"/>
+        android:textColor="#DA0D0D" />
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 
 
 
