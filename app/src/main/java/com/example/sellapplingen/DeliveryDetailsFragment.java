@@ -16,8 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,9 +28,13 @@ public class DeliveryDetailsFragment extends Fragment {
 
     private Order order;
 
+    public String orderId;
+
     public DeliveryDetailsFragment() {
         // Required empty public constructor
     }
+
+
 
     public static DeliveryDetailsFragment newInstance(Order order) {
         DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
@@ -126,7 +133,32 @@ public class DeliveryDetailsFragment extends Fragment {
 
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         // Erfolgsmeldung oder weitere Aktionen hier
-                        showSuccessMessage();
+
+                        try {
+                            InputStream inputStream = conn.getInputStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                            StringBuilder responseBuilder = new StringBuilder();
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                responseBuilder.append(line);
+                            }
+                            reader.close();
+                            inputStream.close();
+
+                            // Konvertiere die Antwort in ein JSONObject
+                            String responseString = responseBuilder.toString();
+                            JSONObject responseJson = new JSONObject(responseString);
+
+                            // Hole die Bestellungs-ID aus dem JSON-Objekt (angenommen, das JSON-Feld heißt "orderId")
+                            orderId = responseJson.getString("orderId");
+
+                            // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
+                            showSuccessMessageWithOrderId();
+
+                        } catch (IOException | JSONException e) {
+                            // Handle exceptions, if any
+                            e.printStackTrace();
+                        }
                     } else {
                         // Zeige eine Fehlermeldung, wenn die Verbindung nicht erfolgreich war
                         showErrorMessage();
@@ -160,6 +192,26 @@ public class DeliveryDetailsFragment extends Fragment {
         });
     }
 
+    private void showSuccessMessageWithOrderId() {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                Bundle args = new Bundle();
+                args.putString("orderId", orderId);
+
+                OrderSuccessFragment successFragment = new OrderSuccessFragment();
+                successFragment.setArguments(args);
+
+                transaction.replace(R.id.frame_layout, successFragment);
+                transaction.commit();
+            }
+        });
+    }
+
     private void showErrorMessage() {
         requireActivity().runOnUiThread(new Runnable() {
             @Override
@@ -169,6 +221,9 @@ public class DeliveryDetailsFragment extends Fragment {
             }
         });
     }
+
+
+
 
 
 
