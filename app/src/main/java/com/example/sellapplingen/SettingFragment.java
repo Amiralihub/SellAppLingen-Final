@@ -3,6 +3,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ public class SettingFragment extends Fragment {
     private Button updateData;
     private Button saveData;
     private String token;
+    private Button logoutButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,6 +53,7 @@ public class SettingFragment extends Fragment {
         editEmail = view.findViewById(R.id.editEmail);
         updateData = view.findViewById(R.id.updateData);
         saveData = view.findViewById(R.id.saveData);
+        logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
 
 
         // Lese den Token aus den SharedPreferences
@@ -75,11 +78,62 @@ public class SettingFragment extends Fragment {
                 showConfirmationDialog();
             }
 
+
         });
 
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLogoutConfirmationDialog();
+            }
+
+    });
         return view;
-        //jshdjhvfo
+
     }
+
+
+
+        private void showLogoutConfirmationDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Abmelden");
+            builder.setMessage("Sind Sie sicher, dass Sie sich abmelden möchten?");
+
+            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Call the log out method here
+                    performLogout();
+                }
+            });
+
+            builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+    private void performLogout() {
+        // Clear session data (token) from SharedPreferences
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("token");
+        editor.apply();
+
+        // Start LoginActivity using an Intent
+        Intent intent = new Intent(requireContext(), LoginActivity.class);
+        startActivity(intent);
+        requireActivity().finish(); // Optional, um die aktuelle Aktivität zu schließen
+    }
+
+
+
+
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Daten speichern");
