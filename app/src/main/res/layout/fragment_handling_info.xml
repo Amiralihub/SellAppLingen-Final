@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Empfängerdaten -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +38,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Paket Größe -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +86,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Handling Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,7 +137,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Lieferdatum wählen -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,7 +192,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Mitarbeiter Kürzel -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,8 +211,6 @@
                 android:hint="Name eingeben"
                 android:inputType="textPersonName" />
 
-            <!-- Hier eine TextView oder EditText für das Mitarbeiter Kürzel hinzufügen -->
-            <!-- Beispiel: <TextView ... /> oder <EditText ... /> -->
         </LinearLayout>
 
         <View
@@ -227,7 +220,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Bestätigungsbutton -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -247,7 +239,6 @@
                 android:drawableLeft="@drawable/baseline_check_24"
                 android:text="Bestätigen" />
 
-            <!-- Optional: Weitere Buttons oder Elemente hier hinzufügen -->
         </LinearLayout>
 
     </LinearLayout>
