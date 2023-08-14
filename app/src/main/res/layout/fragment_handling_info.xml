@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <LinearLayout
@@ -51,28 +51,28 @@
                 android:textStyle="bold" />
 
             <CheckBox
-                android:layout_width="wrap_content"
                 android:id="@+id/small"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="S" />
 
             <CheckBox
-                android:layout_width="wrap_content"
                 android:id="@+id/medium"
+                android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
                 android:text="M" />
 
             <CheckBox
+                android:id="@+id/large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/large"
 
                 android:text="L" />
 
             <CheckBox
-                android:layout_width="wrap_content"
                 android:id="@+id/xlarge"
+                android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
                 android:text="XL" />
@@ -152,33 +152,19 @@
             <Button
                 android:id="@+id/calendarView"
                 style="@style/Text"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="Set Date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:backgroundTint="@color/lavender"
+                android:gravity="center"
+                android:text="Set Date" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Zeitstempel"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/timeview"
-                    style="@style/Text"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="Set Time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -228,16 +214,16 @@
             <Button
                 android:id="@+id/confirmButton"
                 style="@style/Text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="170dp"
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="270dp"
                 android:backgroundTint="@color/lavender"
                 android:drawableLeft="@drawable/baseline_check_24"
-                android:text="Bestätigen" />
+                android:text="Bestätigen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </LinearLayout>
 

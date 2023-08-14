@@ -9,16 +9,17 @@
         android:id="@+id/popupMessageText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
+        android:layout_gravity="center_horizontal"
         android:text="Fehler beim Aktualisieren der Einstellungen!"
-        android:layout_gravity="center_horizontal" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/popupOkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OK"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lavender"
+        android:text="OK" />
 </LinearLayout>

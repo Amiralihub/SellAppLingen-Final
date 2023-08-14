@@ -51,7 +51,6 @@ public class HandlingInfoFragment extends Fragment {
         S = view.findViewById(R.id.small);
         reciptname = view.findViewById(R.id.recipientNameEditText);
         date = view.findViewById(R.id.calendarView);
-        time = view.findViewById(R.id.timeview);
         M = view.findViewById(R.id.medium);
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
@@ -64,7 +63,6 @@ public class HandlingInfoFragment extends Fragment {
         chkOption5 = view.findViewById(R.id.heavy);
         confirmButton = view.findViewById(R.id.confirmButton);
 
-        time = view.findViewById(R.id.timeview);
 
 // Aktuelle Uhrzeit festlegen
         String myFormat = "hh:mm";

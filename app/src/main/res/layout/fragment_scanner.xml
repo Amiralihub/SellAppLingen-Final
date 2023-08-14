@@ -10,8 +10,23 @@
         style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:backgroundTint="@color/lavender"
-        android:text="QR-Code scannen" />
+        android:text="QR-Code scannen"
+        android:textColor="@color/white"
+        android:textSize="28sp" />
+
+    <Button
+        android:id="@+id/btnEnterAddress"
+        style="@style/Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnScan"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/lavender"
+        android:text="Adresse eingeben"
+        android:textColor="@color/white"
+        android:textSize="28sp" />
 
 </RelativeLayout>

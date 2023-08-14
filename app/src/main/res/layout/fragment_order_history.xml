@@ -11,7 +11,8 @@
         android:id="@+id/ordersLogo"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/order"/>
+        android:src="@drawable/order" />
+
     <View
         style="@style/View"
         android:layout_width="match_parent"
@@ -21,14 +22,14 @@
         android:id="@+id/serachOrder"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:src="@drawable/order"
-        android:drawableLeft="@drawable/baseline_search_24"/>
+        android:drawableLeft="@drawable/baseline_search_24"
+        android:src="@drawable/order" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewQRCodeList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
 </LinearLayout>
