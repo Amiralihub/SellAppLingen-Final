@@ -1,0 +1,53 @@
+<!-- res/layout/fragment_manual_input.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/firstNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Vorname" />
+
+    <EditText
+        android:id="@+id/lastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nachname" />
+
+    <EditText
+        android:id="@+id/streetEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Straße" />
+
+    <EditText
+        android:id="@+id/houseNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hausnummer" />
+
+    <Button
+        android:id="@+id/zipButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Postleitzahl" />
+
+
+    <EditText
+        android:id="@+id/cityEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Stadt" />
+
+
+    <!-- Füge hier weitere EditText-Felder für die anderen Order-Informationen hinzu -->
+
+    <Button
+        android:id="@+id/confirmManualInputButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bestätigen" />
+
+</LinearLayout>
