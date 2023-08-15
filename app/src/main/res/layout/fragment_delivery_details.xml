@@ -212,11 +212,6 @@
                     android:backgroundTint="@color/lavender"
                     android:text="Bestätigen" />
 
-
-
             </LinearLayout>
-
-
-
 
         </ScrollView>
