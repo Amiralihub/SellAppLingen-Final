@@ -26,5 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/lavender"
         android:text="Zurück zur Hauptansicht"/>
 </LinearLayout>
