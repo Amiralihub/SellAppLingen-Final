@@ -51,6 +51,7 @@ public class HandlingInfoFragment extends Fragment {
         S = view.findViewById(R.id.small);
         reciptname = view.findViewById(R.id.recipientNameEditText);
         date = view.findViewById(R.id.calendarView);
+
         M = view.findViewById(R.id.medium);
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
@@ -64,37 +65,46 @@ public class HandlingInfoFragment extends Fragment {
         confirmButton = view.findViewById(R.id.confirmButton);
 
 
-// Aktuelle Uhrzeit festlegen
-        String myFormat = "hh:mm";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
-        getTime = dateFormat.format(Calendar.getInstance().getTime());
-        time.setText(getTime);
+
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), new DatePickerDialog.OnDateSetListener() {
-
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
+                        Calendar selectedCalendar = Calendar.getInstance();
+                        selectedCalendar.set(year, month, day);
 
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, month);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, day);
+                        Calendar todayCalendar = Calendar.getInstance();
 
-                        if (myCalendar.get(Calendar.HOUR_OF_DAY) >= 13) {
-                            // Wenn die ausgewählte Uhrzeit nach 13:00 Uhr ist, erhöhe den Tag um 1
-                            myCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                        if (selectedCalendar.before(todayCalendar)) {
+                            // Ausgewähltes Datum liegt in der Vergangenheit
+                            Toast.makeText(requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            myCalendar.set(Calendar.YEAR, year);
+                            myCalendar.set(Calendar.MONTH, month);
+                            myCalendar.set(Calendar.DAY_OF_MONTH, day);
+
+                            if (myCalendar.get(Calendar.HOUR_OF_DAY) >= 13) {
+                                myCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                            }
+
+                            String myFormat = "dd-MM-yyyy"; // Ändere das Format zu "dd-MM-yyyy"
+                            SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+                            setDate = dateFormat.format(myCalendar.getTime());
+                            date.setText(setDate);
                         }
-                        String myFormat = "d-MMM-yyyy";
-                        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
-                        setDate = dateFormat.format(myCalendar.getTime());
-                        date.setText(setDate);
-
                     }
                 }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+
+                // Setze den minimalen Tag des DatePickerDialog auf heute
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
                 datePickerDialog.show();
             }
         });
+
 
 
         //backToScannerFragmentButton = view.findViewById(R.id.backToScannerFragmentButton);
@@ -211,6 +221,21 @@ public class HandlingInfoFragment extends Fragment {
             }
         });
 
+        chkOption5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (!selectedInfo.toString().contains("Schwer")) {
+                    selectedInfo.append("Schwer");
+                    selectedInfo.append("&");
+                }
+                if (chkOption4.isChecked()) {
+                    chkOption4.setChecked(false);
+                }
+            } else {
+                selectedInfo.replace(selectedInfo.indexOf("Schwer"), selectedInfo.indexOf("Schwer") + "Schwer".length() + 2, "");
+            }
+        });
+
+
 
         confirmButton.setOnClickListener(v -> {
             if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
@@ -226,6 +251,12 @@ public class HandlingInfoFragment extends Fragment {
                 order1.setEmployeeName(reciptname.getText().toString());
 
                 order1.setPackageSize(packageSizeInfo.toString());
+                if (selectedInfo.length() > 0) {
+                    selectedInfo.setLength(selectedInfo.length() - 1); // Entferne das letzte "&"
+                    order1.setHandlingInfo(selectedInfo.toString());
+                } else {
+                    order1.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
+                }
                 order1.setHandlingInfo(selectedInfo.toString());
                 order1.setDeliveryDate(setDate);
                 order1.setTimestamp(getTime);

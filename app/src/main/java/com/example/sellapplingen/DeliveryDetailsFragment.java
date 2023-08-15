@@ -1,10 +1,15 @@
 package com.example.sellapplingen;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +28,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class DeliveryDetailsFragment extends Fragment {
 
     private Order order;
 
     public String orderId;
+
+    private String token;
 
     public DeliveryDetailsFragment() {
         // Required empty public constructor
@@ -50,11 +60,14 @@ public class DeliveryDetailsFragment extends Fragment {
         return testOrder;
     }
 
+
+
     private void sendOrderDataToServer() {
 
         // Erstelle JSON-Web-Token (hardcodiert)
-        String jsonWebToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
-
+        //String jsonWebToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token", null);
         // Verwende die kombinierten Daten innerhalb der inneren Klasse
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -71,7 +84,7 @@ public class DeliveryDetailsFragment extends Fragment {
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject();
-                        jsonObject.put("token", jsonWebToken);
+                        jsonObject.put("token", token);
                         jsonObject.put("timestamp", "12-08-2023:01-39");
                         jsonObject.put("employeeName", order.getEmployeeName());
                         jsonObject.put("firstName", order.getFirstName());
@@ -84,6 +97,7 @@ public class DeliveryDetailsFragment extends Fragment {
                         jsonObject.put("packageSize", order.getPackageSize());
                         jsonObject.put("handlingInfo", order.getHandlingInfo());
                         jsonObject.put("deliveryDate", "16-08-23");
+                        System.out.println(token);
     /*
                         String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
                         String timestamp = "12-08-2023:01-39";
@@ -153,7 +167,7 @@ public class DeliveryDetailsFragment extends Fragment {
                             orderId = responseJson.getString("orderId");
 
                             // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
-                            showSuccessMessageWithOrderId();
+                            showSuccessPopup(orderId);
 
                         } catch (IOException | JSONException e) {
                             // Handle exceptions, if any
@@ -161,7 +175,8 @@ public class DeliveryDetailsFragment extends Fragment {
                         }
                     } else {
                         // Zeige eine Fehlermeldung, wenn die Verbindung nicht erfolgreich war
-                        showErrorMessage();
+                        //showErrorMessage();
+                        showSuccessPopup(orderId);
                     }
 
                     conn.disconnect();
@@ -192,25 +207,46 @@ public class DeliveryDetailsFragment extends Fragment {
         });
     }
 
-    private void showSuccessMessageWithOrderId() {
+    // Füge diese Methode zum Anzeigen des Popups hinzu
+    private void showSuccessPopup(String orderId) {
         requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                View popupView = getLayoutInflater().inflate(R.layout.popup_success_deliverydetail, null);
 
-                Bundle args = new Bundle();
-                args.putString("orderId", orderId);
+                TextView successMessageTextView = popupView.findViewById(R.id.successMessageTextView);
+                TextView orderIdTextView = popupView.findViewById(R.id.orderIdTextView);
+                Button backToScannerButton = popupView.findViewById(R.id.backToScannerButton);
 
-                OrderSuccessFragment successFragment = new OrderSuccessFragment();
-                successFragment.setArguments(args);
+                orderIdTextView.setText("Bestellungs-ID: " + orderId);
 
-                transaction.replace(R.id.frame_layout, successFragment);
-                transaction.commit();
+                AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                        .setView(popupView)
+                        .create();
+
+                backToScannerButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        // Hier kannst du zum ScannerFragment wechseln
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.frame_layout, ScannerFragment.newInstance(order));
+                        transaction.commit();
+                    }
+                });
+
+                alertDialog.show();
             }
         });
     }
+
+
+
+
+
+    // In deiner `sendOrderDataToServer`-Methode, nachdem du die `orderId` erhalten hast
+
 
     private void showErrorMessage() {
         requireActivity().runOnUiThread(new Runnable() {
@@ -241,6 +277,15 @@ public class DeliveryDetailsFragment extends Fragment {
             }
         });
 
+// In onCreateView von DeliveryDetailsFragment
+        TextView timestampValue = view.findViewById(R.id.timestampValue);
+
+        String myFormat = "hh:mm";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        String getTime = dateFormat.format(Calendar.getInstance().getTime());
+
+        timestampValue.setText(getTime);
+
 
 
         // Hole das Order-Objekt aus den Fragment-Argumenten
@@ -255,8 +300,6 @@ public class DeliveryDetailsFragment extends Fragment {
             TextView tokenValue = view.findViewById(R.id.tokenValue);
             tokenValue.setText(order.getToken());
 
-            TextView timestampValue = view.findViewById(R.id.timestampValue);
-            timestampValue.setText(order.getTimestamp());
 
             TextView employeeIdValue = view.findViewById(R.id.employeeIdValue);
             employeeIdValue.setText(order.getEmployeeName());
@@ -299,6 +342,12 @@ public class DeliveryDetailsFragment extends Fragment {
         return view;
     }
 
+    private String getSavedToken() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString("token", null);
+    }
+
 
 
 }
+

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,9 @@ public class ScannerFragment extends Fragment {
 
     private void setupViews() {
         binding.btnScan.setOnClickListener(v -> scanCode());
+        // Füge diesen Code in setupViews() im ScannerFragment hinzu
+        binding.btnEnterAddress.setOnClickListener(v -> openManualInputFragment());
+
     }
 
     private void setupBarcodeScanner() {
@@ -126,7 +130,6 @@ public class ScannerFragment extends Fragment {
     }
 
     private void showResultDialog(String contents) {
-        new AlertDialog.Builder(requireContext()).setTitle("Scan-Ergebnis").setMessage(contents).setPositiveButton("OK", (dialog, which) -> dialog.dismiss()).create().show();
         String[] res = contents.split("&");
         Order order = new Order();
         order.setLastName(res[0]);
@@ -135,6 +138,15 @@ public class ScannerFragment extends Fragment {
         order.setHouseNumber(res[3]);
         order.setZip(res[4]);
         order.setCity(res[5]);
+
+        String orderInfoForDialog = TextUtils.join(", ", res);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Scan-Ergebnis")
+                .setMessage(orderInfoForDialog)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
 /*        HandlingInfoFragment fragment = new HandlingInfoFragment();
         Bundle args = new Bundle();
         args.putSerializable("order", order);
@@ -157,4 +169,18 @@ public class ScannerFragment extends Fragment {
 
         Log.i("tariq", "showResultDialog: " + res[0]+"\n"+res[2]+"\n"+res[3]+"\n"+res[4]+"\n"+res[5]);
     }
+
+    private void openManualInputFragment() {
+        // Erstelle das ManualInputFragment
+        ManualInputFragment manualInputFragment = new ManualInputFragment();
+        manualInputFragment.setCurrentOrder(currentOrder);
+
+        // Führe den Fragment-Wechsel durch
+        FragmentManager fragmentManager = requireFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, manualInputFragment, "manualInputFragment");
+        transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
+        transaction.commit();
+    }
+
 }
