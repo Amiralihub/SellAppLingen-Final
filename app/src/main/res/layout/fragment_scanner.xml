@@ -14,7 +14,6 @@
         android:layout_centerVertical="true"
         android:backgroundTint="@color/lavender"
         android:text="QR-Code scannen"
-        android:textColor="@color/white"
         android:textSize="28sp" />
 
     <Button
@@ -26,7 +25,6 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/lavender"
         android:text="Adresse eingeben"
-        android:textColor="@color/white"
         android:textSize="28sp" />
 
 </RelativeLayout>
