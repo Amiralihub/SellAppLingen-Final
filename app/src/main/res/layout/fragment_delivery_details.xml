@@ -21,24 +21,12 @@
             android:text="Lieferungsübersicht"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            style="@style/Screen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tokenLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Token :" />
+        <TextView
+            android:id="@+id/tokenLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Token :" />
 
                 <TextView
                     android:id="@+id/tokenValue"
@@ -118,7 +106,7 @@
                     android:src="@drawable/order" />
 
                 <TextView
-                    android:id="@+id/deliveryDateLabel"
+                    android:id="@+id/deliveryAdressLabel"
                     style="@style/Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -197,21 +185,21 @@
                     android:layout_height="wrap_content"
                     android:text="Ort :" />
 
-                <TextView
-                    android:id="@+id/cityValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/cityValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/confirmButton"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/lavender"
-                    android:text="Bestätigen" />
+        <Button
+            android:id="@+id/confirmButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/lavender"
+            android:text="Bestätigen" />
 
-            </LinearLayout>
+    </LinearLayout>
 
-        </ScrollView>
+</ScrollView>

@@ -142,7 +142,7 @@ public class DeliveryDetailsFragment extends Fragment {
                     os.flush();
                     os.close();
 
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                    Log.i("KACKPUPPE", String.valueOf(conn.getResponseCode()));
                     Log.i("MSG", conn.getResponseMessage());
 
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -175,7 +175,6 @@ public class DeliveryDetailsFragment extends Fragment {
                         }
                     } else {
                         // Zeige eine Fehlermeldung, wenn die Verbindung nicht erfolgreich war
-                        //showErrorMessage();
                         showSuccessPopup(orderId);
                     }
 
@@ -187,6 +186,7 @@ public class DeliveryDetailsFragment extends Fragment {
                 }
             }
         });
+
 
         thread.start();
     }
