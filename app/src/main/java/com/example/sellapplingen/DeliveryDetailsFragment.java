@@ -143,7 +143,7 @@ public class DeliveryDetailsFragment extends Fragment {
                     os.flush();
                     os.close();
 
-                    Log.i("KACKPUPPE", String.valueOf(conn.getResponseCode()));
+                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                     Log.i("MSG", conn.getResponseMessage());
 
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -165,7 +165,7 @@ public class DeliveryDetailsFragment extends Fragment {
                             JSONObject responseJson = new JSONObject(responseString);
 
                             // Hole die Bestellungs-ID aus dem JSON-Objekt (angenommen, das JSON-Feld heißt "orderId")
-                            orderId = responseJson.getString("orderId");
+                            orderId = responseJson.getString("orderID");
 
                             // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
                             showSuccessPopup(orderId);
@@ -176,6 +176,7 @@ public class DeliveryDetailsFragment extends Fragment {
                         }
                     } else {
                         // Zeige eine Fehlermeldung, wenn die Verbindung nicht erfolgreich war
+                        //showErrorMessage();
                         showSuccessPopup(orderId);
                     }
 
@@ -187,7 +188,6 @@ public class DeliveryDetailsFragment extends Fragment {
                 }
             }
         });
-
 
         thread.start();
     }
