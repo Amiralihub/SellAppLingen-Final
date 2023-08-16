@@ -97,6 +97,7 @@ public class DeliveryDetailsFragment extends Fragment {
                         jsonObject.put("packageSize", order.getPackageSize());
                         jsonObject.put("handlingInfo", order.getHandlingInfo());
                         jsonObject.put("deliveryDate", "16-08-23");
+                        jsonObject.put("customDropOffPlace", "Garten");
                         System.out.println(token);
     /*
                         String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
