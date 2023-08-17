@@ -270,6 +270,7 @@ public class SettingFragment extends Fragment {
     }
 
     public void setSettings() {
+        System.out.println();
         String testToken = token;
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
@@ -288,7 +289,6 @@ public class SettingFragment extends Fragment {
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("token", testToken);
             jsonParam.put("storeName", storeName);
-            jsonParam.put("password", "password");
             jsonParam.put("owner", owner);
             jsonParam.put("street", street);
             jsonParam.put("houseNumber", houseNumber);
@@ -315,7 +315,7 @@ public class SettingFragment extends Fragment {
             Log.i("STATUS", String.valueOf(conn.getResponseCode()));
             Log.i("MSG", conn.getResponseMessage());
 
-            System.out.println(conn.getResponseCode());
+            System.out.println(conn.getResponseMessage());
             if (conn.getResponseCode() == 403) {
 
                 showSuccessPopup();
