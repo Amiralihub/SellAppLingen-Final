@@ -130,6 +130,28 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ablageort (Optional)"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/customDropOffEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Beschreiben Sie den Ort"
+                android:inputType="text"
+                android:maxLines="1"/>
+
+        </LinearLayout>
+
         <View
             style="@style/View"
             android:layout_width="match_parent"

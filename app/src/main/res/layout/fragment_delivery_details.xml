@@ -74,6 +74,19 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:id="@+id/customDropOffLabel"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ablageort (Optional) :" />
+
+                <TextView
+                    android:id="@+id/customDropOffValue"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
                     android:id="@+id/actionInfoLabel"
                     style="@style/Text"
                     android:layout_width="wrap_content"

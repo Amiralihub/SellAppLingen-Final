@@ -16,6 +16,7 @@ public class Order implements Serializable {
     private String packageSize;
     private String handlingInfo;
     private String deliveryDate;
+    private String customDropOffPlace;
 
     public Order() {
 
@@ -26,7 +27,7 @@ public class Order implements Serializable {
 
     public Order(String token, String timestamp, String employeeName, String firstName, String lastName,
                  String street, String houseNumber, String zip, String city, String numberPackage,
-                 String packageSize, String handlingInfo, String deliveryDate) {
+                 String packageSize, String handlingInfo, String deliveryDate, String customDropOffPlace) {
         this.token = token;
         this.timestamp = timestamp;
         this.employeeName = employeeName;
@@ -40,7 +41,9 @@ public class Order implements Serializable {
         this.packageSize = packageSize;
         this.handlingInfo = handlingInfo;
         this.deliveryDate = deliveryDate;
+        this.customDropOffPlace = customDropOffPlace;
     }
+
 
     public String getToken() {
         return token;
@@ -146,6 +149,14 @@ public class Order implements Serializable {
         this.deliveryDate = deliveryDate;
     }
 
+    public String getCustomDropOffPlace() {
+        return customDropOffPlace;
+    }
+
+    public void setCustomDropOffPlace(String customDropOffPlace) {
+        this.customDropOffPlace = customDropOffPlace;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -162,6 +173,7 @@ public class Order implements Serializable {
                 ", packageSize='" + packageSize + '\'' +
                 ", handlingInfo='" + handlingInfo + '\'' +
                 ", deliveryDate='" + deliveryDate + '\'' +
+                ", customDropOffPlace='" + customDropOffPlace + '\'' +
                 '}';
     }
 }

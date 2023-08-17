@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,12 +30,54 @@ public class HandlingInfoFragment extends Fragment {
     EditText reciptname;
     private final StringBuilder selectedInfo = new StringBuilder();
     private final StringBuilder packageSizeInfo = new StringBuilder();
+
+    private EditText customDropOffEditText;
     private Order order;
     Button date,time;
     String setDate = "";
     String getTime = "";
 
     Order clientInfo;
+
+
+    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes) {
+        return (buttonView, isChecked) -> {
+            if (isChecked) {
+                if (packageSizeInfo.indexOf(size) == -1) {
+                    packageSizeInfo.append(size);
+                }
+                for (CheckBox checkBox : otherCheckBoxes) {
+                    checkBox.setChecked(false);
+                }
+            } else {
+                int index = packageSizeInfo.indexOf(size);
+                if (index != -1) {
+                    packageSizeInfo.delete(index, index + size.length());
+                }
+            }
+        };
+    }
+
+    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String optionText) {
+        return (buttonView, isChecked) -> {
+            if (isChecked) {
+                if (selectedInfo.indexOf(optionText) == -1) {
+                    selectedInfo.append(optionText).append("&");
+                }
+                if (chkOption4.isChecked()) {
+                    chkOption4.setChecked(false);
+                }
+            } else {
+                int startIndex = selectedInfo.indexOf(optionText);
+                if (startIndex != -1) {
+                    int endIndex = startIndex + optionText.length();
+                    selectedInfo.replace(startIndex, endIndex + 1, "");
+                }
+            }
+        };
+    }
+
+
 
     public HandlingInfoFragment() {
         // Required empty public constructor
@@ -48,13 +91,79 @@ public class HandlingInfoFragment extends Fragment {
 
 //        order = ((MainActivity) requireActivity()).getCurrentOrder();
 
-        S = view.findViewById(R.id.small);
         reciptname = view.findViewById(R.id.recipientNameEditText);
+        EditText customDropOffEditText = view.findViewById(R.id.customDropOffEditText);
+
         date = view.findViewById(R.id.calendarView);
 
+        S = view.findViewById(R.id.small);
         M = view.findViewById(R.id.medium);
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
+
+        S.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (packageSizeInfo.indexOf("S") == -1) {
+                    packageSizeInfo.append("S");
+                }
+                M.setChecked(false);
+                L.setChecked(false);
+                XL.setChecked(false);
+            } else {
+                int index = packageSizeInfo.indexOf("S");
+                if (index != -1) {
+                    packageSizeInfo.delete(index, index + 1);
+                }
+            }
+        });
+
+        M.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (packageSizeInfo.indexOf("M") == -1) {
+                    packageSizeInfo.append("M");
+                }
+                S.setChecked(false);
+                L.setChecked(false);
+                XL.setChecked(false);
+            } else {
+                int index = packageSizeInfo.indexOf("M");
+                if (index != -1) {
+                    packageSizeInfo.delete(index, index + 1);
+                }
+            }
+        });
+
+        L.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (packageSizeInfo.indexOf("L") == -1) {
+                    packageSizeInfo.append("L");
+                }
+                S.setChecked(false);
+                M.setChecked(false);
+                XL.setChecked(false);
+            } else {
+                int index = packageSizeInfo.indexOf("L");
+                if (index != -1) {
+                    packageSizeInfo.delete(index, index + 1);
+                }
+            }
+        });
+
+        XL.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (packageSizeInfo.indexOf("XL") == -1) {
+                    packageSizeInfo.append("XL");
+                }
+                S.setChecked(false);
+                M.setChecked(false);
+                L.setChecked(false);
+            } else {
+                int index = packageSizeInfo.indexOf("XL");
+                if (index != -1) {
+                    packageSizeInfo.delete(index, index + 2);
+                }
+            }
+        });
 //        clientInfo = (Order) requireActivity().getIntent().getSerializableExtra("order");
 
         chkOption1 = view.findViewById(R.id.fluentOption);
@@ -108,137 +217,50 @@ public class HandlingInfoFragment extends Fragment {
 
 
         //backToScannerFragmentButton = view.findViewById(R.id.backToScannerFragmentButton);
-        S.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!packageSizeInfo.toString().contains("S")) {
-                    packageSizeInfo.append("S");
-                }
-                M.setChecked(false);
-                L.setChecked(false);
-                XL.setChecked(false);
-            } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("S"), packageSizeInfo.indexOf("S") + "S".length() + 2, "");
-            }
-        });
+        S.setOnCheckedChangeListener(createCheckedChangeListener("S", packageSizeInfo, M, L, XL));
 
-        M.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!packageSizeInfo.toString().contains("M")) {
-                    packageSizeInfo.append("M");
+        M.setOnCheckedChangeListener(createCheckedChangeListener("M", packageSizeInfo, S, L, XL));
 
-                }
-                S.setChecked(false);
-                L.setChecked(false);
-                XL.setChecked(false);
-            } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("M"), packageSizeInfo.indexOf("M") + "M".length() + 2, "");
-            }
-        });
+        L.setOnCheckedChangeListener(createCheckedChangeListener("L", packageSizeInfo, S, M, XL));
 
-        L.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!packageSizeInfo.toString().contains("L")) {
-                    packageSizeInfo.append("L");
-                }
-                S.setChecked(false);
-                M.setChecked(false);
-                XL.setChecked(false);
-            } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("L"), packageSizeInfo.indexOf("L") + "L".length() + 2, "");
-            }
-        });
+        XL.setOnCheckedChangeListener(createCheckedChangeListener("XL", packageSizeInfo, S, M, L));
 
-        XL.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!packageSizeInfo.toString().contains("XL")) {
-                    packageSizeInfo.append("XL");
-                }
-                S.setChecked(false);
-                M.setChecked(false);
-                L.setChecked(false);
-            } else {
-                packageSizeInfo.replace(packageSizeInfo.indexOf("XL"), packageSizeInfo.indexOf("XL") + "XL".length() + 2, "");
-            }
-        });
-
-
-
-
-        chkOption1.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!selectedInfo.toString().contains("Flüssig")) {
-                    selectedInfo.append("Flüssig");
-                    selectedInfo.append("&");
-                }
-                if (chkOption4.isChecked()) {
-                    chkOption4.setChecked(false);
-                }
-            } else {
-                selectedInfo.replace(selectedInfo.indexOf("Flüssig"), selectedInfo.indexOf("Flüssig") + "Flüssig".length() + 2, "");
-            }
-        });
-
-        chkOption2.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!selectedInfo.toString().contains("Zerbrechlich")) {
-                    selectedInfo.append("Zerbrechlich");
-                    selectedInfo.append("&");
-                }
-                if (chkOption4.isChecked()) {
-                    chkOption4.setChecked(false);
-                }
-            } else {
-                selectedInfo.replace(selectedInfo.indexOf("Zerbrechlich"), selectedInfo.indexOf("Zerbrechlich") + "Zerbrechlich".length() + 2, "");
-            }
-        });
-
-        chkOption3.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!selectedInfo.toString().contains("Glas")) {
-                    selectedInfo.append("Glas");
-                    selectedInfo.append("&");
-                }
-                if (chkOption4.isChecked()) {
-                    chkOption4.setChecked(false);
-                }
-            } else {
-                selectedInfo.replace(selectedInfo.indexOf("Glas"), selectedInfo.indexOf("Glas") + "Glas".length() + 2, "");
-            }
-        });
-
+        chkOption1.setOnCheckedChangeListener(createCheckedChangeListener("Flüssig"));
+        chkOption2.setOnCheckedChangeListener(createCheckedChangeListener("Zerbrechlich"));
+        chkOption3.setOnCheckedChangeListener(createCheckedChangeListener("Glas"));
         chkOption4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!selectedInfo.toString().contains("Keine besondere Eigenschaft")) {
-                    selectedInfo.append("Keine besondere Eigenschaft");
-                    selectedInfo.append("&");
-                }
-                // Deaktiviere andere CheckBoxen
+                selectedInfo.setLength(0); // Entferne alle anderen ausgewählten Handlungsinformationen
+                selectedInfo.append("Keine besondere Eigenschaft").append("&");
+
+                // Deaktiviere alle anderen CheckBoxen
                 chkOption1.setChecked(false);
                 chkOption2.setChecked(false);
                 chkOption3.setChecked(false);
+                chkOption5.setChecked(false);
             } else {
-                selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 2, "");
+                selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 1, "");
             }
+
+            // Deaktiviere die anderen Optionen, wenn "Keine besondere Eigenschaft" ausgewählt ist
+            boolean keineBesondereEigenschaftSelected = selectedInfo.indexOf("Keine besondere Eigenschaft") != -1;
+            chkOption1.setEnabled(!keineBesondereEigenschaftSelected);
+            chkOption2.setEnabled(!keineBesondereEigenschaftSelected);
+            chkOption3.setEnabled(!keineBesondereEigenschaftSelected);
+            chkOption5.setEnabled(!keineBesondereEigenschaftSelected);
         });
 
-        chkOption5.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (!selectedInfo.toString().contains("Schwer")) {
-                    selectedInfo.append("Schwer");
-                    selectedInfo.append("&");
-                }
-                if (chkOption4.isChecked()) {
-                    chkOption4.setChecked(false);
-                }
-            } else {
-                selectedInfo.replace(selectedInfo.indexOf("Schwer"), selectedInfo.indexOf("Schwer") + "Schwer".length() + 2, "");
-            }
-        });
+        chkOption5.setOnCheckedChangeListener(createCheckedChangeListener("Schwer"));
+
+
+
+
 
 
 
         confirmButton.setOnClickListener(v -> {
-            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
+            String customDropOffPlace = customDropOffEditText.getText().toString();
+            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty() || customDropOffPlace.isEmpty()) {
                 Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
             } else {
                 Order order1 = new Order();
@@ -257,10 +279,16 @@ public class HandlingInfoFragment extends Fragment {
                 } else {
                     order1.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
                 }
+                String myFormat = "hh:mm";
+                SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+                String getTime = dateFormat.format(Calendar.getInstance().getTime());
+
                 order1.setHandlingInfo(selectedInfo.toString());
+                order1.setCustomDropOffPlace(customDropOffPlace);
                 order1.setDeliveryDate(setDate);
                 order1.setTimestamp(getTime);
                 String info = selectedInfo.toString();
+                System.out.println(customDropOffPlace);
                 Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
                 DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();

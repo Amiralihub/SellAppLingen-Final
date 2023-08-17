@@ -87,7 +87,8 @@ public class OrderHistoryFragment extends Fragment {
                 String packageSize = jsonObject.getString("packageSize");
                 String handlingInfo = jsonObject.getString("packageSize");
                 String deliveryDate = jsonObject.getString("packageSize");
-                Order placedOrders = new Order(token, timestamp, employeeName, firstName, lastName, street, houseNumber, zip, city, numberPackage, packageSize, handlingInfo, deliveryDate);
+                String customDropOffPlace = jsonObject.getString("customDropOffPlace");
+                Order placedOrders = new Order(token, timestamp, employeeName, firstName, lastName, street, houseNumber, zip, city, numberPackage, packageSize, handlingInfo, deliveryDate, customDropOffPlace);
                 allOrders.add(placedOrders);
                 System.out.println(packageSize);
             }

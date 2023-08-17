@@ -34,6 +34,8 @@ import java.util.Locale;
 
 public class DeliveryDetailsFragment extends Fragment {
 
+
+
     private Order order;
 
     public String orderId;
@@ -85,7 +87,7 @@ public class DeliveryDetailsFragment extends Fragment {
                     try {
                         jsonObject = new JSONObject();
                         jsonObject.put("token", token);
-                        jsonObject.put("timestamp", "12-08-2023:01-39");
+                        jsonObject.put("timestamp", order.getTimestamp());
                         jsonObject.put("employeeName", order.getEmployeeName());
                         jsonObject.put("firstName", order.getFirstName());
                         jsonObject.put("lastName", order.getLastName());
@@ -96,8 +98,8 @@ public class DeliveryDetailsFragment extends Fragment {
                         jsonObject.put("numberPackage", order.getNumberPackage());
                         jsonObject.put("packageSize", order.getPackageSize());
                         jsonObject.put("handlingInfo", order.getHandlingInfo());
-                        jsonObject.put("deliveryDate", "16-08-23");
-                        jsonObject.put("customDropOffPlace", "Garten");
+                        jsonObject.put("deliveryDate", order.getDeliveryDate());
+                        jsonObject.put("customDropOffPlace", order.getCustomDropOffPlace());
                         System.out.println(token);
     /*
                         String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
@@ -284,8 +286,12 @@ public class DeliveryDetailsFragment extends Fragment {
         String myFormat = "hh:mm";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         String getTime = dateFormat.format(Calendar.getInstance().getTime());
-
         timestampValue.setText(getTime);
+
+        // Hier wird die Uhrzeit in das Order-Objekt gespeichert
+        if (order != null) {
+            order.setTimestamp(getTime);
+        }
 
 
 
@@ -299,7 +305,7 @@ public class DeliveryDetailsFragment extends Fragment {
         if (order != null) {
             createTestOrder();
             TextView tokenValue = view.findViewById(R.id.tokenValue);
-            tokenValue.setText(order.getToken());
+            tokenValue.setText(getSavedToken());
 
 
             TextView employeeIdValue = view.findViewById(R.id.employeeIdValue);
@@ -316,6 +322,9 @@ public class DeliveryDetailsFragment extends Fragment {
 
             TextView actionInfoValue = view.findViewById(R.id.actionInfoValue);
             actionInfoValue.setText(order.getHandlingInfo());
+
+            TextView customDropOffValue = view.findViewById(R.id.customDropOffValue);
+            customDropOffValue.setText(order.getCustomDropOffPlace());
 
             TextView deliveryDateValue = view.findViewById(R.id.deliveryDateValue);
             deliveryDateValue.setText(order.getDeliveryDate());
