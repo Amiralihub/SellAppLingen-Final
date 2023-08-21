@@ -16,7 +16,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private Context context;
     private List<PlacedOrder> orderList;
 
-    // Konstruktor
+
     public OrderHistoryAdapter(Context context, List<PlacedOrder> orderList) {
         this.context = context;
         this.orderList = orderList;
@@ -31,12 +31,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         PlacedOrder order = orderList.get(position);
         holder.orderID.setText(order.getOrderID());
-
-
-
+        holder.recipient.setText(String.format("%s%s", order.getFirstName(), order.getLastName()));
+        holder.deliveryDateRecipient.setText(order.getDeliveryDate());
     }
 
     @Override
@@ -45,12 +43,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView orderID;
-
+        TextView orderID, recipient, deliveryDateRecipient;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             orderID = itemView.findViewById(R.id.orderID);
+            recipient = itemView.findViewById(R.id.recipient);
+            deliveryDateRecipient = itemView.findViewById(R.id.deliveryDateRecipient);
         }
     }
 }
