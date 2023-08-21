@@ -1,6 +1,7 @@
 package com.example.sellapplingen;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.orderID.setText(order.getOrderID());
         holder.recipient.setText(String.format("%s%s", order.getFirstName(), order.getLastName()));
         holder.deliveryDateRecipient.setText(order.getDeliveryDate());
-        holder.openDetails.setOnClickListener(view -> goToOrderHistoryDetailsFragment());
+        holder.openDetails.setOnClickListener(view -> goToOrderHistoryDetailsFragment(order));
     }
 
     @Override
@@ -57,14 +58,20 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         }
     }
 
-    private void goToOrderHistoryDetailsFragment() {
+    private void goToOrderHistoryDetailsFragment(PlacedOrder selectedOrder) {
+        OrderHistoryDetailsFragment fragment = new OrderHistoryDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("selected_order", selectedOrder);
+        fragment.setArguments(bundle);
+
         FragmentManagerHelper.goToFragment(
                 ((AppCompatActivity) context).getSupportFragmentManager(),
                 R.id.frame_layout,
-                new OrderHistoryDetailsFragment(),
+                fragment,
                 R.anim.slide_in_right,
                 R.anim.slide_out,
                 true
         );
     }
+
 }

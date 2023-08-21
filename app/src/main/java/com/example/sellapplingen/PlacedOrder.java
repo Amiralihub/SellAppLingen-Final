@@ -3,7 +3,6 @@ package com.example.sellapplingen;
 import java.io.Serializable;
 
 public class PlacedOrder implements Serializable {
-
     private String orderID;
     private String timestamp;
     private String employeeName;
