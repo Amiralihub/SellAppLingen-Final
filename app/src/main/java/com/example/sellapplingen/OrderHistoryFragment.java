@@ -128,7 +128,7 @@ public class OrderHistoryFragment extends Fragment {
                     String houseNumber = jsonObject.getString("houseNumber");
                     String zip = jsonObject.getString("ZIP");
 
-                    PlacedOrder placedOrders = new PlacedOrder(orderID, timestamp, employeeName, packageSize, deliveryDate,
+                    PlacedOrder placedOrders = new PlacedOrder(orderID, timestamp, employeeName, packageSize, PlacedOrder.formatDate(deliveryDate),
                             customDropOffPlace, handlingInfo, firstName, lastName, street, houseNumber, zip);
                     allOrders.add(placedOrders);
                     System.out.println(placedOrders.toString());
