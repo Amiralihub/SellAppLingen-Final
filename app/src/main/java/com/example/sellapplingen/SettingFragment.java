@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +28,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
     private Button saveData;
     private String token;
-    private Button logoutButton;
 
     private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
-
+    private boolean isDataEdited = false; // Neue Variable für bearbeitete Daten
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -49,8 +51,7 @@ public class SettingFragment extends Fragment {
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
         saveData = view.findViewById(R.id.saveData);
-        logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
-
+        Button logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
 
         // Lese den Token aus den SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
@@ -87,8 +88,36 @@ public class SettingFragment extends Fragment {
             }
 
         });
-        return view;
 
+        setupTextWatchers(); // Fügen Sie die TextWatcher für die Textfelder hinzu
+
+        return view;
+    }
+
+    private void setupTextWatchers() {
+        editStoreName.addTextChangedListener(createTextWatcher());
+        editOwner.addTextChangedListener(createTextWatcher());
+        editStreet.addTextChangedListener(createTextWatcher());
+        editHouseNumber.addTextChangedListener(createTextWatcher());
+        editZip.addTextChangedListener(createTextWatcher());
+        editTelephone.addTextChangedListener(createTextWatcher());
+        editEmail.addTextChangedListener(createTextWatcher());
+    }
+
+    private TextWatcher createTextWatcher() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                isDataEdited = true;
+                enableSaveButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
     }
 
     private void enableEditMode() {
@@ -101,6 +130,16 @@ public class SettingFragment extends Fragment {
             editZip.setEnabled(true);
             editTelephone.setEnabled(true);
             editEmail.setEnabled(true);
+            enableSaveButton(); // Überprüfen Sie den Zustand des Speichern-Buttons
+        }
+    }
+
+    private void enableSaveButton() {
+        // Aktivieren oder deaktivieren Sie den "Daten aktualisieren"-Button basierend auf dem Bearbeitungsstatus
+        if (isDataEdited && isEditMode) {
+            saveData.setEnabled(true);
+        } else {
+            saveData.setEnabled(false);
         }
     }
 

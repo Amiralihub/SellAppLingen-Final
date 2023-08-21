@@ -43,6 +43,9 @@ public class ScannerFragment extends Fragment {
         return fragment;
     }
 
+
+
+
     public void setCurrentOrder(Order order) {
         currentOrder = order;
     }
@@ -175,7 +178,6 @@ public class ScannerFragment extends Fragment {
         ManualInputFragment manualInputFragment = new ManualInputFragment();
         manualInputFragment.setCurrentOrder(currentOrder);
 
-        // Führe den Fragment-Wechsel durch
         FragmentManager fragmentManager = requireFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_layout, manualInputFragment, "manualInputFragment");
