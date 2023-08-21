@@ -14,10 +14,10 @@ import java.util.List;
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
 
     private Context context;
-    private List<Order> orderList;
+    private List<PlacedOrder> orderList;
 
     // Konstruktor
-    public OrderHistoryAdapter(Context context, List<Order> orderList) {
+    public OrderHistoryAdapter(Context context, List<PlacedOrder> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
@@ -31,6 +31,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        PlacedOrder order = orderList.get(position);
+        holder.orderID.setText(order.getOrderID());
+
+
+
     }
 
     @Override
@@ -40,8 +46,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        TextView orderID;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            orderID = itemView.findViewById(R.id.orderID);
         }
     }
 }

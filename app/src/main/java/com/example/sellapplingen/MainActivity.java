@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(ScannerFragment.newInstance(getCurrentOrder()));
                     break;
                 case R.id.action_orders:
-                    replaceFragment(new SettingFragment());
+                    replaceFragment(new OrderHistoryFragment());
                     break;
                 case R.id.action_settings:
                     replaceFragment(new SettingFragment());
