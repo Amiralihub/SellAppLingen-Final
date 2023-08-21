@@ -360,4 +360,3 @@ public class DeliveryDetailsFragment extends Fragment {
 
 
 }
-
