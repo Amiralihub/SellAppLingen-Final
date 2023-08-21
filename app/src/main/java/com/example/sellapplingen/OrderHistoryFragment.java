@@ -2,7 +2,10 @@ package com.example.sellapplingen;
 
 import static android.content.ContentValues.TAG;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -14,10 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +51,7 @@ import java.util.concurrent.Executors;
 public class OrderHistoryFragment extends Fragment {
     private ArrayList<PlacedOrder> placedOrders;
     private OrderHistoryAdapter orderHistoryAdapter;
+    EditText serachOrder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,7 @@ public class OrderHistoryFragment extends Fragment {
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), placedOrders);
         recyclerView.setAdapter(orderHistoryAdapter);
 
+        //TODO: refactor
         if (isNetworkAvailable()) {
             executorService.execute(() -> {
                 ArrayList<PlacedOrder> result = downloadData("http://131.173.65.77:8080/api/allOrders");
@@ -75,6 +85,32 @@ public class OrderHistoryFragment extends Fragment {
         } else {
             requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Keine Netzwerkverbindung", Toast.LENGTH_LONG).show());
         }
+
+        serachOrder = view.findViewById(R.id.serachOrder);
+        serachOrder.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                orderHistoryAdapter.filter(serachOrder.getText().toString());
+                hideKeyboard(v);
+                return true;
+            }
+            return false;
+        });
+
+
+        serachOrder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Die Filtermethode mit dem aktuellen Text aufrufen
+                orderHistoryAdapter.filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
         return view;
     }
 
@@ -166,6 +202,10 @@ public class OrderHistoryFragment extends Fragment {
         return sharedPreferences.getString("token", null);
     }
 
+    private void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 
 }

@@ -1,10 +1,14 @@
 package com.example.sellapplingen;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
@@ -73,5 +78,20 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 true
         );
     }
+
+    public void filter(String query) {
+        List<PlacedOrder> filteredList = new ArrayList<>();
+        for (PlacedOrder order : orderList) {
+            if (order.getFirstName().toLowerCase().contains(query.toLowerCase())
+                    || order.getLastName().toLowerCase().contains(query.toLowerCase())
+                    || order.getOrderID().toLowerCase().contains(query.toLowerCase())
+                    || order.getDeliveryDate().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(order);
+            }
+        }
+        this.orderList = filteredList;
+        notifyDataSetChanged();
+    }
+
 
 }

@@ -35,6 +35,7 @@
                 android:drawableLeft="@drawable/baseline_email_24"
                 android:drawablePadding="8dp"
                 android:hint="E-Mail"
+                android:inputType="textEmailAddress"
                 android:padding="8dp" />
 
             <EditText

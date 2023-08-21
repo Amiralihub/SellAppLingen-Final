@@ -13,16 +13,16 @@
         android:layout_height="200dp"
         android:src="@drawable/order" />
 
-    <View
-        style="@style/View"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
 
     <EditText
         android:id="@+id/serachOrder"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_bkg"
         android:drawableLeft="@drawable/baseline_search_24"
+        android:inputType="text"
         android:src="@drawable/order" />
 
 
