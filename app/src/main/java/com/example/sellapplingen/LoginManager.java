@@ -73,7 +73,7 @@ public class LoginManager {
 
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.contains("username") && sharedPreferences.contains("password");
+        return sharedPreferences.contains("token");
     }
 
 
