@@ -187,17 +187,20 @@ public class HandlingInfoFragment extends Fragment {
 
                         Calendar todayCalendar = Calendar.getInstance();
 
-                        if (selectedCalendar.before(todayCalendar)) {
+                        // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
+                        if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) &&
+                                selectedCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
+                                selectedCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH) &&
+                                todayCalendar.get(Calendar.HOUR_OF_DAY) >= 13) {
+                            // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
+                            Toast.makeText(requireContext(), "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.", Toast.LENGTH_SHORT).show();
+                        } else if (selectedCalendar.before(todayCalendar)) {
                             // Ausgewähltes Datum liegt in der Vergangenheit
                             Toast.makeText(requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.", Toast.LENGTH_SHORT).show();
                         } else {
                             myCalendar.set(Calendar.YEAR, year);
                             myCalendar.set(Calendar.MONTH, month);
                             myCalendar.set(Calendar.DAY_OF_MONTH, day);
-
-                            if (myCalendar.get(Calendar.HOUR_OF_DAY) >= 13) {
-                                myCalendar.add(Calendar.DAY_OF_MONTH, 1);
-                            }
 
                             String myFormat = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
                             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -212,6 +215,7 @@ public class HandlingInfoFragment extends Fragment {
 
                 datePickerDialog.show();
             }
+
         });
 
 
@@ -260,7 +264,7 @@ public class HandlingInfoFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             String customDropOffPlace = customDropOffEditText.getText().toString();
-            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty() || customDropOffPlace.isEmpty()) {
+            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
                 Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
             } else {
                 Order order1 = new Order();

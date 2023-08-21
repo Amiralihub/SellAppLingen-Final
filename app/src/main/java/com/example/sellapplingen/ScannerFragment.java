@@ -86,11 +86,10 @@ public class ScannerFragment extends Fragment {
             currentOrder.setHouseNumber(scanResultArray[3]);
             currentOrder.setZip(scanResultArray[4]);
             currentOrder.setCity(scanResultArray[5]);
-        } else {
-            // Wenn der gescannte Inhalt nicht das erwartete Format hat, zeige eine Fehlermeldung
-            Toast.makeText(requireContext(), "Ungültiger QR-Code-Format.", Toast.LENGTH_SHORT).show();
         }
+        // Kein else-Statement hier, da die Fehlermeldung bereits in showResultDialog gezeigt wird
     }
+
 
     private void scanCode() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -133,7 +132,9 @@ public class ScannerFragment extends Fragment {
     }
 
     private void showResultDialog(String contents) {
+
         String[] res = contents.split("&");
+        if (res.length == 6) {
         Order order = new Order();
         order.setLastName(res[0]);
         order.setFirstName(res[1]);
@@ -170,8 +171,16 @@ public class ScannerFragment extends Fragment {
                 .replace(R.id.frame_layout, toFragment, "tariq").commit();
 
 
-        Log.i("tariq", "showResultDialog: " + res[0]+"\n"+res[2]+"\n"+res[3]+"\n"+res[4]+"\n"+res[5]);
-    }
+        Log.i("Sadik", "showResultDialog: " + res[0] + "\n" + res[2] + "\n" + res[3] + "\n" + res[4] + "\n" + res[5]);
+
+        } else {
+
+            Toast.makeText(requireContext(), "Ungültiges QR-Code-Format.", Toast.LENGTH_SHORT).show();
+        }
+
+}
+
+
 
     private void openManualInputFragment() {
         // Erstelle das ManualInputFragment

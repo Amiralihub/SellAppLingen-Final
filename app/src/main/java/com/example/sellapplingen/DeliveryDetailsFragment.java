@@ -153,7 +153,7 @@ public class DeliveryDetailsFragment extends Fragment {
 
                         try {
                             InputStream inputStream = conn.getInputStream();
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)); 
                             StringBuilder responseBuilder = new StringBuilder();
                             String line;
                             while ((line = reader.readLine()) != null) {

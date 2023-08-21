@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +19,7 @@ public class ManualInputFragment extends Fragment {
     private Order currentOrder;
 
     private String selectedZipCode = "";
-
+    private String[] zipCodes = {"49808", "49809", "49811"}; // Array der verfügbaren PLZ-Optionen
 
     public ManualInputFragment() {
         // Required empty public constructor
@@ -36,7 +38,23 @@ public class ManualInputFragment extends Fragment {
 
     private void setupViews() {
         binding.confirmManualInputButton.setOnClickListener(v -> saveManualInput());
-        binding.zipButton.setOnClickListener(v -> showZipCodeOptions());
+
+        // Initialisiere den Spinner
+        ArrayAdapter<String> zipAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, zipCodes);
+        binding.zipSpinner.setAdapter(zipAdapter);
+
+        binding.zipSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Setze den ausgewählten Wert im Spinner
+                selectedZipCode = zipCodes[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Handle nichts ausgewählt
+            }
+        });
     }
 
 
@@ -49,7 +67,7 @@ public class ManualInputFragment extends Fragment {
             currentOrder.setStreet(binding.streetEditText.getText().toString());
             currentOrder.setHouseNumber(binding.houseNumberEditText.getText().toString());
             currentOrder.setZip(selectedZipCode);
-            currentOrder.setCity(binding.cityEditText.getText().toString());
+            currentOrder.setCity("Lingen");
 
             // Erstelle das Bundle für die Übergabe der Order-Daten
             Bundle args = new Bundle();
@@ -76,30 +94,13 @@ public class ManualInputFragment extends Fragment {
         String firstName = binding.firstNameEditText.getText().toString();
         String street = binding.streetEditText.getText().toString();
         String houseNumber = binding.houseNumberEditText.getText().toString();
-        String city = binding.cityEditText.getText().toString();
 
         // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
-        return !lastName.isEmpty() && !firstName.isEmpty() && !street.isEmpty() && !houseNumber.isEmpty() && !selectedZipCode.isEmpty() && !city.isEmpty();
+        return !lastName.isEmpty() && !firstName.isEmpty() && !street.isEmpty() && !houseNumber.isEmpty() && !selectedZipCode.isEmpty();
     }
 
 
-    private void showZipCodeOptions() {
-        // Erstelle ein Array mit den verfügbaren PLZ-Optionen
-        String[] zipCodes = {"49808", "49809", "49811"};
 
-        // Erstelle einen AlertDialog, um die PLZ-Optionen anzuzeigen
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Postleitzahl auswählen")
-                .setItems(zipCodes, (dialog, which) -> {
-                    // Wenn eine Option ausgewählt wurde, setze den ausgewählten Wert im Button-Text
-                    String selectedZip = zipCodes[which];
-                    binding.zipButton.setText(selectedZip);
-                    selectedZipCode = selectedZip; // Aktualisiere die ausgewählte Postleitzahl
-                });
-
-        // Zeige den AlertDialog
-        builder.create().show();
-    }
 
 
 }

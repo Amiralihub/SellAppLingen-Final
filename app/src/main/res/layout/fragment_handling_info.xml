@@ -10,27 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/tokenLabel"
-                style="@style/Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Empfängerdaten :" />
-
-            <TextView
-                android:id="@+id/tokenValue"
-                style="@style/Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
         <View
             style="@style/View"
             android:layout_width="match_parent"
@@ -180,7 +159,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/lavender"
                 android:gravity="center"
-                android:text="Set Date" />
+                android:text="Datum festlegen" />
 
             <LinearLayout
                 android:layout_width="match_parent"

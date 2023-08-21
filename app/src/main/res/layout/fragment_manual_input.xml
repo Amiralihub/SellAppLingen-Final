@@ -29,20 +29,20 @@
         android:layout_height="wrap_content"
         android:hint="Hausnummer" />
 
-    <Button
-        android:id="@+id/zipButton"
+    <Spinner
+        android:id="@+id/zipSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lavender"
-        android:hint="Postleitzahl"
+        android:spinnerMode="dropdown"
         app:iconTint="@color/white" />
 
 
-    <EditText
-        android:id="@+id/cityEditText"
+    <TextView
+        android:id="@+id/cityTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Stadt" />
+        android:text="Lingen" />
 
 
     <!-- Füge hier weitere EditText-Felder für die anderen Order-Informationen hinzu -->
