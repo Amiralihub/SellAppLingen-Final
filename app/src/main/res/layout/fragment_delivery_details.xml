@@ -28,175 +28,175 @@
             android:layout_height="wrap_content"
             android:text="Token :" />
 
-                <TextView
-                    android:id="@+id/tokenValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tokenValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/timestampLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Zeitstempel :" />
+        <TextView
+            android:id="@+id/timestampLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zeitstempel :" />
 
-                <TextView
-                    android:id="@+id/timestampValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/timestampValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/employeeIdLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mitarbeiter-ID :" />
+        <TextView
+            android:id="@+id/employeeIdLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mitarbeiter-ID :" />
 
-                <TextView
-                    android:id="@+id/employeeIdValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/employeeIdValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/packageSizeLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Paket Größe :" />
+        <TextView
+            android:id="@+id/packageSizeLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Paket Größe :" />
 
-                <TextView
-                    android:id="@+id/packageSizeValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/packageSizeValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/customDropOffLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ablageort (Optional) :" />
+        <TextView
+            android:id="@+id/customDropOffLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ablageort (Optional) :" />
 
-                <TextView
-                    android:id="@+id/customDropOffValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/customDropOffValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/actionInfoLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Handlungsinformationen :" />
+        <TextView
+            android:id="@+id/actionInfoLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handlungsinformationen :" />
 
-                <TextView
-                    android:id="@+id/actionInfoValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/actionInfoValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/deliveryDateLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lieferdatum :" />
+        <TextView
+            android:id="@+id/deliveryDateLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lieferdatum :" />
 
-                <TextView
-                    android:id="@+id/deliveryDateValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/deliveryDateValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <ImageView
-                    android:id="@+id/ordersLogo"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/order" />
+        <ImageView
+            android:id="@+id/ordersLogo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/order" />
 
-                <TextView
-                    android:id="@+id/deliveryAdressLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Lieferadresse:" />
+        <TextView
+            android:id="@+id/deliveryAdressLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Lieferadresse:" />
 
-                <TextView
-                    android:id="@+id/firstNameLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vorname :" />
+        <TextView
+            android:id="@+id/firstNameLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vorname :" />
 
-                <TextView
-                    android:id="@+id/firstNameValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/firstNameValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/lastNameLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nachname :" />
+        <TextView
+            android:id="@+id/lastNameLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nachname :" />
 
-                <TextView
-                    android:id="@+id/lastNameValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/lastNameValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/streetNameLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Straßennamen :" />
+        <TextView
+            android:id="@+id/streetNameLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Straßennamen :" />
 
-                <TextView
-                    android:id="@+id/streetNameValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/streetNameValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/houseNumberLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hausnummer :" />
+        <TextView
+            android:id="@+id/houseNumberLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hausnummer :" />
 
-                <TextView
-                    android:id="@+id/houseNumberValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/houseNumberValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/zipLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Postleitzahl :" />
+        <TextView
+            android:id="@+id/zipLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Postleitzahl :" />
 
-                <TextView
-                    android:id="@+id/zipValue"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/zipValue"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/cityLabel"
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ort :" />
+        <TextView
+            android:id="@+id/cityLabel"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ort :" />
 
         <TextView
             android:id="@+id/cityValue"
