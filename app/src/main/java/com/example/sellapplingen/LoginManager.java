@@ -3,6 +3,7 @@ package com.example.sellapplingen;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +20,8 @@ public class LoginManager {
     public static final String PREF_NAME = "LoginPrefs";
     public String username;
     public String password;
+
+    public Boolean showFailMSG = false;
 
     public LoginManager(String username, String password) {
 
@@ -79,6 +82,8 @@ public class LoginManager {
 
 
     public void sendPost(Runnable onSuccess) {
+
+        showFailMSG = false;
         Log.d("LoginManager", "sendPost() Methode aufgerufen");
 
         if (username == null || password == null )  {
@@ -145,6 +150,8 @@ public class LoginManager {
                         // Logge den Token
                         Log.d("LoginManager", "Received token: " + token);
                         onSuccess.run();
+                    }else{
+                        showFailMSG = true;
                     }
                     conn.disconnect();
 
@@ -158,6 +165,11 @@ public class LoginManager {
         });
 
         thread.start();
+
+        if(showFailMSG){
+            Toast.makeText(context, "Falsche Login Daten", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
