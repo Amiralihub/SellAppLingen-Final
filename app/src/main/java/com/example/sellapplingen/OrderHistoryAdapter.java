@@ -37,7 +37,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         PlacedOrder order = orderList.get(position);
         holder.orderID.setText(order.getOrderID());
         holder.recipient.setText(String.format("%s%s", order.getFirstName(), order.getLastName()));
-        holder.deliveryDateRecipient.setText(order.getDeliveryDate());
+        holder.deliveryDateRecipient.setText(order.formatDate(order.getDeliveryDate()));
         holder.openDetails.setOnClickListener(view -> goToOrderHistoryDetailsFragment(order));
     }
 
