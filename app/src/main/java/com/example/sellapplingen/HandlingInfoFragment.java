@@ -199,7 +199,7 @@ public class HandlingInfoFragment extends Fragment {
                                 myCalendar.add(Calendar.DAY_OF_MONTH, 1);
                             }
 
-                            String myFormat = "dd-MM-yyyy"; // Ändere das Format zu "dd-MM-yyyy"
+                            String myFormat = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
                             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                             setDate = dateFormat.format(myCalendar.getTime());
                             date.setText(setDate);
