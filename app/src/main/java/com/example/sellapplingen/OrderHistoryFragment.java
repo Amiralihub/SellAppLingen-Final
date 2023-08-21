@@ -72,6 +72,7 @@ public class OrderHistoryFragment extends Fragment {
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), placedOrders);
         recyclerView.setAdapter(orderHistoryAdapter);
 
+        //TODO: refactor
         if (isNetworkAvailable()) {
             executorService.execute(() -> {
                 ArrayList<PlacedOrder> result = downloadData("http://131.173.65.77:8080/api/allOrders");
