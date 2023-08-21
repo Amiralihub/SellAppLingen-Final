@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
-
     private EditText passwordEditText;
-    private Button loginButton;
-
     private LoginManager loginManager;
 
 
@@ -25,9 +23,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ImageView loginImageView = findViewById(R.id.loginImageView);
+        ImageView logobigImageView = findViewById(R.id.logobigImageView);
         usernameEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
-        loginButton = findViewById(R.id.buttonLogin);
+        Button loginButton = findViewById(R.id.buttonLogin);
 
 
         // Verwende den ApplicationContext für den LoginManager

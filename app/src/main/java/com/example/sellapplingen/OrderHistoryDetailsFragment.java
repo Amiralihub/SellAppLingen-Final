@@ -68,14 +68,14 @@ public class OrderHistoryDetailsFragment extends Fragment {
 
 
         if (order != null) {
-            orderNumberTextView.setText(order.getOrderID());
-            orderDateTextView.setText(order.getDeliveryDate());
-            employeeTextView.setText(order.getEmployeeName());
-            orderPackageTextView.setText(order.getPackageSize());
-            orderDropPlaceTextView.setText(order.getCustomDropOffPlace());
-            recipientTextView.setText(String.format("%s%s", order.getFirstName(), order.getLastName()));
-            recipientStreetTextView.setText(String.format("%s%s", order.getStreet(), order.getHouseNumber()));
-            recipientCityTextView.setText(order.getZip());
+            recipientOrderNumberTextView.setText(order.getOrderID());
+            recipientOrderDateTextView.setText(order.getDeliveryDate());
+            employeeOrderTextView.setText(order.getEmployeeName());
+            recipientOrderPackageTextView.setText(order.getPackageSize());
+            recipientOrderDropPlaceTextView.setText(order.getCustomDropOffPlace());
+            recipientOrderTextView.setText(String.format("%s%s", order.getFirstName(), order.getLastName()));
+            orderStreetTextView.setText(String.format("%s%s", order.getStreet(), order.getHouseNumber()));
+            orderCityTextView.setText(order.getZip());
         }
 
 
