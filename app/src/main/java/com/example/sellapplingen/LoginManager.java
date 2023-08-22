@@ -24,10 +24,8 @@ public class LoginManager {
     public Boolean showFailMSG = false;
 
     public LoginManager(String username, String password) {
-
         this.username = username;
         this.password = password;
-
     }
 
     private static LoginManager instance;

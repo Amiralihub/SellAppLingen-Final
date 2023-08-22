@@ -156,7 +156,6 @@ public class PlacedOrder implements Serializable {
     public static String formatDate(String inputDate) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd.MM.yyyy");
-
         try {
             Date date = inputFormat.parse(inputDate);
             return outputFormat.format(date);
@@ -165,6 +164,5 @@ public class PlacedOrder implements Serializable {
             return ""; // Return an empty string or handle the error as needed
         }
     }
-
 
 }

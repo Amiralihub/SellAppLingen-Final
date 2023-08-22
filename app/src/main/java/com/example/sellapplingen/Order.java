@@ -22,9 +22,6 @@ public class Order implements Serializable {
 
     }
 
-
-
-
     public Order(String token, String timestamp, String employeeName, String firstName, String lastName,
                  String street, String houseNumber, String zip, String city, String numberPackage,
                  String packageSize, String handlingInfo, String deliveryDate, String customDropOffPlace) {
