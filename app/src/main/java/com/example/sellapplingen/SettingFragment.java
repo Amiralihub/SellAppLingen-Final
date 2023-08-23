@@ -89,10 +89,11 @@ public class SettingFragment extends Fragment {
 
         });
 
-        setupTextWatchers(); // Fügen Sie die TextWatcher für die Textfelder hinzu
+        setupTextWatchers();
 
         return view;
     }
+
 
     private void setupTextWatchers() {
         editStoreName.addTextChangedListener(createTextWatcher());
@@ -309,13 +310,11 @@ public class SettingFragment extends Fragment {
     }
 
     public void setSettings() {
-        System.out.println();
         String testToken = token;
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
             return;
         }
-
 
         try {
             String storeName = editStoreName.getText().toString();
