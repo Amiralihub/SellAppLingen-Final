@@ -316,6 +316,7 @@ public class SettingFragment extends Fragment {
             return;
         }
 
+
         try {
             String storeName = editStoreName.getText().toString();
             String owner = editOwner.getText().toString();
