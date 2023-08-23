@@ -234,7 +234,11 @@ public class SettingFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        setSettings();
+                        setSettings(SettingParameter.storeName, editStoreName.getText().toString());
+                        setSettings(SettingParameter.owner, editOwner.getText().toString());
+                        setSettings(SettingParameter.telephone, editTelephone.getText().toString());
+                        setSettings(SettingParameter.email, editEmail.getText().toString());
+                        setAddress(editStreet.getText().toString(), editHouseNumber.getText().toString(), editZip.getText().toString());
 
                         requireActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -247,6 +251,8 @@ public class SettingFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+
+
 
 
         builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -267,16 +273,15 @@ public class SettingFragment extends Fragment {
         return sharedPreferences.getString("token", null);
     }
 
-
     private void getSettings() {
-        String testToken = token;
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
             return;
         }
+
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("token", testToken);
+            jsonParam.put("token", token);
 
             URL url = new URL("http://131.173.65.77:8080/api/getSettings");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -304,50 +309,27 @@ public class SettingFragment extends Fragment {
 
                 final JSONObject jsonResponse = new JSONObject(response.toString());
 
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             String storeName = jsonResponse.getString("storeName");
                             String owner = jsonResponse.getString("owner");
-                            String street = jsonResponse.getString("street");
-                            String houseNumber = jsonResponse.getString("houseNumber");
-                            String zip = jsonResponse.getString("zip");
+                            String street = jsonResponse.getJSONObject("address").getString("street");
+                            String houseNumber = jsonResponse.getJSONObject("address").getString("houseNumber");
+                            String zip = jsonResponse.getJSONObject("address").getString("zip");
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
+                            // Update UI components with the retrieved data
+                            editStoreName.setText(storeName);
+                            editOwner.setText(owner);
+                            editStreet.setText(street);
+                            editHouseNumber.setText(houseNumber);
+                            editZip.setText(zip);
+                            editTelephone.setText(telephone);
+                            editEmail.setText(email);
 
-                            dataEditWatcher.watch(editStoreName);
-                            dataEditWatcher.watch(editOwner);
-                            dataEditWatcher.watch(editStreet);
-                            dataEditWatcher.watch(editHouseNumber);
-                            dataEditWatcher.watch(editZip);
-                            dataEditWatcher.watch(editTelephone);
-                            dataEditWatcher.watch(editEmail);
-
-                            if (!isEditMode) {
-                                editStoreName.setEnabled(false);
-                                editOwner.setEnabled(false);
-                                editStreet.setEnabled(false);
-                                editHouseNumber.setEnabled(false);
-                                editZip.setEnabled(false);
-                                editTelephone.setEnabled(false);
-                                editEmail.setEnabled(false);
-                            }
-
-                            requireActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    editStoreName.setText(storeName);
-                                    editOwner.setText(owner);
-                                    editStreet.setText(street);
-                                    editHouseNumber.setText(houseNumber);
-                                    editZip.setText(zip);
-                                    editTelephone.setText(telephone);
-                                    editEmail.setText(email);
-                                }
-                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -362,35 +344,24 @@ public class SettingFragment extends Fragment {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    public void setSettings() {
-        String testToken = token;
+
+
+
+    public void setSettings(SettingParameter parameter, String value) {
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
             return;
         }
 
         try {
-            String storeName = editStoreName.getText().toString();
-            String owner = editOwner.getText().toString();
-            String street = editStreet.getText().toString();
-            String houseNumber = editHouseNumber.getText().toString();
-            String zip = editZip.getText().toString();
-            String telephone = editTelephone.getText().toString();
-            String email = editEmail.getText().toString();
-
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("token", testToken);
-            jsonParam.put("storeName", storeName);
-            jsonParam.put("owner", owner);
-            jsonParam.put("street", street);
-            jsonParam.put("houseNumber", houseNumber);
-            jsonParam.put("zip", zip);
-            jsonParam.put("telephone", telephone);
-            jsonParam.put("email", email);
+            jsonParam.put("token", token);
+            jsonParam.put("parameter", parameter.toString());
+            jsonParam.put("value", value);
+
+
 
             URL url = new URL("http://131.173.65.77:8080/api/setSettings");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -408,15 +379,12 @@ public class SettingFragment extends Fragment {
             os.flush();
             os.close();
 
-            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-            Log.i("MSG", conn.getResponseMessage());
+            int responseCode = conn.getResponseCode();
 
-            if (conn.getResponseCode() == 403) {
+            if (responseCode == 200) {
 
                 showSuccessPopup();
-
             } else {
-
                 showErrorPopup();
             }
 
@@ -426,6 +394,58 @@ public class SettingFragment extends Fragment {
             showErrorPopup();
         }
     }
+
+
+
+
+    public void setAddress(String street, String houseNumber, String zip) {
+        if (getSavedToken() == null) {
+            Log.d("Settings", "Kein Token");
+            return;
+        }
+
+        try {
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("token", token);
+
+            JSONObject addressJson = new JSONObject();
+            addressJson.put("street", street);
+            addressJson.put("houseNumber", houseNumber);
+            addressJson.put("zip", zip);
+
+            jsonParam.put("address", addressJson);
+
+            URL url = new URL("http://131.173.65.77:8080/api/setAddress");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            if (token != null) {
+                conn.setRequestProperty("Authorization", "Bearer " + token);
+            }
+
+            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(jsonParam.toString());
+            os.flush();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 200) {
+                showSuccessPopup();
+            } else {
+                showErrorPopup();
+            }
+
+            conn.disconnect();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        }
+    }
+
 
     public void showSuccessPopup() {
         requireActivity().runOnUiThread(new Runnable() {
