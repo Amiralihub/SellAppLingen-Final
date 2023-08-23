@@ -432,10 +432,11 @@ public class SettingFragment extends Fragment {
 
             if (responseCode == 200) {
 
-                Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
-
+                showSuccessPopup();
             } else {
-                Toast.makeText(requireContext(), "Keine Verbindung zum Server.", Toast.LENGTH_SHORT).show();
+
+                showErrorPopup();
+
             }
 
             conn.disconnect();
