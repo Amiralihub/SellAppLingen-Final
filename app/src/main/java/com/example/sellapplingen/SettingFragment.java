@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class SettingFragment extends Fragment {
@@ -37,6 +39,9 @@ public class SettingFragment extends Fragment {
 
     private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
     private boolean isDataEdited = false; // Neue Variable für bearbeitete Daten
+
+    private DataEditWatcher dataEditWatcher;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -53,16 +58,21 @@ public class SettingFragment extends Fragment {
         saveData = view.findViewById(R.id.saveData);
         Button logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
 
+
+        dataEditWatcher = new DataEditWatcher();
+        dataEditWatcher.watch(editStoreName);
+        dataEditWatcher.watch(editOwner);
+        dataEditWatcher.watch(editStreet);
+        dataEditWatcher.watch(editHouseNumber);
+        dataEditWatcher.watch(editZip);
+        dataEditWatcher.watch(editTelephone);
+        dataEditWatcher.watch(editEmail);
+
         // Lese den Token aus den SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getSettings();
-            }
-        }).start();
+        new Thread(this::getSettings).start();
 
         Button editDataButton = view.findViewById(R.id.editDataButton);
         editDataButton.setOnClickListener(new View.OnClickListener() {
@@ -73,13 +83,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        saveData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmationDialog();
-            }
-
-        });
+        saveData.setOnClickListener(v -> showConfirmationDialog());
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +96,39 @@ public class SettingFragment extends Fragment {
         setupTextWatchers();
 
         return view;
+    }
+
+
+
+    private class DataEditWatcher implements TextWatcher {
+
+        private Set<EditText> watchedFields = new HashSet<>();
+
+        public void watch(EditText editText) {
+            watchedFields.add(editText);
+            editText.addTextChangedListener(this);
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            isDataEdited = true;
+            enableSaveButton();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {}
+
+        public boolean anyFieldEdited() {
+            for (EditText editText : watchedFields) {
+                if (!editText.getText().toString().equals(editText.getTag())) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 
@@ -121,7 +158,8 @@ public class SettingFragment extends Fragment {
         };
     }
 
-    private void enableEditMode() {
+
+    public void enableEditMode() {
         // Aktivieren Sie die Bearbeitung der Daten
         if (isEditMode) {
             editStoreName.setEnabled(true);
@@ -131,13 +169,11 @@ public class SettingFragment extends Fragment {
             editZip.setEnabled(true);
             editTelephone.setEnabled(true);
             editEmail.setEnabled(true);
-            enableSaveButton(); // Überprüfen Sie den Zustand des Speichern-Buttons
         }
     }
 
     private void enableSaveButton() {
-        // Aktivieren oder deaktivieren Sie den "Daten aktualisieren"-Button basierend auf dem Bearbeitungsstatus
-        if (isDataEdited && isEditMode) {
+        if (isDataEdited && isEditMode && dataEditWatcher.anyFieldEdited()) {
             saveData.setEnabled(true);
         } else {
             saveData.setEnabled(false);
@@ -268,6 +304,15 @@ public class SettingFragment extends Fragment {
                             String zip = jsonResponse.getString("zip");
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
+
+
+                            dataEditWatcher.watch(editStoreName);
+                            dataEditWatcher.watch(editOwner);
+                            dataEditWatcher.watch(editStreet);
+                            dataEditWatcher.watch(editHouseNumber);
+                            dataEditWatcher.watch(editZip);
+                            dataEditWatcher.watch(editTelephone);
+                            dataEditWatcher.watch(editEmail);
 
                             if (!isEditMode) {
                                 editStoreName.setEnabled(false);
