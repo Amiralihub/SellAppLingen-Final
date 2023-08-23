@@ -6,8 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -101,7 +100,7 @@ public class SettingFragment extends Fragment {
 
     private class DataEditWatcher implements TextWatcher {
 
-        private Set<EditText> watchedFields = new HashSet<>();
+        private final Set<EditText> watchedFields = new HashSet<>();
 
         public void watch(EditText editText) {
             watchedFields.add(editText);
@@ -174,13 +173,10 @@ public class SettingFragment extends Fragment {
 
     private void enableSaveButton() {
         if (isEditMode) {
-            if (dataEditWatcher.anyFieldEdited()) {
-                saveData.setEnabled(true);
-            } else {
-                saveData.setEnabled(false);
-            }
+            saveData.setEnabled(dataEditWatcher.anyFieldEdited());
         } else {
             saveData.setEnabled(false);
+
         }
     }
 
@@ -218,12 +214,108 @@ public class SettingFragment extends Fragment {
         // Start LoginActivity using an Intent
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         startActivity(intent);
-        requireActivity().finish(); // Optional, um die aktuelle Aktivität zu schließen
+        requireActivity().finish();
+    }
+
+    private boolean isInputValid(String storeName, String owner, String street, String houseNumber, String zip, String telephone, String email) {
+        boolean isValid = true;
+
+        if (storeName.isEmpty()) {
+            isValid = false;
+            editStoreName.setError("Bitte geben Sie einen Geschäftsnamen ein");
+        }
+
+        if (owner.isEmpty()) {
+            isValid = false;
+            editOwner.setError("Bitte geben Sie den Eigentümer ein");
+        }
+
+        if (street.isEmpty()) {
+            isValid = false;
+            editStreet.setError("Bitte geben Sie eine Straße ein");
+        }
+
+        if (houseNumber.isEmpty()) {
+            isValid = false;
+            editHouseNumber.setError("Bitte geben Sie eine Hausnummer ein");
+        }
+        if (zip.isEmpty()) {
+            isValid = false;
+            editZip.setError("Bitte geben Sie einen Geschäftsnamen ein");
+        }
+        if (telephone.isEmpty()) {
+            isValid = false;
+            editTelephone.setError("Bitte geben Sie einen Geschäftsnamen ein");
+        }
+        if (email.isEmpty()) {
+            isValid = false;
+            editEmail.setError("Bitte geben Sie einen Geschäftsnamen ein");
+        }
+
+        return isValid;
     }
 
 
+//TODO
 
+/*
+
+
+    private boolean isInputValid(String storeName, String owner, String street, String houseNumber, String zip, String telephone, String email) {
+        boolean isValid = true;
+
+        if (storeName.isEmpty()) {
+            isValid = false;
+            editStoreName.setError("Bitte geben Sie einen Geschäftsnamen ein");
+        }
+
+        if (owner.isEmpty()) {
+            isValid = false;
+            editOwner.setError("Bitte geben Sie den Eigentümer ein");
+        }
+
+        if (street.isEmpty()) {
+            isValid = false;
+            editStreet.setError("Bitte geben Sie eine Straße ein");
+        }
+
+        if (houseNumber.isEmpty()) {
+            isValid = false;
+            editHouseNumber.setError("Bitte geben Sie eine Hausnummer ein");
+        }
+
+        if (zip.isEmpty()) {
+            isValid = false;
+            editZip.setError("Bitte geben Sie eine Postleitzahl ein");
+        }
+
+        if (telephone.isEmpty()) {
+            isValid = false;
+            editTelephone.setError("Bitte geben Sie eine Telefonnummer ein");
+        }
+
+        if (email.isEmpty()) {
+            isValid = false;
+            editEmail.setError("Bitte geben Sie eine E-Mail-Adresse ein");
+        }
+
+        return isValid;
+    }
+
+    // Verwende die Methode in deiner showConfirmationDialog-Methode
     private void showConfirmationDialog() {
+        if (!isInputValid(
+                editStoreName.getText().toString(),
+                editOwner.getText().toString(),
+                editStreet.getText().toString(),
+                editHouseNumber.getText().toString(),
+                editZip.getText().toString(),
+                editTelephone.getText().toString(),
+                editEmail.getText().toString()
+        )) {
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Daten speichern");
         builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
@@ -252,8 +344,63 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 
+*/
+
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Daten speichern");
+        builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
+
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String storeName = editStoreName.getText().toString();
+                String owner = editOwner.getText().toString();
+                String street = editStreet.getText().toString();
+                String houseNumber = editHouseNumber.getText().toString();
+                String zip = editZip.getText().toString();
+                String telephone = editTelephone.getText().toString();
+                String email = editEmail.getText().toString();
+
+                // Hier rufst du die Methode auf, um die Validierung durchzuführen
+                if (isInputValid(storeName, owner, street, houseNumber, zip, telephone, email)) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setSettings(SettingParameter.storeName, storeName);
+                            setSettings(SettingParameter.owner, owner);
+                            setSettings(SettingParameter.telephone, telephone);
+                            setSettings(SettingParameter.email, email);
+                            setAddress(street, houseNumber, zip);
+
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    saveData.setEnabled(false);
+                                }
+                            });
+                        }
+                    }).start();
+                    dialog.dismiss();
+                } else {
+                    // Zeige eine Fehlermeldung an, wenn die Validierung fehlschlägt
+                    Toast.makeText(requireContext(), "Bitte überprüfen Sie die Eingabe", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             @Override
@@ -381,6 +528,8 @@ public class SettingFragment extends Fragment {
             if (responseCode == 200) {
 
                 showSuccessPopup();
+                enableEditMode();
+
             } else {
                 showErrorPopup();
             }
@@ -453,6 +602,7 @@ public class SettingFragment extends Fragment {
             public void run() {
                 // Show the success message using a Toast on the main UI thread
                 Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
+                enableEditMode();
             }
         });
     }
