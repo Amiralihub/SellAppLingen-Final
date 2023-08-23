@@ -56,7 +56,7 @@ public class SettingFragment extends Fragment {
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
         saveData = view.findViewById(R.id.saveData);
-        Button logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
+        Button logoutButton = view.findViewById(R.id.logoutButton);
 
         dataEditWatcher = new DataEditWatcher();
         dataEditWatcher.watch(editStoreName);
@@ -346,9 +346,6 @@ public class SettingFragment extends Fragment {
         }
     }
 
-
-
-
     public void setSettings(SettingParameter parameter, String value) {
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
@@ -434,9 +431,11 @@ public class SettingFragment extends Fragment {
             int responseCode = conn.getResponseCode();
 
             if (responseCode == 200) {
-                showSuccessPopup();
+
+                Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
+
             } else {
-                showErrorPopup();
+                Toast.makeText(requireContext(), "Keine Verbindung zum Server.", Toast.LENGTH_SHORT).show();
             }
 
             conn.disconnect();
