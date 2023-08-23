@@ -58,7 +58,6 @@ public class SettingFragment extends Fragment {
         saveData = view.findViewById(R.id.saveData);
         Button logoutButton = view.findViewById(R.id.logoutButton); // Initialize the log out button
 
-
         dataEditWatcher = new DataEditWatcher();
         dataEditWatcher.watch(editStoreName);
         dataEditWatcher.watch(editOwner);
@@ -170,11 +169,16 @@ public class SettingFragment extends Fragment {
             editTelephone.setEnabled(true);
             editEmail.setEnabled(true);
         }
+
     }
 
     private void enableSaveButton() {
-        if (isDataEdited && isEditMode && dataEditWatcher.anyFieldEdited()) {
-            saveData.setEnabled(true);
+        if (isEditMode) {
+            if (dataEditWatcher.anyFieldEdited()) {
+                saveData.setEnabled(true);
+            } else {
+                saveData.setEnabled(false);
+            }
         } else {
             saveData.setEnabled(false);
         }
@@ -231,11 +235,19 @@ public class SettingFragment extends Fragment {
                     @Override
                     public void run() {
                         setSettings();
+
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                saveData.setEnabled(false);
+                            }
+                        });
                     }
                 }).start();
                 dialog.dismiss();
             }
         });
+
 
         builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             @Override
@@ -399,10 +411,10 @@ public class SettingFragment extends Fragment {
             Log.i("STATUS", String.valueOf(conn.getResponseCode()));
             Log.i("MSG", conn.getResponseMessage());
 
-            System.out.println(conn.getResponseMessage());
             if (conn.getResponseCode() == 403) {
 
                 showSuccessPopup();
+
             } else {
 
                 showErrorPopup();
