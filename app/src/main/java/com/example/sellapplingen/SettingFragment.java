@@ -405,7 +405,6 @@ public class SettingFragment extends Fragment {
 
 
 
-
     private String getSavedToken() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString("token", null);
