@@ -526,8 +526,6 @@ public class SettingFragment extends Fragment {
         }
     }
 
-
-
     private boolean setAddress(String street, String houseNumber, String zip) {
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
