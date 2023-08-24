@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -26,7 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -37,7 +42,6 @@ public class SettingFragment extends Fragment {
     private String token;
 
     private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
-    private boolean isDataEdited = false; // Neue Variable für bearbeitete Daten
 
     private DataEditWatcher dataEditWatcher;
 
@@ -112,7 +116,6 @@ public class SettingFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            isDataEdited = true;
             enableSaveButton();
         }
 
@@ -147,7 +150,6 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                isDataEdited = true;
                 enableSaveButton();
             }
 
@@ -232,6 +234,10 @@ public class SettingFragment extends Fragment {
         }
     }
 
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(\\w+\\.)(com|de)$";
+        return email.matches(emailRegex);
+    }
 
 
 
@@ -268,7 +274,7 @@ public class SettingFragment extends Fragment {
             editTelephone.setError("Bitte geben Sie eine gültige Telefonnummer ein");
         }
 
-        if (email.trim().isEmpty() || containsEmojis(email)) {
+        if (!isValidEmail(email)) {
             isValid = false;
             editEmail.setError("Bitte geben Sie eine gültige E-Mail-Adresse ein");
         }
@@ -293,60 +299,112 @@ public class SettingFragment extends Fragment {
     }
 
 //
+
     private void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Daten speichern");
-        builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
+        if (isInputValid(
+                editStoreName.getText().toString(),
+                editOwner.getText().toString(),
+                editStreet.getText().toString(),
+                editHouseNumber.getText().toString(),
+                editZip.getText().toString(),
+                editTelephone.getText().toString(),
+                editEmail.getText().toString()
+        )) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Daten speichern");
+            builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
 
-        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String storeName = editStoreName.getText().toString();
-                String owner = editOwner.getText().toString();
-                String street = editStreet.getText().toString();
-                String houseNumber = editHouseNumber.getText().toString();
-                String zip = editZip.getText().toString();
-                String telephone = editTelephone.getText().toString();
-                String email = editEmail.getText().toString();
-
-                // Hier rufst du die Methode auf, um die Validierung durchzuführen
-                if (isInputValid(storeName, owner, street, houseNumber, zip, telephone, email)) {
+            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            setSettings(SettingParameter.storeName, storeName);
-                            setSettings(SettingParameter.owner, owner);
-                            setSettings(SettingParameter.telephone, telephone);
-                            setSettings(SettingParameter.email, email);
-                            setAddress(street, houseNumber, zip);
+                            List<Pair<SettingParameter, String>> updatedSettings = new ArrayList<>();
+                            if (!editStoreName.getText().toString().isEmpty()) {
+                                updatedSettings.add(new Pair<>(SettingParameter.storeName, editStoreName.getText().toString()));
+                            }
+                            if (!editOwner.getText().toString().isEmpty()) {
+                                updatedSettings.add(new Pair<>(SettingParameter.owner, editOwner.getText().toString()));
+                            }
+                            if (!editTelephone.getText().toString().isEmpty()) {
+                                updatedSettings.add(new Pair<>(SettingParameter.telephone, editTelephone.getText().toString()));
+                            }
+                            if (!editEmail.getText().toString().isEmpty()) {
+                                updatedSettings.add(new Pair<>(SettingParameter.email, editEmail.getText().toString()));
+                            }
 
-                            requireActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    saveData.setEnabled(false);
-                                    enableEditMode(false);
+                            String updatedStreet = editStreet.getText().toString();
+                            String updatedHouseNumber = editHouseNumber.getText().toString();
+                            String updatedZip = editZip.getText().toString();
 
+                            if (updatedSettings.isEmpty() && updatedStreet.isEmpty() && updatedHouseNumber.isEmpty() && updatedZip.isEmpty()) {
+                                dialog.dismiss();
+                                return;
+                            }
+
+                            boolean allUpdatesSuccessful = true;
+                            for (Pair<SettingParameter, String> setting : updatedSettings) {
+                                boolean settingUpdated;
+                                if (!setSettings(setting.second, setting.first)) {
+                                    settingUpdated = false;
+                                } else {
+                                    settingUpdated = true;
                                 }
-                            });
+                                if (!settingUpdated) {
+                                    allUpdatesSuccessful = false;
+                                    break;
+                                }
+                            }
+
+                            if (allUpdatesSuccessful) {
+                                boolean addressUpdated = setAddress(updatedStreet, updatedHouseNumber, updatedZip);
+                                if (addressUpdated) {
+                                    requireActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            saveData.setEnabled(false);
+                                            enableEditMode(false);
+                                            showSuccessPopup();
+                                        }
+                                    });
+                                } else {
+                                    requireActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showErrorPopup();
+                                        }
+                                    });
+                                }
+                            } else {
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showErrorPopup();
+                                    }
+                                });
+                            }
+
+                            dialog.dismiss();
                         }
                     }).start();
-                    dialog.dismiss();
-                } else {
-                    Toast.makeText(requireContext(), "Bitte überprüfen Sie die Eingabe", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            }).setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
 
-        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            Toast.makeText(requireContext(), "Bitte überprüfen Sie die Eingabe", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
+
 
 
 
@@ -404,14 +462,6 @@ public class SettingFragment extends Fragment {
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
-                            // Update UI components with the retrieved data
-                            editStoreName.setText(storeName);
-                            editOwner.setText(owner);
-                            editStreet.setText(street);
-                            editHouseNumber.setText(houseNumber);
-                            editZip.setText(zip);
-                            editTelephone.setText(telephone);
-                            editEmail.setText(email);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -429,10 +479,13 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    public void setSettings(SettingParameter parameter, String value) {
+
+
+
+    public boolean setSettings(String value, SettingParameter parameter) {
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
-            return;
+            return false;
         }
 
         try {
@@ -440,8 +493,6 @@ public class SettingFragment extends Fragment {
             jsonParam.put("token", token);
             jsonParam.put("parameter", parameter.toString());
             jsonParam.put("value", value);
-
-
 
             URL url = new URL("http://131.173.65.77:8080/api/setSettings");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -461,29 +512,25 @@ public class SettingFragment extends Fragment {
 
             int responseCode = conn.getResponseCode();
 
-            if (responseCode == 200) {
-
-                showSuccessPopup();
-
-
-            } else {
-                showErrorPopup();
-            }
-
             conn.disconnect();
+
+            return responseCode == 200;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
-            showErrorPopup();
+            return false;
         }
     }
 
 
 
 
-    public void setAddress(String street, String houseNumber, String zip) {
+
+
+
+    private boolean setAddress(String street, String houseNumber, String zip) {
         if (getSavedToken() == null) {
             Log.d("Settings", "Kein Token");
-            return;
+            return false;
         }
 
         try {
@@ -515,21 +562,15 @@ public class SettingFragment extends Fragment {
 
             int responseCode = conn.getResponseCode();
 
-            if (responseCode == 200) {
-
-                showSuccessPopup();
-            } else {
-
-                showErrorPopup();
-
-            }
-
             conn.disconnect();
+
+            return responseCode == 200;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
-            showErrorPopup();
+            return false;
         }
     }
+
 
 
     public void showSuccessPopup() {
