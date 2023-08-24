@@ -283,7 +283,7 @@ public class DeliveryDetailsFragment extends Fragment {
 // In onCreateView von DeliveryDetailsFragment
         TextView timestampValue = view.findViewById(R.id.timestampValue);
 
-        String myFormat = "hh:mm";
+        String myFormat = "dd-MM-yyyy:HH-mm-ss";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         String getTime = dateFormat.format(Calendar.getInstance().getTime());
         timestampValue.setText(getTime);
