@@ -34,34 +34,34 @@
 
             <CheckBox
                 android:id="@+id/small"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_bkg"
                 android:text="S" />
 
             <CheckBox
                 android:id="@+id/medium"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="M"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/edittext_bkg"
-                android:layout_marginStart="16dp" />
+                android:text="M" />
 
             <CheckBox
                 android:id="@+id/large"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="L"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/edittext_bkg"
-                android:layout_marginStart="16dp" />
+                android:text="L" />
 
             <CheckBox
                 android:id="@+id/xlarge"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="XL"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/edittext_bkg"
-                android:layout_marginStart="16dp" />
+                android:text="XL" />
 
         </LinearLayout>
 
@@ -88,23 +88,26 @@
 
                 <CheckBox
                     android:id="@+id/fragileOption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="125dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/edittext_bkg"
+                    android:layout_marginBottom="5dp"
                     android:text="Zerbrechlich" />
 
                 <CheckBox
                     android:id="@+id/glasOption"
-                    android:layout_width="wrap_content"
+                    android:layout_width="76dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_bkg"
+                    android:layout_marginBottom="5dp"
                     android:text="Glas" />
 
                 <CheckBox
                     android:id="@+id/noOption"
-                    android:layout_width="wrap_content"
+                    android:layout_width="229dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_bkg"
+                    android:layout_marginBottom="5dp"
                     android:text="Keine besondere Eigenschaft" />
 
             </LinearLayout>
@@ -120,13 +123,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_bkg"
+                    android:layout_marginBottom="5dp"
                     android:text="Flüssigkeiten" />
 
                 <CheckBox
                     android:id="@+id/heavy"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_bkg"
+                    android:layout_marginBottom="5dp"
                     android:text="Schwer" />
 
             </LinearLayout>
@@ -151,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="Beschreiben Sie den Ort"
+                android:padding="8dp"
                 android:background="@drawable/edittext_bkg"
                 android:inputType="text"
                 android:maxLines="1"
@@ -211,6 +217,7 @@
                 android:autofillHints=""
                 android:baselineAligned="false"
                 android:hint="@string/name_eingeben"
+                android:padding="8dp"
                 android:background="@drawable/edittext_bkg"
                 android:inputType="textPersonName" />
 

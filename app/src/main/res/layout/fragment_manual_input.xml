@@ -17,13 +17,14 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-    <EditText
-        android:id="@+id/firstNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="5dp"
-        android:hint="Vorname *"
-        android:background="@drawable/edittext_bkg" />
+        <EditText
+            android:id="@+id/firstNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_bkg"
+            android:hint="Vorname *"
+            android:padding="8dp" />
 
     <EditText
         android:id="@+id/lastNameEditText"
@@ -31,6 +32,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Nachname *"
+        android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
     <EditText
@@ -39,6 +41,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Straße *"
+        android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
     <EditText
@@ -47,6 +50,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Hausnummer *"
+        android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
 
