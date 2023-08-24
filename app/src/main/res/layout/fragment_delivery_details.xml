@@ -26,7 +26,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Token :" />
+            android:text="🔑 Token :"/>
 
         <TextView
             android:id="@+id/tokenValue"
@@ -39,7 +39,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Zeitstempel :" />
+            android:text="⏰ Zeitstempel :" />
 
         <TextView
             android:id="@+id/timestampValue"
@@ -52,7 +52,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mitarbeiter-ID :" />
+            android:text="👤 Mitarbeiter-ID :" />
 
         <TextView
             android:id="@+id/employeeIdValue"
@@ -65,7 +65,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Paket Größe :" />
+            android:text="📦 Paket Größe :" />
 
         <TextView
             android:id="@+id/packageSizeValue"
@@ -78,7 +78,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ablageort (Optional) :" />
+            android:text="🏠 Ablageort :" />
 
         <TextView
             android:id="@+id/customDropOffValue"
@@ -91,7 +91,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Handlungsinformationen :" />
+            android:text="✉ Handlungsinformationen :" />
 
         <TextView
             android:id="@+id/actionInfoValue"
@@ -104,7 +104,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lieferdatum :" />
+            android:text="📆 Lieferdatum :" />
 
         <TextView
             android:id="@+id/deliveryDateValue"
@@ -124,14 +124,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Lieferadresse:" />
+            android:text="🏠 Lieferadresse:" />
 
         <TextView
             android:id="@+id/firstNameLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vorname :" />
+            android:text="👤 Vorname :" />
 
         <TextView
             android:id="@+id/firstNameValue"
@@ -144,7 +144,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nachname :" />
+            android:text="👤 Nachname :" />
 
         <TextView
             android:id="@+id/lastNameValue"
@@ -157,7 +157,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Straßennamen :" />
+            android:text="🏠 Straßennamen :" />
 
         <TextView
             android:id="@+id/streetNameValue"
@@ -170,7 +170,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hausnummer :" />
+            android:text="🏠 Hausnummer :" />
 
         <TextView
             android:id="@+id/houseNumberValue"
@@ -183,7 +183,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Postleitzahl :" />
+            android:text="🏠 Postleitzahl :" />
 
         <TextView
             android:id="@+id/zipValue"
@@ -196,7 +196,7 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ort :" />
+            android:text="🏠 Ort :" />
 
         <TextView
             android:id="@+id/cityValue"

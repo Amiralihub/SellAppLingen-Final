@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <ImageView
+        android:id="@+id/ordersLogo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/logobig" />
+
     <Button
         android:id="@+id/btnScan"
         style="@style/Text"
