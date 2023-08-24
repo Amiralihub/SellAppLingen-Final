@@ -217,7 +217,6 @@ public class SettingFragment extends Fragment {
     }
 
 
-
     public enum ZipCode {
         ZIP_40808("49808"),
         ZIP_49809("49809"),
