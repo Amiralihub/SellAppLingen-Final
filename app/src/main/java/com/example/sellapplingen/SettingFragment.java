@@ -570,8 +570,6 @@ public class SettingFragment extends Fragment {
         }
     }
 
-
-
     public void showSuccessPopup() {
         requireActivity().runOnUiThread(new Runnable() {
             @Override
