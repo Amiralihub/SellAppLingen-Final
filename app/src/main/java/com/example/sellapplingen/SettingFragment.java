@@ -45,7 +45,6 @@ public class SettingFragment extends Fragment {
 
     private DataEditWatcher dataEditWatcher;
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
