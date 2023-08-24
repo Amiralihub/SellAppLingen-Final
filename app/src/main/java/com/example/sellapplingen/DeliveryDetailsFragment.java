@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -65,12 +66,9 @@ public class DeliveryDetailsFragment extends Fragment {
 
 
     private void sendOrderDataToServer() {
-
-        // Erstelle JSON-Web-Token (hardcodiert)
-        //String jsonWebToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
-        // Verwende die kombinierten Daten innerhalb der inneren Klasse
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -100,60 +98,18 @@ public class DeliveryDetailsFragment extends Fragment {
                         jsonObject.put("handlingInfo", order.getHandlingInfo());
                         jsonObject.put("deliveryDate", order.getDeliveryDate());
                         jsonObject.put("customDropOffPlace", order.getCustomDropOffPlace());
-                        System.out.println(token);
-    /*
-                        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlEIjo1LCJzdG9yZU5hbWUiOiJUYWtlMiIsIm93bmVyIjoiU2FkaWsiLCJsb2dvIjoiODljZDI4M2EtOGFmZC00NGUwLTkwYmYtZDAxNzJhNzU5Y2EwIiwidGVsZXBob25lIjoiMDE3NjMyMjU0MTM2IiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5MTc5NzEzMywic3ViIjoiYXV0aF90b2tlbiJ9.OYtJrXBBRkHZWPgePoDTH_hKUmiuNiF338lFkoRL8dc";
-                        String timestamp = "12-08-2023:01-39";
-                        String employeeName = "Ryba";
-                        String firstName = "Sadik";
-                        String lastName = "Jobs";
-                        String street = "Am Pulverturm";
-                        String houseNumber = "12";
-                        String zip = "49808";
-                        String city = "Lingen";
-                        String packageSize = "M";
-                        String handlingInfo = "Zerbrechlich";
-                        String deliveryDate = "16-08-23";
-                        String customDropOffPlace = "";
 
-                        jsonObject = new JSONObject();
-                        jsonObject.put("token", token);
-                        jsonObject.put("timestamp", timestamp);
-                        jsonObject.put("employeeName", employeeName);
-                        jsonObject.put("firstName", firstName);
-                        jsonObject.put("lastName", lastName);
-                        jsonObject.put("street", street);
-                        jsonObject.put("houseNumber", houseNumber);
-                        jsonObject.put("zip", zip);
-                        jsonObject.put("city", city);
-                        jsonObject.put("packageSize", packageSize);
-                        jsonObject.put("handlingInfo", handlingInfo);
-                        jsonObject.put("deliveryDate", deliveryDate);
-                        jsonObject.put("customDropOffPlace", customDropOffPlace);
+                        String jsonString = jsonObject.toString();
+                        byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
 
-*/
-                        System.out.println(jsonObject.toString());
+                        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                        os.write(postData);
+                        os.flush();
+                        os.close();
 
-                        // Jetzt kannst du jsonString verwenden, um es zu übertragen oder zu speichern
-                    } catch (JSONException e) {
-                        // Behandlung von JSON-Fehler
-                    }
-
-                    // Verwende die kombinierten Daten innerhalb der inneren Klasse
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    os.writeBytes(jsonObject.toString());
-                    os.flush();
-                    os.close();
-
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG", conn.getResponseMessage());
-
-                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        // Erfolgsmeldung oder weitere Aktionen hier
-
-                        try {
+                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                             InputStream inputStream = conn.getInputStream();
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)); 
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                             StringBuilder responseBuilder = new StringBuilder();
                             String line;
                             while ((line = reader.readLine()) != null) {
@@ -162,29 +118,21 @@ public class DeliveryDetailsFragment extends Fragment {
                             reader.close();
                             inputStream.close();
 
-                            // Konvertiere die Antwort in ein JSONObject
                             String responseString = responseBuilder.toString();
                             JSONObject responseJson = new JSONObject(responseString);
 
-                            // Hole die Bestellungs-ID aus dem JSON-Objekt (angenommen, das JSON-Feld heißt "orderId")
                             orderId = responseJson.getString("orderID");
-
-                            // Zeige das OrderSuccessFragment mit der Bestellungs-ID an
                             showSuccessPopup(orderId);
-
-                        } catch (IOException | JSONException e) {
-                            // Handle exceptions, if any
-                            e.printStackTrace();
+                        } else {
+                            showSuccessPopup(orderId); // Hier könnte eine Fehlerbehandlung stehen
                         }
-                    } else {
-                        // Zeige eine Fehlermeldung, wenn die Verbindung nicht erfolgreich war
-                        //showErrorMessage();
-                        showSuccessPopup(orderId);
+
+                        conn.disconnect();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                    conn.disconnect();
                 } catch (IOException e) {
-                    // Zeige eine Fehlermeldung, wenn eine IOException auftritt
                     e.printStackTrace();
                     showErrorMessage();
                 }
