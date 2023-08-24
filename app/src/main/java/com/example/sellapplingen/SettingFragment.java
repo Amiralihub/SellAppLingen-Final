@@ -463,6 +463,15 @@ public class SettingFragment extends Fragment {
                             String email = jsonResponse.getString("email");
 
 
+                            // Update UI components with the retrieved data
+                            editStoreName.setText(storeName);
+                            editOwner.setText(owner);
+                            editStreet.setText(street);
+                            editHouseNumber.setText(houseNumber);
+                            editZip.setText(zip);
+                            editTelephone.setText(telephone);
+                            editEmail.setText(email);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
