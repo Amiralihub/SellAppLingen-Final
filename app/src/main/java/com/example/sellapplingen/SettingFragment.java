@@ -298,7 +298,6 @@ public class SettingFragment extends Fragment {
         return text.matches(regex);
     }
 
-
     private void showConfirmationDialog() {
         if (isInputValid(
                 editStoreName.getText().toString(),
