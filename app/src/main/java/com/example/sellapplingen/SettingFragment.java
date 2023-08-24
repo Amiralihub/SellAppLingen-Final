@@ -132,7 +132,6 @@ public class SettingFragment extends Fragment {
         }
     }
 
-
     private void setupTextWatchers() {
         editStoreName.addTextChangedListener(createTextWatcher());
         editOwner.addTextChangedListener(createTextWatcher());
