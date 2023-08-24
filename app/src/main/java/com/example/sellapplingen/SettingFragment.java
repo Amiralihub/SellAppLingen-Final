@@ -96,7 +96,6 @@ public class SettingFragment extends Fragment {
         return view;
     }
 
-
     private class DataEditWatcher implements TextWatcher {
 
         private final Set<EditText> watchedFields = new HashSet<>();
