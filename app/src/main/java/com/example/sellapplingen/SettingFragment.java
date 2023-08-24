@@ -239,7 +239,6 @@ public class SettingFragment extends Fragment {
         return email.matches(emailRegex);
     }
 
-
     private boolean isInputValid(String storeName, String owner, String street, String houseNumber, String zip, String telephone, String email) {
         boolean isValid = true;
 
