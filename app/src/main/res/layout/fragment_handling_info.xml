@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -17,98 +18,122 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Paket Größe auswählen -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Paket Größe auswählen"
-                android:textStyle="bold" />
-
-            <CheckBox
-                android:id="@+id/small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="S" />
-
-            <CheckBox
-                android:id="@+id/medium"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:text="M" />
-
-            <CheckBox
-                android:id="@+id/large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="L" />
-
-            <CheckBox
-                android:id="@+id/xlarge"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:text="XL" />
-
-        </LinearLayout>
-
-        <View
-            style="@style/View"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
+            android:text="Paket Größe auswählen"
+            android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="8dp">
 
-            <TextView
+            <CheckBox
+                android:id="@+id/small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Handling Info"
-                android:textStyle="bold" />
+                android:background="@drawable/edittext_bkg"
+                android:text="S" />
 
             <CheckBox
-                android:id="@+id/fragileOption"
+                android:id="@+id/medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zerbrechlich" />
+                android:text="M"
+                android:background="@drawable/edittext_bkg"
+                android:layout_marginStart="16dp" />
 
             <CheckBox
-                android:id="@+id/glasOption"
+                android:id="@+id/large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Glas" />
+                android:text="L"
+                android:background="@drawable/edittext_bkg"
+                android:layout_marginStart="16dp" />
 
             <CheckBox
-                android:id="@+id/fluentOption"
+                android:id="@+id/xlarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Flüssigkeiten" />
-
-            <CheckBox
-                android:id="@+id/heavy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Schwer" />
-
-            <CheckBox
-                android:id="@+id/noOption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Keine besondere Eigenschaft" />
+                android:text="XL"
+                android:background="@drawable/edittext_bkg"
+                android:layout_marginStart="16dp" />
 
         </LinearLayout>
 
+        <!-- Handling Info -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handling Info"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/fragileOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Zerbrechlich" />
+
+                <CheckBox
+                    android:id="@+id/glasOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Glas" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/fluentOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Flüssigkeiten" />
+
+                <CheckBox
+                    android:id="@+id/heavy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Schwer" />
+
+                <CheckBox
+                    android:id="@+id/noOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bkg"
+                    android:text="Keine besondere Eigenschaft" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Ablageort -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +143,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ablageort (Optional)"
+                android:text="Ablageort"
                 android:textStyle="bold" />
 
             <EditText
@@ -126,8 +151,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Beschreiben Sie den Ort"
+                android:background="@drawable/edittext_bkg"
                 android:inputType="text"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -138,6 +165,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
+        <!-- Lieferdatum wählen -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,24 +189,9 @@
                 android:gravity="center"
                 android:text="Datum festlegen" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-            </LinearLayout>
-
         </LinearLayout>
 
-
-        <View
-            style="@style/View"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
-
+        <!-- Mitarbeiter Kürzel -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -194,8 +207,11 @@
             <EditText
                 android:id="@+id/recipientNameEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name eingeben"
+                android:layout_height="match_parent"
+                android:autofillHints=""
+                android:baselineAligned="false"
+                android:hint="@string/name_eingeben"
+                android:background="@drawable/edittext_bkg"
                 android:inputType="textPersonName" />
 
         </LinearLayout>
@@ -207,26 +223,21 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <!-- Bestätigen Button -->
+        <Button
+            android:id="@+id/confirmButton"
+            style="@style/Text"
+            android:layout_width="170dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/lavender"
+            android:drawableLeft="@drawable/baseline_check_24"
 
-            <Button
-                android:id="@+id/confirmButton"
-                style="@style/Text"
-                android:layout_width="170dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="270dp"
-                android:backgroundTint="@color/lavender"
-                android:drawableLeft="@drawable/baseline_check_24"
-                android:text="Bestätigen"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </LinearLayout>
+            android:text="Bestätigen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 
