@@ -462,7 +462,6 @@ public class SettingFragment extends Fragment {
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
-
                             // Update UI components with the retrieved data
                             editStoreName.setText(storeName);
                             editOwner.setText(owner);
@@ -487,9 +486,6 @@ public class SettingFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
-
-
 
     public boolean setSettings(String value, SettingParameter parameter) {
         if (getSavedToken() == null) {
@@ -529,10 +525,6 @@ public class SettingFragment extends Fragment {
             return false;
         }
     }
-
-
-
-
 
 
 
