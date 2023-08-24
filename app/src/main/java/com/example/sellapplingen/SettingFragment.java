@@ -292,7 +292,7 @@ public class SettingFragment extends Fragment {
         return text.matches(regex);
     }
 
-
+//
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Daten speichern");
