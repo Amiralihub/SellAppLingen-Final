@@ -62,7 +62,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Bestellnummer:" />
+                android:text="Bestellnummer:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/recipientOrderNumberTextView"
@@ -85,7 +86,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Bestelldatum:" />
+                android:text="Bestelldatum:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/recipientOrderDateTextView"
@@ -108,7 +110,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mitarbeiter:" />
+                android:text="Mitarbeiter:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/employeeOrderTextView"
@@ -131,7 +134,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Packetgröße:" />
+                android:text="Packetgröße:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/recipientOrderPackageTextView"
@@ -155,7 +159,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Ablageort:" />
+                android:text="Ablageort:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/recipientOrderDropPlaceTextView"
@@ -205,7 +210,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Empfänger:" />
+                android:text="Empfänger:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/recipientOrderTextView"
@@ -229,7 +235,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Straße:" />
+                android:text="Straße:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/orderStreetTextView"
@@ -252,7 +259,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Stadt:" />
+                android:text="Stadt:"
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/orderCityTextView"

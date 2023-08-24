@@ -304,15 +304,13 @@ public class DeliveryDetailsFragment extends Fragment {
         // Zeige die Order-Informationen in den entsprechenden TextViews an
         if (order != null) {
             createTestOrder();
-            TextView tokenValue = view.findViewById(R.id.tokenValue);
-            tokenValue.setText(getSavedToken());
 
 
             TextView employeeIdValue = view.findViewById(R.id.employeeIdValue);
             employeeIdValue.setText(order.getEmployeeName());
 
             TextView firstNameValue = view.findViewById(R.id.firstNameValue);
-            firstNameValue.setText(order.getFirstName());
+            firstNameValue.setText(order.getFirstName() +" ");
 
             TextView lastNameValue = view.findViewById(R.id.lastNameValue);
             lastNameValue.setText(order.getLastName());
@@ -330,17 +328,17 @@ public class DeliveryDetailsFragment extends Fragment {
             deliveryDateValue.setText(order.getDeliveryDate());
 
             TextView streetNameValue = view.findViewById(R.id.streetNameValue);
-            streetNameValue.setText(order.getStreet());
+            streetNameValue.setText(order.getStreet() +" ");
 
 
             TextView housenNumberValue = view.findViewById(R.id.houseNumberValue);
             housenNumberValue.setText(order.getHouseNumber());
 
             TextView cityLabel = view.findViewById(R.id.cityValue);
-            cityLabel.setText(order.getCity());
+            cityLabel.setText(order.getCity() + " ");
 
             TextView zipLabel = view.findViewById(R.id.zipValue);
-            zipLabel.setText(order.getZip());
+            zipLabel.setText(order.getZip() + " ");
 
             // Weitere TextViews für andere Order-Informationen hinzufügen
             // Hier kannst du weitere TextViews hinzufügen, um andere Order-Informationen anzuzeigen

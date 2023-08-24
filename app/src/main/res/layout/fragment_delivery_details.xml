@@ -19,98 +19,140 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Lieferungsübersicht"
+            android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/tokenLabel"
-            style="@style/Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🔑 Token :"/>
-
-        <TextView
-            android:id="@+id/tokenValue"
-            style="@style/Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/timestampLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⏰ Zeitstempel :" />
+            android:text="⏰ Zeitstempel : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/timestampValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/employeeIdLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👤 Mitarbeiter-ID :" />
+            android:text="👤 Mitarbeiter-ID : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/employeeIdValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/packageSizeLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📦 Paket Größe :" />
+            android:text="📦 Paket Größe : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/packageSizeValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/customDropOffLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏠 Ablageort :" />
+            android:text="🏠 Ablageort : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/customDropOffValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/actionInfoLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="✉ Handlungsinformationen :" />
+            android:text="✉ Handlungsinformationen : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/actionInfoValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/deliveryDateLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📆 Lieferdatum :" />
+            android:text="📆 Lieferdatum : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/deliveryDateValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
 
         <ImageView
             android:id="@+id/ordersLogo"
@@ -124,85 +166,95 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="🏠 Lieferadresse:" />
+            android:text="🏠 Lieferadresse:"
+            android:textSize="22dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/firstNameLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👤 Vorname :" />
+            android:text="👤 Empfänger : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/firstNameValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/lastNameLabel"
-            style="@style/Text"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👤 Nachname :" />
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/lastNameValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/streetNameLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏠 Straßennamen :" />
+            android:text="🏠 Straße : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/streetNameValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/houseNumberLabel"
-            style="@style/Text"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏠 Hausnummer :" />
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/houseNumberValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/zipLabel"
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏠 Postleitzahl :" />
+            android:text="🏠 Stadt : "
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/zipValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/cityLabel"
-            style="@style/Text"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏠 Ort :" />
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/cityValue"
             style="@style/Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
 
         <Button
             android:id="@+id/confirmButton"

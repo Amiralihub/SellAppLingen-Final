@@ -5,29 +5,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/ordersLogo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@android:drawable/ic_menu_compass" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
     <EditText
         android:id="@+id/firstNameEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Vorname" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Vorname *"
+        android:background="@drawable/edittext_bkg" />
 
     <EditText
         android:id="@+id/lastNameEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nachname" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Nachname *"
+        android:background="@drawable/edittext_bkg" />
 
     <EditText
         android:id="@+id/streetEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Straße" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Straße *"
+        android:background="@drawable/edittext_bkg" />
 
     <EditText
         android:id="@+id/houseNumberEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Hausnummer" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Hausnummer *"
+        android:background="@drawable/edittext_bkg" />
+
 
     <Spinner
         android:id="@+id/zipSpinner"
@@ -42,16 +63,17 @@
         android:id="@+id/cityTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:text="Lingen" />
-
-
-    <!-- Füge hier weitere EditText-Felder für die anderen Order-Informationen hinzu -->
 
     <Button
         android:id="@+id/confirmManualInputButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lavender"
+        android:drawableLeft="@drawable/baseline_check_24"
         android:text="Bestätigen" />
+
+    </LinearLayout>
 
 </LinearLayout>
