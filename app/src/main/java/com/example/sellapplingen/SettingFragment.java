@@ -158,7 +158,6 @@ public class SettingFragment extends Fragment {
         };
     }
 
-
     private void enableEditMode(boolean enable) {
         editStoreName.setEnabled(enable);
         editOwner.setEnabled(enable);
