@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Paket Größe auswählen"
+            android:text="Paket Größe auswählen *"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Handling Info"
+            android:text="Handling Info *"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
@@ -148,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ablageort"
+                android:text="Ablageort (Optional)"
                 android:textStyle="bold" />
 
             <EditText
@@ -181,7 +181,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lieferdatum wählen"
+                android:text="Lieferdatum wählen *"
                 android:textStyle="bold" />
 
             <Button
@@ -207,7 +207,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mitarbeiter Kürzel"
+                android:text="Mitarbeiter Kürzel (Optional)"
                 android:textStyle="bold" />
 
             <EditText
