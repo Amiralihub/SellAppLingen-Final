@@ -240,7 +240,6 @@ public class SettingFragment extends Fragment {
     }
 
 
-
     private boolean isInputValid(String storeName, String owner, String street, String houseNumber, String zip, String telephone, String email) {
         boolean isValid = true;
 
