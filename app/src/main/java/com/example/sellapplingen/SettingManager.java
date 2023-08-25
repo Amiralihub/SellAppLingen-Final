@@ -74,7 +74,7 @@ public class SettingManager {
         }
     }
 
-    public static boolean setSettings(String token, String parameter, String value) throws IOException, JSONException {
+    public static boolean setSettings(String token, String parameter, String value, String telephone, String email) throws IOException, JSONException {
         JSONObject jsonParam = new JSONObject();
         try {
             jsonParam.put("token", token);

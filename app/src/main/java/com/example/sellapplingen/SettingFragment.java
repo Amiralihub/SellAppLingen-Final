@@ -1,5 +1,7 @@
 package com.example.sellapplingen;
-import static com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.ComparisonChain.start;
+
+import static com.example.sellapplingen.SettingParameter.email;
+import static com.example.sellapplingen.SettingParameter.telephone;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -13,8 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,20 +23,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingFragment extends Fragment {
 
@@ -45,7 +35,6 @@ public class SettingFragment extends Fragment {
     private String token;
 
     private final SettingManager settingManager = new SettingManager();
-
 
 
     private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
@@ -65,8 +54,14 @@ public class SettingFragment extends Fragment {
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
         saveData = view.findViewById(R.id.saveData);
-        Button logoutButton = view.findViewById(R.id.logoutButton);
+        saveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog();
+            }
+        });
 
+        Button logoutButton = view.findViewById(R.id.logoutButton);
 
         InputFilter emojiFilter = new EmojiExcludeFilter();
         editStoreName.setFilters(new InputFilter[]{emojiFilter});
@@ -76,7 +71,6 @@ public class SettingFragment extends Fragment {
         editZip.setFilters(new InputFilter[]{emojiFilter});
         editEmail.setFilters(new InputFilter[]{emojiFilter});
         editHouseNumber.setFilters(new InputFilter[]{emojiFilter});
-
 
         dataEditWatcher = new DataEditWatcher();
         dataEditWatcher.watch(editStoreName);
@@ -90,7 +84,6 @@ public class SettingFragment extends Fragment {
         // Lese den Token aus den SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
-
 
         new Thread(() -> {
             try {
@@ -112,32 +105,6 @@ public class SettingFragment extends Fragment {
             }
         }).start();
 
-        new Thread(() -> {
-            try {
-                boolean success = settingManager.setSettings(token, "parameterName", "neuerWert");
-                if (success) {
-
-                } else {
-
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        new Thread(() -> {
-            try {
-                boolean success = SettingManager.setAddress(token, "zzzzz", "2222", "49808");
-                if (success) {
-                    // Erfolgreiche Aktualisierung, ggf. Benachrichtigung anzeigen
-                } else {
-                    // Aktualisierung fehlgeschlagen, ggf. Fehlermeldung anzeigen
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                // Fehler beim Kommunizieren mit dem Server
-            }
-        }).start();
 
 
         Button editDataButton = view.findViewById(R.id.editDataButton);
@@ -150,9 +117,7 @@ public class SettingFragment extends Fragment {
         });
 
 
-
-//        saveData.setOnClickListener(v -> showConfirmationDialog());
-
+        saveData.setOnClickListener(v -> showConfirmationDialog());
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,9 +132,7 @@ public class SettingFragment extends Fragment {
         return view;
     }
 
-    private void settingManager() {
 
-    }
 
     private class DataEditWatcher implements TextWatcher {
 
@@ -203,7 +166,6 @@ public class SettingFragment extends Fragment {
 
 
 
-
     public class EmojiExcludeFilter implements InputFilter {
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -217,7 +179,6 @@ public class SettingFragment extends Fragment {
             return (source instanceof Spanned) ? new SpannableString(filtered) : filtered.toString();
         }
     }
-
 
 
     private void setupTextWatchers() {
@@ -254,7 +215,6 @@ public class SettingFragment extends Fragment {
         editTelephone.setEnabled(enable);
         editEmail.setEnabled(enable);
     }
-
 
     private void enableSaveButton() {
         if (isEditMode) {
@@ -301,7 +261,6 @@ public class SettingFragment extends Fragment {
         startActivity(intent);
         requireActivity().finish();
     }
-
 
     public enum ZipCode {
         ZIP_40808("49808"),
@@ -365,7 +324,6 @@ public class SettingFragment extends Fragment {
         return isValid;
     }
 
-
     private boolean isValidZipCode(String zip) {
         for (ZipCode validZip : ZipCode.values()) {
             if (validZip.getValue().equals(zip)) {
@@ -375,100 +333,83 @@ public class SettingFragment extends Fragment {
         return false;
     }
 
-/*
+    public void setAddressToServer() {
+        String street = editStreet.getText().toString();
+        String houseNumber = editHouseNumber.getText().toString();
+        String zip = editZip.getText().toString();
 
-    private void showConfirmationDialog() {
-        if (isInputValid(
-                editStoreName.getText().toString(),
-                editOwner.getText().toString(),
-                editStreet.getText().toString(),
-                editHouseNumber.getText().toString(),
-                editZip.getText().toString(),
-                editTelephone.getText().toString(),
-                editEmail.getText().toString()
-        )) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setTitle("Daten speichern");
-            builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
-
-            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Settings updatedSettings = new Settings(
-                                    editStoreName.getText().toString(),
-                                    editOwner.getText().toString(),
-                                    new Address(editStreet.getText().toString(), editHouseNumber.getText().toString(), editZip.getText().toString()),
-                                    editTelephone.getText().toString(),
-                                    editEmail.getText().toString(),
-                                    null, // Leave logo and backgroundImage as null
-                                    null
-                            );
-
-                            try {
-                                boolean settingsUpdated = SettingManager.setSettings(token, updatedSettings.setStoreName();
-                                updatedSettings.setOwner();
-                                updatedSettings.setTelephone();
-                                updatedSettings.setEmail();)
-
-                                if (settingsUpdated) {
-                                    boolean addressUpdated = SettingManager.setAddress(token, updatedSettings.getAddress());
-                                    if (addressUpdated) {
-                                        requireActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                saveData.setEnabled(false);
-                                                enableEditMode(false);
-                                                showSuccessPopup();
-                                            }
-                                        });
-                                    } else {
-                                        requireActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                showErrorPopup();
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    requireActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showErrorPopup();
-                                        }
-                                    });
-                                }
-                            } catch (IOException | JSONException e) {
-                                e.printStackTrace();
-                                requireActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showErrorPopup();
-                                    }
-                                });
-                            }
-
-                            dialog.dismiss();
-                        }
-                    }).start();
-                }
-            }); builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            Toast.makeText(requireContext(), "Bitte überprüfen Sie die Eingabe", Toast.LENGTH_SHORT).show();
+        try {
+            boolean success = SettingManager.setAddress(token, street, houseNumber, zip);
+            if (!success) {
+                showErrorPopup();
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            showErrorPopup();
         }
     }
-*/
 
+    public void setSettingsToServer() {
+        String storeName = editStoreName.getText().toString();
+        String owner = editOwner.getText().toString();
+        String telephone = editTelephone.getText().toString();
+        String email = editEmail.getText().toString();
+
+        try {
+            boolean success = SettingManager.setSettings(token, storeName, owner, telephone, email);
+            if (!success) {
+                showErrorPopup();
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        }
+    }
+
+
+    public void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Bestätigung");
+        builder.setMessage("Möchten Sie die Änderungen speichern?");
+
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Extract data from EditText fields
+                String storeName = editStoreName.getText().toString();
+                String owner = editOwner.getText().toString();
+                String street = editStreet.getText().toString();
+                String houseNumber = editHouseNumber.getText().toString();
+                String zip = editZip.getText().toString();
+                String telephone = editTelephone.getText().toString();
+                String email = editEmail.getText().toString();
+
+                try {
+                    boolean setAddressSuccess = SettingManager.setAddress(token, street, houseNumber, zip);
+                    boolean setSettingSuccess = SettingManager.setSettings(token, storeName, owner, telephone, email);
+
+                    if (setAddressSuccess && setSettingSuccess) {
+                        showSuccessPopup();
+                    } else {
+                        showErrorPopup();
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    showErrorPopup();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     public void showSuccessPopup() {
         requireActivity().runOnUiThread(new Runnable() {

@@ -12,7 +12,7 @@ public class Settings {
 
     // Konstruktor
     public Settings( String storeName, String owner, Address address,
-                    String telephone, String email, String logo, String backgroundImage) {
+                     String telephone, String email, String logo, String backgroundImage) {
         this.storeName = storeName;
         this.owner = owner;
         this.address = address;
@@ -29,7 +29,7 @@ public class Settings {
         return storeName;
     }
 
-    public void setStoreName() {
+    public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
 
@@ -37,7 +37,7 @@ public class Settings {
         return owner;
     }
 
-    public void setOwner() {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
@@ -53,7 +53,7 @@ public class Settings {
         return telephone;
     }
 
-    public void setTelephone() {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
 
@@ -61,7 +61,7 @@ public class Settings {
         return email;
     }
 
-    public void setEmail() {
+    public void setEmail(String email) {
         this.email = email;
     }
 
