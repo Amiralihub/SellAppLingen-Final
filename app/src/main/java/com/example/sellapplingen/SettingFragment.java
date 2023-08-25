@@ -476,7 +476,7 @@ public class SettingFragment extends Fragment {
                             String telephone = jsonResponse.getString("telephone");
                             String email = jsonResponse.getString("email");
 
-                            // Update UI components with the retrieved data
+
                             editStoreName.setText(storeName);
                             editOwner.setText(owner);
                             editStreet.setText(street);
@@ -517,7 +517,7 @@ public class SettingFragment extends Fragment {
             jsonParam.put("parameter", parameter.toString());
             jsonParam.put("value", value);
 
-            String jsonString = jsonParam.toString();  // Convert JSONObject to a string
+            String jsonString = jsonParam.toString();
 
             URL url = new URL("http://131.173.65.77:8080/api/setSettings");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -530,11 +530,11 @@ public class SettingFragment extends Fragment {
                 conn.setRequestProperty("Authorization", "Bearer " + token);
             }
 
-            // Convert the JSON string to bytes using UTF-8 encoding
+
             byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
 
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            os.write(postData);  // Write the bytes
+            os.write(postData);
             os.flush();
             os.close();
 
