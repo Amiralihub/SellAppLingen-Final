@@ -1,13 +1,13 @@
 package com.example.sellapplingen;
 
-public class Address2 {
+public class Address {
 
     private String street;
     private String houseNumber;
     private String zip;
 
     // Konstruktor
-    public Address2(String street, String houseNumber, String zip) {
+    public Address(String street, String houseNumber, String zip) {
         this.street = street;
         this.houseNumber = houseNumber;
         this.zip = zip;

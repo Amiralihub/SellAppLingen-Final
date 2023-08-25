@@ -1,22 +1,18 @@
 package com.example.sellapplingen;
 
-import android.location.Address;
-
 public class Settings {
 
-    private String token;
     private String storeName;
     private String owner;
-    private Address2 address;
+    private Address address;
     private String telephone;
     private String email;
     private String logo;
     private String backgroundImage;
 
     // Konstruktor
-    public Settings(String token, String storeName, String owner, Address2 address,
+    public Settings( String storeName, String owner, Address address,
                     String telephone, String email, String logo, String backgroundImage) {
-        this.token = token;
         this.storeName = storeName;
         this.owner = owner;
         this.address = address;
@@ -27,19 +23,13 @@ public class Settings {
     }
 
     // Getter und Setter
-    public String getToken() {
-        return token;
-    }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getStoreName() {
         return storeName;
     }
 
-    public void setStoreName(String storeName) {
+    public void setStoreName() {
         this.storeName = storeName;
     }
 
@@ -47,15 +37,15 @@ public class Settings {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner() {
         this.owner = owner;
     }
 
-    public Address2 getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address2 address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -63,7 +53,7 @@ public class Settings {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+    public void setTelephone() {
         this.telephone = telephone;
     }
 
@@ -71,7 +61,7 @@ public class Settings {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail() {
         this.email = email;
     }
 
