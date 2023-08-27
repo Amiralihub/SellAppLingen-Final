@@ -1,6 +1,13 @@
 package com.example.sellapplingen;
+
+import static com.example.sellapplingen.SettingParameter.email;
+import static com.example.sellapplingen.SettingParameter.telephone;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,8 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,25 +23,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
     private Button saveData;
     private String token;
+
+    private final SettingManager settingManager = new SettingManager();
+
 
     private boolean isEditMode = false; // Neue Variable für den Bearbeitungsmodus
 
@@ -55,7 +53,23 @@ public class SettingFragment extends Fragment {
         editTelephone = view.findViewById(R.id.editTelephone);
         editEmail = view.findViewById(R.id.editEmail);
         saveData = view.findViewById(R.id.saveData);
+        saveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog();
+            }
+        });
+
         Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        InputFilter emojiFilter = new EmojiExcludeFilter();
+        editStoreName.setFilters(new InputFilter[]{emojiFilter});
+        editOwner.setFilters(new InputFilter[]{emojiFilter});
+        editStreet.setFilters(new InputFilter[]{emojiFilter});
+        editTelephone.setFilters(new InputFilter[]{emojiFilter});
+        editZip.setFilters(new InputFilter[]{emojiFilter});
+        editEmail.setFilters(new InputFilter[]{emojiFilter});
+        editHouseNumber.setFilters(new InputFilter[]{emojiFilter});
 
         dataEditWatcher = new DataEditWatcher();
         dataEditWatcher.watch(editStoreName);
@@ -70,7 +84,27 @@ public class SettingFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
-        new Thread(this::getSettings).start();
+        new Thread(() -> {
+            try {
+                Settings settings = SettingManager.getSettings(token);
+                if (settings != null) {
+                    requireActivity().runOnUiThread(() -> {
+                        editStoreName.setText(settings.getStoreName());
+                        editOwner.setText(settings.getOwner());
+                        editStreet.setText(settings.getAddress().getStreet());
+                        editHouseNumber.setText(settings.getAddress().getHouseNumber());
+                        editZip.setText(settings.getAddress().getZip());
+                        editTelephone.setText(settings.getTelephone());
+                        editEmail.setText(settings.getEmail());
+
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+
 
         Button editDataButton = view.findViewById(R.id.editDataButton);
         editDataButton.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +114,7 @@ public class SettingFragment extends Fragment {
                 enableEditMode(true); // Aktivieren Sie die Bearbeitung der Daten
             }
         });
+
 
         saveData.setOnClickListener(v -> showConfirmationDialog());
 
@@ -95,6 +130,8 @@ public class SettingFragment extends Fragment {
 
         return view;
     }
+
+
 
     private class DataEditWatcher implements TextWatcher {
 
@@ -125,6 +162,23 @@ public class SettingFragment extends Fragment {
             return false;
         }
     }
+
+
+
+    public class EmojiExcludeFilter implements InputFilter {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            StringBuilder filtered = new StringBuilder();
+            for (int i = start; i < end; i++) {
+                int type = Character.getType(source.charAt(i));
+                if (type != Character.SURROGATE && type != Character.OTHER_SYMBOL) {
+                    filtered.append(source.charAt(i));
+                }
+            }
+            return (source instanceof Spanned) ? new SpannableString(filtered) : filtered.toString();
+        }
+    }
+
 
     private void setupTextWatchers() {
         editStoreName.addTextChangedListener(createTextWatcher());
@@ -160,7 +214,6 @@ public class SettingFragment extends Fragment {
         editTelephone.setEnabled(enable);
         editEmail.setEnabled(enable);
     }
-
 
     private void enableSaveButton() {
         if (isEditMode) {
@@ -208,7 +261,6 @@ public class SettingFragment extends Fragment {
         requireActivity().finish();
     }
 
-
     public enum ZipCode {
         ZIP_40808("49808"),
         ZIP_49809("49809"),
@@ -233,32 +285,32 @@ public class SettingFragment extends Fragment {
     private boolean isInputValid(String storeName, String owner, String street, String houseNumber, String zip, String telephone, String email) {
         boolean isValid = true;
 
-        if (storeName.trim().isEmpty() || containsEmojis(storeName)) {
+        if (storeName.trim().isEmpty() ) {
             isValid = false;
             editStoreName.setError("Bitte geben Sie einen gültigen Geschäftsnamen ein");
         }
 
-        if (owner.trim().isEmpty() || containsEmojis(owner)) {
+        if (owner.trim().isEmpty() ) {
             isValid = false;
             editOwner.setError("Bitte geben Sie einen gültigen Eigentümer ein");
         }
 
-        if (street.trim().isEmpty() || containsEmojis(street)) {
+        if (street.trim().isEmpty() ) {
             isValid = false;
             editStreet.setError("Bitte geben Sie eine gültige Straße ein");
         }
 
-        if (houseNumber.trim().isEmpty() || containsEmojis(houseNumber)) {
+        if (houseNumber.trim().isEmpty() ) {
             isValid = false;
             editHouseNumber.setError("Bitte geben Sie eine gültige Hausnummer ein");
         }
 
         if (!isValidZipCode(zip)) {
             isValid = false;
-            editZip.setError("Bitte geben Sie eine gültige PLZ ein (49808,49809,49811)");
+            editZip.setError("Bitte geben Sie eine gültige PLZ ein (49808, 49809, 49811)");
         }
 
-        if (telephone.trim().isEmpty() || containsEmojis(telephone)) {
+        if (telephone.trim().isEmpty() ) {
             isValid = false;
             editTelephone.setError("Bitte geben Sie eine gültige Telefonnummer ein");
         }
@@ -280,274 +332,82 @@ public class SettingFragment extends Fragment {
         return false;
     }
 
-    private boolean containsEmojis(String text) {
-        String regex = "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{1FA70}-\\x{1FAFF}\\x{2600}-\\x{27BF}\\x{2300}\\x{2B50}\\x{1F004}\\x{2B05}\\x{2744}\\x{26A1}\\x{1F004}\\x{1F0CF}\\x{1F18E}\\x{1F201}\\x{1F202}\\x{1F21A}\\x{1F22F}\\x{1F232}\\x{1F233}\\x{1F234}\\x{1F235}\\x{1F236}\\x{1F237}\\x{1F238}\\x{1F239}\\x{1F23A}\\x{1F250}\\x{1F251}\\x{1F300}\\x{1F301}\\x{1F302}\\x{1F303}\\x{1F304}\\x{1F305}\\x{1F306}\\x{1F307}\\x{1F308}\\x{1F309}\\x{1F30A}\\x{1F30B}\\x{1F30C}\\x{1F30D}\\x{1F30E}\\x{1F30F}\\x{1F310}\\x{1F311}\\x{1F312}\\x{1F313}\\x{1F314}\\x{1F315}\\x{1F316}\\x{1F317}\\x{1F318}\\x{1F319}\\x{1F31A}\\x{1F31B}\\x{1F31C}\\x{1F31D}\\x{1F31E}\\x{1F31F}\\x{1F320}\\x{1F321}\\x{1F322}\\x{1F323}\\x{1F324}\\x{1F325}\\x{1F326}\\x{1F327}\\x{1F328}\\x{1F329}\\x{1F32A}\\x{1F32B}\\x{1F32C}\\x{1F32D}\\x{1F32E}\\x{1F32F}\\x{1F330}\\x{1F331}\\x{1F332}\\x{1F333}\\x{1F334}\\x{1F335}\\x{1F336}\\x{1F337}\\x{1F338}\\x{1F339}\\x{1F33A}\\x{1F33B}\\x{1F33C}\\x{1F33D}\\x{1F33E}\\x{1F33F}\\x{1F340}\\x{1F341}\\x{1F342}\\x{1F343}\\x{1F344}\\x{1F345}\\x{1F346}\\x{1F347}\\x{1F348}\\x{1F349}\\x{1F34A}\\x{1F34B}\\x{1F34C}\\x{1F34D}\\x{1F34E}\\x{1F34F}\\x{1F350}\\x{1F351}\\x{1F352}\\x{1F353}\\x{1F354}\\x{1F355}\\x{1F356}\\x{1F357}\\x{1F358}\\x{1F359}\\x{1F35A}\\x{1F35B}\\x{1F35C}\\x{1F35D}\\x{1F35E}\\x{1F35F}\\x{1F360}\\x{1F361}\\x{1F362}\\x{1F363}\\x{1F364}\\x{1F365}\\x{1F366}\\x{1F367}\\x{1F368}\\x{1F369}\\x{1F36A}\\x{1F36B}\\x{1F36C}\\x{1F36D}\\x{1F36E}\\x{1F36F}\\x{1F370}\\x{1F371}\\x{1F372}\\x{1F373}\\x{1F374}\\x{1F375}\\x{1F376}\\x{1F377}\\x{1F378}\\x{1F379}\\x{1F37A}\\x{1F37B}\\x{1F37C}\\x{1F37D}\\x{1F37E}\\x{1F37F}\\x{1F380}\\x{1F381}\\x{1F382}\\x{1F383}\\x{1F384}\\x{1F385}\\x{1F386}\\x{1F387}\\x{1F388}\\x{1F389}\\x{1F38A}\\x{1F38B}\\x{1F38C}]";
-
-        return text.matches(regex);
-    }
-
-    private void showConfirmationDialog() {
-        if (isInputValid(
-                editStoreName.getText().toString(),
-                editOwner.getText().toString(),
-                editStreet.getText().toString(),
-                editHouseNumber.getText().toString(),
-                editZip.getText().toString(),
-                editTelephone.getText().toString(),
-                editEmail.getText().toString()
-        )) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setTitle("Daten speichern");
-            builder.setMessage("Sind Sie sicher, dass Sie die Daten speichern möchten?");
-
-            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            List<Pair<SettingParameter, String>> updatedSettings = new ArrayList<>();
-                            if (!editStoreName.getText().toString().isEmpty()) {
-                                updatedSettings.add(new Pair<>(SettingParameter.storeName, editStoreName.getText().toString()));
-                            }
-                            if (!editOwner.getText().toString().isEmpty()) {
-                                updatedSettings.add(new Pair<>(SettingParameter.owner, editOwner.getText().toString()));
-                            }
-                            if (!editTelephone.getText().toString().isEmpty()) {
-                                updatedSettings.add(new Pair<>(SettingParameter.telephone, editTelephone.getText().toString()));
-                            }
-                            if (!editEmail.getText().toString().isEmpty()) {
-                                updatedSettings.add(new Pair<>(SettingParameter.email, editEmail.getText().toString()));
-                            }
-
-                            String updatedStreet = editStreet.getText().toString();
-                            String updatedHouseNumber = editHouseNumber.getText().toString();
-                            String updatedZip = editZip.getText().toString();
-
-                            if (updatedSettings.isEmpty() && updatedStreet.isEmpty() && updatedHouseNumber.isEmpty() && updatedZip.isEmpty()) {
-                                dialog.dismiss();
-                                return;
-                            }
-
-                            boolean allUpdatesSuccessful = true;
-                            for (Pair<SettingParameter, String> setting : updatedSettings) {
-                                boolean settingUpdated;
-                                if (!setSettings(setting.second, setting.first)) {
-                                    settingUpdated = false;
-                                } else {
-                                    settingUpdated = true;
-                                }
-                                if (!settingUpdated) {
-                                    allUpdatesSuccessful = false;
-                                    break;
-                                }
-                            }
-
-                            if (allUpdatesSuccessful) {
-                                boolean addressUpdated = setAddress(updatedStreet, updatedHouseNumber, updatedZip);
-                                if (addressUpdated) {
-                                    requireActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            saveData.setEnabled(false);
-                                            enableEditMode(false);
-                                            showSuccessPopup();
-                                        }
-                                    });
-                                } else {
-                                    requireActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showErrorPopup();
-                                        }
-                                    });
-                                }
-                            } else {
-                                requireActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showErrorPopup();
-                                    }
-                                });
-                            }
-
-                            dialog.dismiss();
-                        }
-                    }).start();
-                }
-            }).setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            Toast.makeText(requireContext(), "Bitte überprüfen Sie die Eingabe", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private String getSavedToken() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString("token", null);
-    }
-
-    private void getSettings() {
-        if (getSavedToken() == null) {
-            Log.d("Settings", "Kein Token");
-            return;
-        }
+    public void setAddressToServer() {
+        String street = editStreet.getText().toString();
+        String houseNumber = editHouseNumber.getText().toString();
+        String zip = editZip.getText().toString();
 
         try {
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("token", token);
+            boolean success = SettingManager.setAddress(token, street, houseNumber, zip);
+            if (!success) {
+                showErrorPopup();
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        }
+    }
 
-            URL url = new URL("http://131.173.65.77:8080/api/getSettings");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
+    public void setSettingsToServer() {
+        String storeName = editStoreName.getText().toString();
+        String owner = editOwner.getText().toString();
+        String telephone = editTelephone.getText().toString();
+        String email = editEmail.getText().toString();
 
-            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            os.writeBytes(jsonParam.toString());
-            os.flush();
-            os.close();
+        try {
+            boolean success = SettingManager.setSettings(token, storeName, owner, telephone, email);
+            if (!success) {
+                showErrorPopup();
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        }
+    }
 
-            int responseCode = conn.getResponseCode();
 
-            if (responseCode == 200) {
-                InputStream in = conn.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
+    public void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Bestätigung");
+        builder.setMessage("Möchten Sie die Änderungen speichern?");
 
-                final JSONObject jsonResponse = new JSONObject(response.toString());
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Extract data from EditText fields
+                String storeName = editStoreName.getText().toString();
+                String owner = editOwner.getText().toString();
+                String street = editStreet.getText().toString();
+                String houseNumber = editHouseNumber.getText().toString();
+                String zip = editZip.getText().toString();
+                String telephone = editTelephone.getText().toString();
+                String email = editEmail.getText().toString();
 
-                requireActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String storeName = jsonResponse.getString("storeName");
-                            String owner = jsonResponse.getString("owner");
-                            String street = jsonResponse.getJSONObject("address").getString("street");
-                            String houseNumber = jsonResponse.getJSONObject("address").getString("houseNumber");
-                            String zip = jsonResponse.getJSONObject("address").getString("zip");
-                            String telephone = jsonResponse.getString("telephone");
-                            String email = jsonResponse.getString("email");
+                try {
+                    boolean setAddressSuccess = SettingManager.setAddress(token, street, houseNumber, zip);
+                    boolean setSettingSuccess = SettingManager.setSettings(token, storeName, owner, telephone, email);
 
-                            // Update UI components with the retrieved data
-                            editStoreName.setText(storeName);
-                            editOwner.setText(owner);
-                            editStreet.setText(street);
-                            editHouseNumber.setText(houseNumber);
-                            editZip.setText(zip);
-                            editTelephone.setText(telephone);
-                            editEmail.setText(email);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    if (setAddressSuccess && setSettingSuccess) {
+                        showSuccessPopup();
+                    } else {
+                        showErrorPopup();
                     }
-                });
-
-            } else {
-                Log.d("Settings", "Fehler beim Empfangen der Einstellungen. Statuscode: " + responseCode);
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    showErrorPopup();
+                }
             }
+        });
 
-            conn.disconnect();
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean setSettings(String value, SettingParameter parameter) {
-        if (getSavedToken() == null) {
-            Log.d("Settings", "Kein Token");
-            return false;
-        }
-
-        try {
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("token", token);
-            jsonParam.put("parameter", parameter.toString());
-            jsonParam.put("value", value);
-
-            URL url = new URL("http://131.173.65.77:8080/api/setSettings");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-
-            if (token != null) {
-                conn.setRequestProperty("Authorization", "Bearer " + token);
+        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
+        });
 
-            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            os.writeBytes(jsonParam.toString());
-            os.flush();
-            os.close();
-
-            int responseCode = conn.getResponseCode();
-
-            conn.disconnect();
-
-            return responseCode == 200;
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private boolean setAddress(String street, String houseNumber, String zip) {
-        if (getSavedToken() == null) {
-            Log.d("Settings", "Kein Token");
-            return false;
-        }
-
-        try {
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("token", token);
-
-            JSONObject addressJson = new JSONObject();
-            addressJson.put("street", street);
-            addressJson.put("houseNumber", houseNumber);
-            addressJson.put("zip", zip);
-
-            jsonParam.put("address", addressJson);
-
-            URL url = new URL("http://131.173.65.77:8080/api/setAddress");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-
-            if (token != null) {
-                conn.setRequestProperty("Authorization", "Bearer " + token);
-            }
-
-            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            os.writeBytes(jsonParam.toString());
-            os.flush();
-            os.close();
-
-            int responseCode = conn.getResponseCode();
-
-            conn.disconnect();
-
-            return responseCode == 200;
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void showSuccessPopup() {
