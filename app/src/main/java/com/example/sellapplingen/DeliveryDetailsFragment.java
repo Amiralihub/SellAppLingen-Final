@@ -35,8 +35,6 @@ import java.util.Locale;
 
 public class DeliveryDetailsFragment extends Fragment {
 
-
-
     private Order order;
 
     public String orderId;
@@ -46,8 +44,6 @@ public class DeliveryDetailsFragment extends Fragment {
     public DeliveryDetailsFragment() {
         // Required empty public constructor
     }
-
-
 
     public static DeliveryDetailsFragment newInstance(Order order) {
         DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();

@@ -29,52 +29,10 @@ public class SettingManager {
     }
 
 
-    public static Settings getSettings(String token) throws IOException {
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-        String jsonResponse = null;
+    public static Settings getSettings(String token) {
 
-        try {
-            URL url = new URL(API_URL);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
-            urlConnection.connect();
-
-            InputStream inputStream = urlConnection.getInputStream();
-            if (inputStream == null) {
-                return null;
-            }
-
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder buffer = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\n");
-            }
-
-            if (buffer.length() == 0) {
-                return null;
-            }
-            jsonResponse = buffer.toString();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Handle error appropriately
-            return null;
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        CompletableFuture<String> getSettingsFuture = NetworkManager.sendGetRequest(NetworkManager.APIEndpoints.SETTINGS.getUrl());
+        String jsonResponse = getSettingsFuture.join();
         try {
             Settings settings = gson.fromJson(jsonResponse, Settings.class);
             return settings;

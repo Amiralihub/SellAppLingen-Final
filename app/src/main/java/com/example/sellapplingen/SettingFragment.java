@@ -92,23 +92,19 @@ public class SettingFragment extends Fragment {
         token = sharedPreferences.getString("token", null);
 
         new Thread(() -> {
-            try {
-                settings = SettingManager.getSettings(token);
+            settings = SettingManager.getSettings(token);
 
-                if (settings != null) {
-                    requireActivity().runOnUiThread(() -> {
-                        editStoreName.setText(settings.getStoreName());
-                        editOwner.setText(settings.getOwner());
-                        editStreet.setText(settings.getAddress().getStreet());
-                        editHouseNumber.setText(settings.getAddress().getHouseNumber());
-                        editZip.setText(settings.getAddress().getZip());
-                        editTelephone.setText(settings.getTelephone());
-                        editEmail.setText(settings.getEmail());
+            if (settings != null) {
+                requireActivity().runOnUiThread(() -> {
+                    editStoreName.setText(settings.getStoreName());
+                    editOwner.setText(settings.getOwner());
+                    editStreet.setText(settings.getAddress().getStreet());
+                    editHouseNumber.setText(settings.getAddress().getHouseNumber());
+                    editZip.setText(settings.getAddress().getZip());
+                    editTelephone.setText(settings.getTelephone());
+                    editEmail.setText(settings.getEmail());
 
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                });
             }
         }).start();
 

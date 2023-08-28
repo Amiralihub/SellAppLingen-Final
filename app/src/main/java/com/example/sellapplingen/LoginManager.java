@@ -8,13 +8,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 
 public class LoginManager {
     public static final String PREF_NAME = "LoginPrefs";
@@ -84,95 +78,43 @@ public class LoginManager {
     // Beispiel-Implementierung für die Überprüfung der Login-Daten mit dem Server
 
 
-    public void sendPost(Runnable onSuccess) {
+    public boolean sendPost(LogInData loginData) {
 
         showFailMSG = false;
-        Log.d("LoginManager", "sendPost() Methode aufgerufen");
+        String token = null;
+        boolean success = false;
 
-        if (username == null || password == null )  {
-            Log.d("LoginManager", "Name oder Passwort ist null");
-            throw new NullPointerException("Name or password is null");
-        } else if (username.trim().isEmpty() || password.trim().isEmpty()) {
-            Log.d("LoginManager", "Name oder Passwort ist leer");
-            throw new IllegalArgumentException("Name or password is empty");
+        CompletableFuture<String> loginFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.LOGIN.getUrl(),loginData);
+
+        String response = loginFuture.join();
+        JSONObject responseJson = null;
+        try {
+            responseJson = new JSONObject(response);
+        } catch (JSONException e) {
+            showFailMSG = true;
+            throw new RuntimeException(e);
         }
+        try {
+            token = responseJson.getString("token");
+            Log.d("LoginManager", "Received token: " + token);
 
-        Log.d("LoginManager", "Geht in Methode");
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("http://131.173.65.77:8080/auth/login");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept", "application/json");
-                    Log.d("LoginManager", "Serververbindung wird hergestellt...");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-
-                    JSONObject requestData = new JSONObject();
-                    requestData.put("username", username.trim());
-                    requestData.put("password", password.trim());
-
-                    Log.i("JSON", requestData.toString());
-
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    os.writeBytes(requestData.toString());
-                    os.flush();
-                    os.close();
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG", conn.getResponseMessage());
-
-                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        saveLoginDetails(username, password);
-                    }
-
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == 200) {
-                        InputStream inputStream = conn.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder responseBuilder = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            responseBuilder.append(line);
-                        }
-                        // Schließe Streams
-                        reader.close();
-                        inputStream.close();
-
-                        // Konvertiere die Antwort in ein JSONObject
-                        String responseString = responseBuilder.toString();
-                        JSONObject responseJson = new JSONObject(responseString);
-
-                        // Hole den Token aus dem JSON-Objekt
-                        String token = responseJson.getString("token");
-                        saveToken(token);
-
-                        // Logge den Token
-                        Log.d("LoginManager", "Received token: " + token);
-                        onSuccess.run();
-                    }else{
-                        showFailMSG = true;
-                    }
-                    conn.disconnect();
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+            if (token != null) {
+                LoginManager.saveToken(token);
+                success = true;
+            }else {
+                showFailMSG = true;
+                success = false;
             }
-        });
 
-        thread.start();
-
+        } catch (JSONException e) {
+            showFailMSG = true;
+            throw new RuntimeException(e);
+        }
         if(showFailMSG){
             Toast.makeText(context, "Falsche Login Daten", Toast.LENGTH_SHORT).show();
         }
 
+        return success;
     }
 
 }
