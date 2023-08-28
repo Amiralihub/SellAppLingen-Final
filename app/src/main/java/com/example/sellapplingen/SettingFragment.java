@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import java.io.IOException;
 import java.util.HashSet;
@@ -363,10 +366,20 @@ public class SettingFragment extends Fragment {
                     sendSettings(SettingManager.Parameter.OWNER, owner);
                 }
 
-                Address address = settings.getAddress();
-                if (!street.equals(address.getStreet()) || !houseNumber.equals(address.getHouseNumber()) ||
-                        !zip.equals(address.getZip()));{
+                Address oldAddress = settings.getAddress();
+                if (!street.equals(oldAddress.getStreet()) || !houseNumber.equals(oldAddress.getHouseNumber()) ||
+                        !zip.equals(oldAddress.getZip())) {
 
+                    Address address = new Address(street, houseNumber, zip);
+                    SetAddress toSendAddress = new SetAddress(address);
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(address);
+                    System.out.println("json to send: "+jsonString);
+                    if (SettingManager.setAddress(toSendAddress)) {
+                        showSuccessPopup();
+                    }else {
+                        showErrorPopup();
+                    }
                 }
                 if (!telephone.equals(settings.getTelephone())) {
                     sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
@@ -391,9 +404,7 @@ public class SettingFragment extends Fragment {
 
     private void sendSettings(String parameter, String value) {
         try {
-            CompletableFuture<Boolean> setSettingFuture = SettingManager.setSettings(token, parameter, value);
-
-            boolean setSettingSuccess = setSettingFuture.join(); // Hier wartest du auf das Ergebnis
+            Boolean setSettingSuccess = SettingManager.setSettings(parameter, value);
 
             if (setSettingSuccess) {
                 showSuccessPopup();
@@ -403,10 +414,6 @@ public class SettingFragment extends Fragment {
         } catch (CompletionException e) {
             e.printStackTrace();
             showErrorPopup();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

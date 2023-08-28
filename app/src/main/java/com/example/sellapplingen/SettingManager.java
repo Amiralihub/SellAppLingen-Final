@@ -4,13 +4,11 @@ import com.google.gson.JsonSyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -86,123 +84,47 @@ public class SettingManager {
         }
     }
 
-    public static CompletableFuture<Boolean> setSettings(String token, String parameter, String value) throws IOException, JSONException {
-            return CompletableFuture.supplyAsync(() -> {
-                try {
-                    URL url = new URL(API_URL);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Authorization", "Bearer " + token);
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
+    public static Boolean setSettings(String parameter, String value) {
 
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("parameter", parameter);
-                    jsonObject.put("value", value);
+        boolean success = false;
+        String token = null;
 
-                    String jsonString = jsonObject.toString();
-                    byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
-
-                    try (DataOutputStream os = new DataOutputStream(conn.getOutputStream())) {
-                        os.write(postData);
-                        os.flush();
-                    }
-
-                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-                        InputStream inputStream = conn.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                        StringBuilder responseBuilder = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            responseBuilder.append(line);
-                        }
-                        reader.close();
-                        inputStream.close();
-
-                        String responseString = responseBuilder.toString();
-                        JSONObject responseJson = new JSONObject(responseString);
-
-                        System.out.println("Server Antwort: " + responseString);
-
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-        }
-
-    public void setAddressAsync(final String token, final String address) {
-        /*new Thread(() -> {
-            try {
-                boolean success = setSettings(token, "address", address, null, null);
-                // Hier kannst du das Ergebnis verwenden, z.B. eine Benachrichtigung anzeigen
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                // Hier kannst du einen Fehler behandeln, z.B. eine Fehlermeldung anzeigen
-            }
-        }).start(); */
-    }
-
-
-
-
-    public static boolean setAddress(String token, String street, String houseNumber, String zip) throws IOException, JSONException {
-        JSONObject jsonParam = new JSONObject();
+        SetSettings settingsObject = new SetSettings(parameter, value);
+        Gson gson = new Gson();
+        CompletableFuture<String> setSettingFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.SETTINGS.getUrl(), settingsObject);
+        String response = setSettingFuture.join();
+        JSONObject responseJson = null;
         try {
-            jsonParam.put("token", token);
+            responseJson = new JSONObject(response);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            token = responseJson.getString("token");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
-        JSONObject addressJson = new JSONObject();
-        addressJson.put("street", street);
-        addressJson.put("houseNumber", houseNumber);
-        addressJson.put("zip", zip);
-
-        jsonParam.put("address", addressJson);
-
-        String jsonString = jsonParam.toString();
-
-        HttpURLConnection conn = null;
-        DataOutputStream os = null;
-
-        try {
-            URL url = new URL("http://131.173.65.77:8080/api/setAddress");
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-
-            if (token != null) {
-                conn.setRequestProperty("Authorization", "Bearer " + token);
-            }
-
-            byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
-
-            os = new DataOutputStream(conn.getOutputStream());
-            os.write(postData);
-            os.flush();
-
-            int responseCode = conn.getResponseCode();
-            return responseCode == 200;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (conn != null) {
-                conn.disconnect();
-            }
+        if (token != null) {
+            LoginManager.saveToken(token);
+            success = true;
         }
+
+        return success;
+
+    }
+
+
+    public static boolean setAddress(SetAddress address) {
+
+        boolean success = false;
+
+        CompletableFuture<String> setSettingFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.SET_ADDRESS.getUrl(), address);
+        String response = setSettingFuture.join();
+
+        System.out.println("Server response" + response);
+
+        return success;
+
     }
 }

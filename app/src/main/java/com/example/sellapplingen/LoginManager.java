@@ -29,7 +29,7 @@ public class LoginManager {
     }
 
     private static LoginManager instance;
-    private Context context;
+    private static Context context;
 
     // Privater Konstruktor, um die Instanz nur einmal zu erstellen
     private LoginManager(Context context) {
@@ -56,7 +56,7 @@ public class LoginManager {
         editor.apply();
     }
 
-    private void saveToken(String token) {
+    public static void saveToken(String token) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("token", token);
@@ -67,6 +67,11 @@ public class LoginManager {
         } else {
             Log.e("LoginManager", "Failed to save the token");
         }
+    }
+
+    public static String loadToken() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString("token", null);
     }
 
     public boolean isLoggedIn() {
