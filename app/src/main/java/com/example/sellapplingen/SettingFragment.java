@@ -23,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
