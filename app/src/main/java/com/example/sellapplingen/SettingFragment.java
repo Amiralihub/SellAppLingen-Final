@@ -22,16 +22,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
     private Button saveData;
     private String token;
+
+    private Settings settings;
 
     private final SettingManager settingManager = new SettingManager();
 
@@ -86,7 +93,8 @@ public class SettingFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                Settings settings = SettingManager.getSettings(token);
+                settings = SettingManager.getSettings(token);
+
                 if (settings != null) {
                     requireActivity().runOnUiThread(() -> {
                         editStoreName.setText(settings.getStoreName());
@@ -332,40 +340,6 @@ public class SettingFragment extends Fragment {
         return false;
     }
 
-    public void setAddressToServer() {
-        String street = editStreet.getText().toString();
-        String houseNumber = editHouseNumber.getText().toString();
-        String zip = editZip.getText().toString();
-
-        try {
-            boolean success = SettingManager.setAddress(token, street, houseNumber, zip);
-            if (!success) {
-                showErrorPopup();
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            showErrorPopup();
-        }
-    }
-
-    public void setSettingsToServer() {
-        String storeName = editStoreName.getText().toString();
-        String owner = editOwner.getText().toString();
-        String telephone = editTelephone.getText().toString();
-        String email = editEmail.getText().toString();
-
-        try {
-            boolean success = SettingManager.setSettings(token, storeName, owner, telephone, email);
-            if (!success) {
-                showErrorPopup();
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            showErrorPopup();
-        }
-    }
-
-
     public void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Bestätigung");
@@ -374,7 +348,7 @@ public class SettingFragment extends Fragment {
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Extract data from EditText fields
+
                 String storeName = editStoreName.getText().toString();
                 String owner = editOwner.getText().toString();
                 String street = editStreet.getText().toString();
@@ -383,19 +357,37 @@ public class SettingFragment extends Fragment {
                 String telephone = editTelephone.getText().toString();
                 String email = editEmail.getText().toString();
 
-                try {
-                    boolean setAddressSuccess = SettingManager.setAddress(token, street, houseNumber, zip);
-                    boolean setSettingSuccess = SettingManager.setSettings(token, storeName, owner, telephone, email);
+                if (!storeName.equals(settings.getStoreName())) {
+                    System.out.println(storeName + " " + settings.getStoreName());
+                    sendSettings(SettingManager.Parameter.STORE_NAME, storeName);
+                }
 
-                    if (setAddressSuccess && setSettingSuccess) {
+                if (!owner.equals(settings.getOwner())) {
+                    sendSettings(SettingManager.Parameter.OWNER, owner);
+                }
+
+                Address oldAddress = settings.getAddress();
+                if (!street.equals(oldAddress.getStreet()) || !houseNumber.equals(oldAddress.getHouseNumber()) ||
+                        !zip.equals(oldAddress.getZip())) {
+
+                    Address address = new Address(street, houseNumber, zip);
+                    SetAddress toSendAddress = new SetAddress(address);
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(address);
+                    System.out.println("json to send: "+jsonString);
+                    if (SettingManager.setAddress(toSendAddress)) {
                         showSuccessPopup();
-                    } else {
+                    }else {
                         showErrorPopup();
                     }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                    showErrorPopup();
                 }
+                if (!telephone.equals(settings.getTelephone())) {
+                    sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
+                }
+                if (!email.equals(settings.getEmail())) {
+                    sendSettings(SettingManager.Parameter.EMAIL, email);
+                }
+
             }
         });
 
@@ -409,6 +401,22 @@ public class SettingFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private void sendSettings(String parameter, String value) {
+        try {
+            Boolean setSettingSuccess = SettingManager.setSettings(parameter, value);
+
+            if (setSettingSuccess) {
+                showSuccessPopup();
+            } else {
+                showErrorPopup();
+            }
+        } catch (CompletionException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        }
+    }
+
 
     public void showSuccessPopup() {
         requireActivity().runOnUiThread(new Runnable() {
