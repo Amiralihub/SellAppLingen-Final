@@ -27,12 +27,16 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class SettingFragment extends Fragment {
 
     private EditText editStoreName, editOwner, editStreet, editHouseNumber, editZip, editTelephone, editEmail;
     private Button saveData;
     private String token;
+
+    private Settings settings;
 
     private final SettingManager settingManager = new SettingManager();
 
@@ -87,7 +91,8 @@ public class SettingFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                Settings settings = SettingManager.getSettings(token);
+                settings = SettingManager.getSettings(token);
+
                 if (settings != null) {
                     requireActivity().runOnUiThread(() -> {
                         editStoreName.setText(settings.getStoreName());
@@ -333,40 +338,6 @@ public class SettingFragment extends Fragment {
         return false;
     }
 
-    public void setAddressToServer() {
-        String street = editStreet.getText().toString();
-        String houseNumber = editHouseNumber.getText().toString();
-        String zip = editZip.getText().toString();
-
-        try {
-            boolean success = SettingManager.setAddress(token, street, houseNumber, zip);
-            if (!success) {
-                showErrorPopup();
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            showErrorPopup();
-        }
-    }
-
-    public void setSettingsToServer() {
-        String storeName = editStoreName.getText().toString();
-        String owner = editOwner.getText().toString();
-        String telephone = editTelephone.getText().toString();
-        String email = editEmail.getText().toString();
-
-        try {
-            boolean success = SettingManager.setSettings(token, storeName, owner, telephone, email);
-            if (!success) {
-                showErrorPopup();
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            showErrorPopup();
-        }
-    }
-
-
     public void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Bestätigung");
@@ -375,7 +346,7 @@ public class SettingFragment extends Fragment {
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Extract data from EditText fields
+
                 String storeName = editStoreName.getText().toString();
                 String owner = editOwner.getText().toString();
                 String street = editStreet.getText().toString();
@@ -384,19 +355,27 @@ public class SettingFragment extends Fragment {
                 String telephone = editTelephone.getText().toString();
                 String email = editEmail.getText().toString();
 
-                try {
-                    boolean setAddressSuccess = SettingManager.setAddress(token, street, houseNumber, zip);
-                    boolean setSettingSuccess = SettingManager.setSettings(token, storeName, owner, telephone, email);
-
-                    if (setAddressSuccess && setSettingSuccess) {
-                        showSuccessPopup();
-                    } else {
-                        showErrorPopup();
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                    showErrorPopup();
+                if (!storeName.equals(settings.getStoreName())) {
+                    System.out.println(storeName + " " + settings.getStoreName());
+                    sendSettings(SettingManager.Parameter.STORE_NAME, storeName);
                 }
+
+                if (!owner.equals(settings.getOwner())) {
+                    sendSettings(SettingManager.Parameter.OWNER, owner);
+                }
+
+                Address address = settings.getAddress();
+                if (!street.equals(address.getStreet()) || !houseNumber.equals(address.getHouseNumber()) ||
+                        !zip.equals(address.getZip()));{
+
+                }
+                if (!telephone.equals(settings.getTelephone())) {
+                    sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
+                }
+                if (!email.equals(settings.getEmail())) {
+                    sendSettings(SettingManager.Parameter.EMAIL, email);
+                }
+
             }
         });
 
@@ -410,6 +389,28 @@ public class SettingFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private void sendSettings(String parameter, String value) {
+        try {
+            CompletableFuture<Boolean> setSettingFuture = SettingManager.setSettings(token, parameter, value);
+
+            boolean setSettingSuccess = setSettingFuture.join(); // Hier wartest du auf das Ergebnis
+
+            if (setSettingSuccess) {
+                showSuccessPopup();
+            } else {
+                showErrorPopup();
+            }
+        } catch (CompletionException e) {
+            e.printStackTrace();
+            showErrorPopup();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void showSuccessPopup() {
         requireActivity().runOnUiThread(new Runnable() {
