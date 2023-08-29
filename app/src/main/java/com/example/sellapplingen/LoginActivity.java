@@ -27,9 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
 
-        // Verwende den ApplicationContext für den LoginManager
         loginManager = LoginManager.getInstance(getApplicationContext());
-
         loginButton.setOnClickListener(v -> login());
     }
 

@@ -62,12 +62,9 @@ public class ManualInputFragment extends Fragment {
         // Überprüfe, ob alle Felder ausgefüllt sind oder Daten eingegeben wurden
         if (isInputValid()) {
             // Speichere die manuell eingegebenen Order-Informationen im currentOrder-Objekt
-            currentOrder.setLastName(binding.lastNameEditText.getText().toString());
-            currentOrder.setFirstName(binding.firstNameEditText.getText().toString());
-            currentOrder.setStreet(binding.streetEditText.getText().toString());
-            currentOrder.setHouseNumber(binding.houseNumberEditText.getText().toString());
-            currentOrder.setZip(selectedZipCode);
-            currentOrder.setCity("Lingen");
+            Address address = new Address(binding.streetEditText.getText().toString(), binding.houseNumberEditText.getText().toString(), selectedZipCode);
+            Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(), binding.lastNameEditText.getText().toString(), address);
+            currentOrder.setRecipient(recipient);
 
             // Erstelle das Bundle für die Übergabe der Order-Daten
             Bundle args = new Bundle();

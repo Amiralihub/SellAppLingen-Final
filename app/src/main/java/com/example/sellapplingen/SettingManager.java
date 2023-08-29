@@ -3,12 +3,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -71,7 +65,6 @@ public class SettingManager {
         return success;
 
     }
-
 
     public static boolean setAddress(SetAddress address) {
 

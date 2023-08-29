@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -80,14 +79,10 @@ public class ScannerFragment extends Fragment {
     private void saveScanResultToOrder(String scanResult) {
         String[] scanResultArray = scanResult.split("&");
         if (scanResultArray.length == 6) {
-            currentOrder.setLastName(scanResultArray[0]);
-            currentOrder.setFirstName(scanResultArray[1]);
-            currentOrder.setStreet(scanResultArray[2]);
-            currentOrder.setHouseNumber(scanResultArray[3]);
-            currentOrder.setZip(scanResultArray[4]);
-            currentOrder.setCity(scanResultArray[5]);
+
+            currentOrder.setRecipientOverOrder(scanResultArray[0],scanResultArray[1], scanResultArray[2],
+                    scanResultArray[3], scanResultArray[4]);
         }
-        // Kein else-Statement hier, da die Fehlermeldung bereits in showResultDialog gezeigt wird
     }
 
 
@@ -135,13 +130,18 @@ public class ScannerFragment extends Fragment {
 
         String[] res = contents.split("&");
         if (res.length == 6) {
-        Order order = new Order();
+            Order order = new Order();
+       /*
         order.setLastName(res[0]);
         order.setFirstName(res[1]);
         order.setStreet(res[2]);
         order.setHouseNumber(res[3]);
         order.setZip(res[4]);
-        order.setCity(res[5]);
+        order.setCity(res[5]);TODO warum order und currentORder? */
+
+        System.out.println(res[0] + " Sacn erste Stelle! ");
+            order.setRecipientOverOrder(res[0],res[1], res[2],
+                    res[3], res[4]);
 
         String orderInfoForDialog = TextUtils.join(", ", res);
 

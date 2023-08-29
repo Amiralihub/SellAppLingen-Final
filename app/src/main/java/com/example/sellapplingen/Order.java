@@ -3,16 +3,10 @@ package com.example.sellapplingen;
 import java.io.Serializable;
 
 public class Order implements Serializable {
-    private String token;
+    private String orderID;
     private String timestamp;
     private String employeeName;
-    private String firstName;
-    private String lastName;
-    private String street;
-    private String houseNumber;
-    private String zip;
-    private String city;
-    private String numberPackage;
+    private Recipient recipient;
     private String packageSize;
     private String handlingInfo;
     private String deliveryDate;
@@ -22,19 +16,12 @@ public class Order implements Serializable {
 
     }
 
-    public Order(String token, String timestamp, String employeeName, String firstName, String lastName,
-                 String street, String houseNumber, String zip, String city, String numberPackage,
+    public Order(String orderID, String timestamp, Recipient recipient,
                  String packageSize, String handlingInfo, String deliveryDate, String customDropOffPlace) {
-        this.token = token;
+        this.orderID = orderID;
         this.timestamp = timestamp;
+        this.recipient = recipient;
         this.employeeName = employeeName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.zip = zip;
-        this.city = city;
-        this.numberPackage = numberPackage;
         this.packageSize = packageSize;
         this.handlingInfo = handlingInfo;
         this.deliveryDate = deliveryDate;
@@ -42,12 +29,12 @@ public class Order implements Serializable {
     }
 
 
-    public String getToken() {
-        return token;
+    public String getOrderID() {
+        return orderID;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
     }
 
     public String getTimestamp() {
@@ -66,60 +53,11 @@ public class Order implements Serializable {
         this.employeeName = employeeName;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Recipient getRecipient(){
+        return recipient;
     }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getNumberPackage() {
-        return numberPackage;
-    }
-
-    public void setNumberPackage(String numberPackage) {
-        this.numberPackage = numberPackage;
+    public void setRecipient(Recipient recipient){
+        this.recipient = recipient;
     }
 
     public String getPackageSize() {
@@ -154,19 +92,19 @@ public class Order implements Serializable {
         this.customDropOffPlace = customDropOffPlace;
     }
 
+    public String getStreet(){
+        return recipient.getAddress().getStreet();
+    }
+    public void setRecipientOverOrder(String firstName, String lastName, String street, String houseNumber, String zip){
+        this.recipient  = new Recipient(firstName, lastName, new Address(street, houseNumber, zip));
+    }
+
     @Override
     public String toString() {
         return "Order{" +
-                "token='" + token + '\'' +
+                "token='" + orderID + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", employeeName='" + employeeName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", street='" + street + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", zip='" + zip + '\'' +
-                ", city='" + city + '\'' +
-                ", numberPackage='" + numberPackage + '\'' +
                 ", packageSize='" + packageSize + '\'' +
                 ", handlingInfo='" + handlingInfo + '\'' +
                 ", deliveryDate='" + deliveryDate + '\'' +
