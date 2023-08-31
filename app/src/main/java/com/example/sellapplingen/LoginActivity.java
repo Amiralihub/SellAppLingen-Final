@@ -1,6 +1,5 @@
 // LoginActivity.java
 package com.example.sellapplingen;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +14,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private LoginManager loginManager;
+    private LogInData loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
 
-        loginManager = LoginManager.getInstance(getApplicationContext());
+        loginManager = LogInData.getInstance(getApplicationContext());
         loginButton.setOnClickListener(v ->{
             login();
             Toast.makeText(this, "Login erfolgreich", Toast.LENGTH_SHORT).show();

@@ -4,12 +4,7 @@ import static android.content.ContentValues.TAG;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 public class NetworkManager {
 
@@ -50,7 +44,7 @@ public class NetworkManager {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                conn.setRequestProperty("Authorization", "Bearer " + LoginManager.loadToken());
+                conn.setRequestProperty("Authorization", "Bearer " + LogInData.loadToken());
                 conn.setRequestProperty("Accept", "application/json");
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
@@ -91,7 +85,7 @@ public class NetworkManager {
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-                conn.setRequestProperty("Authorization", "Bearer " + LoginManager.loadToken());
+                conn.setRequestProperty("Authorization", "Bearer " + LogInData.loadToken());
                 conn.setRequestProperty("Accept", "application/json");
 
                 int responseCode = conn.getResponseCode();

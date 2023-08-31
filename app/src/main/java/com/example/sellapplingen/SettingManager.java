@@ -58,7 +58,7 @@ public class SettingManager {
         }
 
         if (token != null) {
-            LoginManager.saveToken(token);
+            LogInData.saveToken(token);
             success = true;
         }
 
