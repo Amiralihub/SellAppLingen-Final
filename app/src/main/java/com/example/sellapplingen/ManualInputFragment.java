@@ -1,6 +1,8 @@
 package com.example.sellapplingen;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +57,31 @@ public class ManualInputFragment extends Fragment {
                 // Handle nichts ausgewählt
             }
         });
+
+        // Fügen Sie den TextWatcher zum houseNumberEditText hinzu
+        binding.houseNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Nicht benötigt, vor der Textänderung
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Überprüfen Sie die Länge der eingegebenen Hausnummer
+                if (charSequence.length() > 5) {
+                    // Schneiden Sie den Text auf 5 Zeichen ab
+                    binding.houseNumberEditText.setText(charSequence.subSequence(0, 5));
+                    binding.houseNumberEditText.setSelection(5); // Setzen Sie den Cursor am Ende
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Nicht benötigt, nach der Textänderung
+            }
+        });
     }
+
 
 
     private void saveManualInput() {

@@ -131,13 +131,6 @@ public class ScannerFragment extends Fragment {
         String[] res = contents.split("&");
         if (res.length == 6) {
             Order order = new Order();
-       /*
-        order.setLastName(res[0]);
-        order.setFirstName(res[1]);
-        order.setStreet(res[2]);
-        order.setHouseNumber(res[3]);
-        order.setZip(res[4]);
-        order.setCity(res[5]);TODO warum order und currentORder? */
 
         System.out.println(res[0] + " Sacn erste Stelle! ");
             order.setRecipientOverOrder(res[0],res[1], res[2],
@@ -151,16 +144,6 @@ public class ScannerFragment extends Fragment {
                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
-/*        HandlingInfoFragment fragment = new HandlingInfoFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("order", order);
-        fragment.setArguments(args);*/
-  /*      FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frame_layout, fragment);
-        transaction.commit();
-*/
-
 
         Bundle args = new Bundle();
         args.putSerializable("order", order);
