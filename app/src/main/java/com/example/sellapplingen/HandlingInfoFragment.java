@@ -264,7 +264,7 @@ public class HandlingInfoFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             String customDropOffPlace = customDropOffEditText.getText().toString();
-            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
+            if (packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
                 Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
             } else {
 

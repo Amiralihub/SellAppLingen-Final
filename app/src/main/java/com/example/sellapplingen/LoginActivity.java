@@ -28,7 +28,10 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextPassword);
 
         loginManager = LoginManager.getInstance(getApplicationContext());
-        loginButton.setOnClickListener(v -> login());
+        loginButton.setOnClickListener(v ->{
+            login();
+            Toast.makeText(this, "Login erfolgreich", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void login() {
