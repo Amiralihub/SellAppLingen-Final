@@ -1,9 +1,10 @@
 package com.example.sellapplingen;
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 public class NetworkManager {
 
@@ -44,12 +44,12 @@ public class NetworkManager {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                conn.setRequestProperty("Authorization", "Bearer " + LoginManager.loadToken());
+                conn.setRequestProperty("Authorization", "Bearer " + LogInData.loadToken());
                 conn.setRequestProperty("Accept", "application/json");
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
                 String jsonString = gson.toJson(dataObject);
-                System.out.println("json to send: "+jsonString);
+                System.out.println("json to send: " + jsonString);
                 byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
 
                 try (DataOutputStream os = new DataOutputStream(conn.getOutputStream())) {
@@ -76,4 +76,41 @@ public class NetworkManager {
         });
     }
 
+    public static CompletableFuture<String> sendGetRequest(String apiUrl) {
+
+        return CompletableFuture.supplyAsync(() -> {
+
+            try {
+
+                URL url = new URL(apiUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Authorization", "Bearer " + LogInData.loadToken());
+                conn.setRequestProperty("Accept", "application/json");
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == 200) {
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    return response.toString();
+
+                } else {
+                    Log.e(TAG, "Server returned status code: " + responseCode);
+                    return null;
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error downloading or decoding JSON data", e);
+                e.printStackTrace();
+                return null;
+            }
+        });
+    }
 }

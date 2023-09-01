@@ -14,14 +14,14 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     private Order currentOrder;
-    private LoginManager loginManager;
+    private LogInData loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Verwende den ApplicationContext für den LoginManager
-        loginManager = LoginManager.getInstance(getApplicationContext());
+        loginManager = LogInData.getInstance(getApplicationContext());
 
         if (!loginManager.isLoggedIn()) {
             // Wenn der Benutzer nicht angemeldet ist, starte die LoginActivity

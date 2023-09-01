@@ -1,8 +1,5 @@
 package com.example.sellapplingen;
 
-import static com.example.sellapplingen.SettingParameter.email;
-import static com.example.sellapplingen.SettingParameter.telephone;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.text.InputFilter;
@@ -25,11 +22,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 public class SettingFragment extends Fragment {
@@ -88,27 +82,23 @@ public class SettingFragment extends Fragment {
         dataEditWatcher.watch(editEmail);
 
         // Lese den Token aus den SharedPreferences
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
         new Thread(() -> {
-            try {
-                settings = SettingManager.getSettings(token);
+            settings = SettingManager.getSettings(token);
 
-                if (settings != null) {
-                    requireActivity().runOnUiThread(() -> {
-                        editStoreName.setText(settings.getStoreName());
-                        editOwner.setText(settings.getOwner());
-                        editStreet.setText(settings.getAddress().getStreet());
-                        editHouseNumber.setText(settings.getAddress().getHouseNumber());
-                        editZip.setText(settings.getAddress().getZip());
-                        editTelephone.setText(settings.getTelephone());
-                        editEmail.setText(settings.getEmail());
+            if (settings != null) {
+                requireActivity().runOnUiThread(() -> {
+                    editStoreName.setText(settings.getStoreName());
+                    editOwner.setText(settings.getOwner());
+                    editStreet.setText(settings.getAddress().getStreet());
+                    editHouseNumber.setText(settings.getAddress().getHouseNumber());
+                    editZip.setText(settings.getAddress().getZip());
+                    editTelephone.setText(settings.getTelephone());
+                    editEmail.setText(settings.getEmail());
 
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                });
             }
         }).start();
 
@@ -258,7 +248,7 @@ public class SettingFragment extends Fragment {
 
     private void performLogout() {
         // Clear session data (token) from SharedPreferences
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LoginManager.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("token");
         editor.apply();

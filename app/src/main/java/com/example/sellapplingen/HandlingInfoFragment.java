@@ -264,39 +264,33 @@ public class HandlingInfoFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             String customDropOffPlace = customDropOffEditText.getText().toString();
-            if (reciptname.getText().toString().isEmpty() || packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
+            if (packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
                 Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
             } else {
-                Order order1 = new Order();
-                order1.setLastName(clientInfo.getLastName());
-                order1.setFirstName(clientInfo.getFirstName());
-                order1.setStreet(clientInfo.getStreet());
-                order1.setHouseNumber(clientInfo.getHouseNumber());
-                order1.setZip(clientInfo.getZip());
-                order1.setCity(clientInfo.getCity());
-                order1.setEmployeeName(reciptname.getText().toString());
 
-                order1.setPackageSize(packageSizeInfo.toString());
+                clientInfo.setEmployeeName(reciptname.getText().toString());
+
+                clientInfo.setPackageSize(packageSizeInfo.toString());
                 if (selectedInfo.length() > 0) {
                     selectedInfo.setLength(selectedInfo.length() - 1); // Entferne das letzte "&"
-                    order1.setHandlingInfo(selectedInfo.toString());
+                    clientInfo.setHandlingInfo(selectedInfo.toString());
                 } else {
-                    order1.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
+                    clientInfo.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
                 }
                 String myFormat = "hh:mm";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                 String getTime = dateFormat.format(Calendar.getInstance().getTime());
 
-                order1.setHandlingInfo(selectedInfo.toString());
-                order1.setCustomDropOffPlace(customDropOffPlace);
-                order1.setDeliveryDate(setDate);
-                order1.setTimestamp(getTime);
+                clientInfo.setHandlingInfo(selectedInfo.toString());
+                clientInfo.setCustomDropOffPlace(customDropOffPlace);
+                clientInfo.setDeliveryDate(setDate);
+                clientInfo.setTimestamp(getTime);
                 String info = selectedInfo.toString();
                 System.out.println(customDropOffPlace);
                 Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
                 DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();
-                args.putSerializable("order", order1);
+                args.putSerializable("order", clientInfo);
                 fragment.setArguments(args);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();

@@ -159,6 +159,7 @@
                 android:padding="8dp"
                 android:background="@drawable/edittext_bkg"
                 android:inputType="text"
+                android:imeOptions="actionNext"
                 android:maxLines="1"
                 tools:ignore="TouchTargetSizeCheck" />
 
@@ -216,6 +217,7 @@
                 android:layout_height="50dp"
                 android:autofillHints=""
                 android:baselineAligned="false"
+                android:imeOptions="actionNext"
                 android:hint="@string/name_eingeben"
                 android:padding="8dp"
                 android:background="@drawable/edittext_bkg"

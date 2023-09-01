@@ -23,6 +23,8 @@
             android:layout_height="50dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/edittext_bkg"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             android:hint="Vorname *"
             android:padding="8dp" />
 
@@ -32,6 +34,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Nachname *"
+        android:inputType="text"
+        android:imeOptions="actionNext"
         android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
@@ -41,6 +45,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Straße *"
+        android:inputType="text"
+        android:imeOptions="actionNext"
         android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
@@ -50,6 +56,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:hint="Hausnummer *"
+        android:inputType="text"
+        android:imeOptions="actionNext"
         android:padding="8dp"
         android:background="@drawable/edittext_bkg" />
 
