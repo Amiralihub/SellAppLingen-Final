@@ -34,7 +34,7 @@
                 android:background="@drawable/edittext_bkg"
                 android:drawableLeft="@drawable/baseline_email_24"
                 android:drawablePadding="8dp"
-                android:hint="E-Mail"
+                android:hint="Benutzername"
                 android:inputType="textEmailAddress"
                 android:padding="8dp" />
 

@@ -75,35 +75,32 @@ public class LogInData {
         showFailMSG = false;
         String token = null;
         boolean success = false;
-        CompletableFuture<String> loginFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.LOGIN.getUrl(),loginData);
+        CompletableFuture<String> loginFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.LOGIN.getUrl(), loginData);
         String response = loginFuture.join();
-        JSONObject responseJson = null;
-        try {
-            responseJson = new JSONObject(response);
-        } catch (JSONException e) {
-            showFailMSG = true;
-            throw new RuntimeException(e);
-        }
-        try {
-            token = responseJson.getString("token");
-            Log.d("LoginManager", "Received token: " + token);
 
-            if (token != null) {
-                LogInData.saveToken(token);
-                success = true;
-            }else {
+        if (response != null) {
+            try {
+                JSONObject responseJson = new JSONObject(response);
+                token = responseJson.optString("token");
+                Log.d("LoginManager", "Received token: " + token);
+
+                if (token != null) {
+                    LogInData.saveToken(token);
+                    success = true;
+                } else {
+                    showFailMSG = true;
+                    success = false;
+                }
+            } catch (JSONException e) {
                 showFailMSG = true;
-                success = false;
+                e.printStackTrace();
             }
-
-        } catch (JSONException e) {
+        } else {
             showFailMSG = true;
-            throw new RuntimeException(e);
         }
-        if(showFailMSG){
-            Toast.makeText(context, "Falsche Login Daten", Toast.LENGTH_SHORT).show();
-        }
+
         return success;
     }
+
 
 }

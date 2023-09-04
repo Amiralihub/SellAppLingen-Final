@@ -132,22 +132,21 @@ public class DeliveryDetailsFragment extends Fragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Generiere den Timestamp
+                String myFormat = "dd-MM-yyyy:HH-mm-ss.SSS";
+                SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+                String getTime = dateFormat.format(Calendar.getInstance().getTime());
+
+                if (order != null) {
+                    order.setTimestamp(getTime);
+                }
+
                 sendOrderDataToServer();
             }
         });
 
-// In onCreateView von DeliveryDetailsFragment
-        TextView timestampValue = view.findViewById(R.id.timestampValue);
 
-        String myFormat = "dd-MM-yyyy:HH-mm-ss.SSS";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
-        String getTime = dateFormat.format(Calendar.getInstance().getTime());
-        timestampValue.setText(getTime);
 
-        // Hier wird die Uhrzeit in das Order-Objekt gespeichert
-        if (order != null) {
-            order.setTimestamp(getTime);
-        }
 
 
 

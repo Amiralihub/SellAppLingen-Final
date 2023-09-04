@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_orders"
-        android:icon="@drawable/baseline_settings_24"
+        android:icon="@drawable/baseline_search_24"
         android:title="Aufgegebene Bestellungen" />
 
     <item

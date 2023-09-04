@@ -29,21 +29,30 @@ public class LoginActivity extends AppCompatActivity {
         loginManager = LogInData.getInstance(getApplicationContext());
         loginButton.setOnClickListener(v ->{
             login();
-            Toast.makeText(this, "Login erfolgreich", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void login() {
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
 
-        if(TextUtils.isEmpty(usernameEditText.getText()) || TextUtils.isEmpty(passwordEditText.getText())) {
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            // Behandlung von leerem Benutzernamen oder Passwort
+            Toast.makeText(this, "Benutzername und Passwort sind erforderlich", Toast.LENGTH_SHORT).show();
             return;
         }
-        LogInData loginData = new LogInData(usernameEditText.getText().toString(), passwordEditText.getText().toString());
 
-        if(loginManager.sendPost(loginData)){
+        LogInData loginData = new LogInData(username, password);
+
+        if (loginManager.sendPost(loginData)) {
+            Toast.makeText(this, "Login erfolgreich", Toast.LENGTH_SHORT).show();
             goToScannerFragment();
+        } else {
+            Toast.makeText(this, "Anmeldung fehlgeschlagen. Benutzername oder Passwort ist falsch", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void goToScannerFragment() {
         Intent mainIntent = new Intent(this, MainActivity.class);
