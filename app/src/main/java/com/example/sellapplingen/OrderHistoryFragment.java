@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 
 
 public class OrderHistoryFragment extends Fragment {
-    private ArrayList<PlacedOrder> placedOrders;
+    private ArrayList<Order> placedOrders;
     private OrderHistoryAdapter orderHistoryAdapter;
     EditText serachOrder;
 
@@ -60,7 +60,7 @@ public class OrderHistoryFragment extends Fragment {
         //TODO: refactor
         if (isNetworkAvailable()) {
             executorService.execute(() -> {
-                ArrayList<PlacedOrder> result = downloadData("http://131.173.65.77:8080/api/allOrders");
+                ArrayList<Order> result = downloadData("http://131.173.65.77:8080/api/allOrders");
                 if (result != null) {
                     requireActivity().runOnUiThread(() -> updateUI(result));
                 } else {
@@ -100,8 +100,8 @@ public class OrderHistoryFragment extends Fragment {
     }
 
 
-    private ArrayList<PlacedOrder> downloadData(String urlStr) {
-        ArrayList<PlacedOrder> allOrders = new ArrayList<>();
+    private ArrayList<Order> downloadData(String urlStr) {
+        ArrayList<Order> allOrders = new ArrayList<>();
 
         try {
 
@@ -113,7 +113,7 @@ public class OrderHistoryFragment extends Fragment {
 
             for (int storeIndex = 0; storeIndex < jsonArray.length(); storeIndex++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(storeIndex);
-                PlacedOrder placedOrder = gson.fromJson(jsonObject.toString(), PlacedOrder.class);
+                Order placedOrder = gson.fromJson(jsonObject.toString(), Order.class);
                 allOrders.add(placedOrder);
             }
             return allOrders;
@@ -124,7 +124,7 @@ public class OrderHistoryFragment extends Fragment {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateUI(ArrayList<PlacedOrder> result) {
+    private void updateUI(ArrayList<Order> result) {
         placedOrders.clear();
         placedOrders.addAll(result);
         if (orderHistoryAdapter != null) {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 
 public class OrderHistoryDetailsFragment extends Fragment {
-    private PlacedOrder order;
+    private Order order;
     TextView deliveryDetailsTextView, addressDetailsTextView;
     TextView orderNumberTextView, recipientOrderNumberTextView;
     TextView orderDateTextView, recipientOrderDateTextView;
@@ -42,7 +42,7 @@ public class OrderHistoryDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_history_details, container, false);
         if (getArguments() != null) {
-            order = (PlacedOrder) getArguments().getSerializable("selected_order");
+            order = (Order) getArguments().getSerializable("selected_order");
         }
 
         deliveryDetailsTextView = view.findViewById(R.id.deliveryDetailsTextView);
@@ -73,9 +73,9 @@ public class OrderHistoryDetailsFragment extends Fragment {
             employeeOrderTextView.setText(order.getEmployeeName());
             recipientOrderPackageTextView.setText(order.getPackageSize());
             recipientOrderDropPlaceTextView.setText(order.getCustomDropOffPlace());
-            recipientOrderTextView.setText(order.getFirstName() + " " + order.getLastName());
-            orderStreetTextView.setText(order.getStreet() + " " + order.getHouseNumber());
-            orderCityTextView.setText(order.getZip() + " Lingen");
+            recipientOrderTextView.setText(order.getRecipient().getFirstName() + " " + order.getRecipient().getLastName());
+            orderStreetTextView.setText(order.getRecipient().getAddress().getStreet() + " " + order.getRecipient().getAddress().getHouseNumber());
+            orderCityTextView.setText(order.getRecipient().getAddress().getZip() + " Lingen");
         }
 
 
