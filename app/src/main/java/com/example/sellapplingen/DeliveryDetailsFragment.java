@@ -194,6 +194,8 @@ public class DeliveryDetailsFragment extends Fragment {
             TextView zipLabel = view.findViewById(R.id.zipValue);
             zipLabel.setText(order.getRecipient().getAddress().getZip() + " ");
 
+
+
             // Weitere TextViews für andere Order-Informationen hinzufügen
             // Hier kannst du weitere TextViews hinzufügen, um andere Order-Informationen anzuzeigen
             // Beispiel:

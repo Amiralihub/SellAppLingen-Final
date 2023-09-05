@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Bestelldatum:"
-                android:textSize="18dp"/>
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/recipientOrderDateTextView"
@@ -139,6 +139,30 @@
 
             <TextView
                 android:id="@+id/recipientOrderPackageTextView"
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/orderDropPlaceDateTextView"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Lieferdatum:"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:id="@+id/recipientOrderDropPlaceDateTextView"
                 style="@style/Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

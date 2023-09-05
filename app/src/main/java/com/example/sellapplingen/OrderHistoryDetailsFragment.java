@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class OrderHistoryDetailsFragment extends Fragment {
@@ -24,6 +27,7 @@ public class OrderHistoryDetailsFragment extends Fragment {
     TextView orderPackageTextView, recipientOrderPackageTextView;
     TextView orderDropPlaceTextView, recipientOrderDropPlaceTextView;
     TextView recipientTextView, recipientOrderTextView;
+    TextView recipientOrderDropPlaceDateTextView;
     TextView recipientStreetTextView, orderStreetTextView;
     TextView recipientCityTextView, orderCityTextView;
     ImageView deliveryImageView, homeImageView;
@@ -65,11 +69,13 @@ public class OrderHistoryDetailsFragment extends Fragment {
         recipientCityTextView = view.findViewById(R.id.recipientCityTextView);
         orderCityTextView = view.findViewById(R.id.orderCityTextView);
         deliveryImageView = view.findViewById(R.id.deliveryImageView);
+        recipientOrderDropPlaceDateTextView = view.findViewById(R.id.recipientOrderDropPlaceDateTextView);
 
 
         if (order != null) {
             recipientOrderNumberTextView.setText(order.getOrderID());
-            recipientOrderDateTextView.setText(order.getDeliveryDate());
+            recipientOrderDateTextView.setText(dateFormater(order.getTimestamp()));
+            recipientOrderDropPlaceDateTextView.setText(dateFormater(order.getDeliveryDate()));
             employeeOrderTextView.setText(order.getEmployeeName());
             recipientOrderPackageTextView.setText(order.getPackageSize());
             recipientOrderDropPlaceTextView.setText(order.getCustomDropOffPlace());
@@ -88,5 +94,9 @@ public class OrderHistoryDetailsFragment extends Fragment {
         return view;
     }
 
+    public String dateFormater(String update) {
+        String newFormat[] = update.split(":");
+        return newFormat[0];
+    }
 
 }
