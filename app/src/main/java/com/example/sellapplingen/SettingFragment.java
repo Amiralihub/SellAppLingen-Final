@@ -85,6 +85,8 @@ public class SettingFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
+
+
         new Thread(() -> {
             settings = SettingManager.getSettings(token);
 
@@ -331,66 +333,83 @@ public class SettingFragment extends Fragment {
     }
 
     public void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Bestätigung");
-        builder.setMessage("Möchten Sie die Änderungen speichern?");
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Bestätigung");
+            builder.setMessage("Möchten Sie die Änderungen speichern?");
 
-        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        String storeName = editStoreName.getText().toString();
+                        String owner = editOwner.getText().toString();
+                        String street = editStreet.getText().toString();
+                        String houseNumber = editHouseNumber.getText().toString();
+                        String zip = editZip.getText().toString();
+                        String telephone = editTelephone.getText().toString();
+                        String email = editEmail.getText().toString();
 
-                String storeName = editStoreName.getText().toString();
-                String owner = editOwner.getText().toString();
-                String street = editStreet.getText().toString();
-                String houseNumber = editHouseNumber.getText().toString();
-                String zip = editZip.getText().toString();
-                String telephone = editTelephone.getText().toString();
-                String email = editEmail.getText().toString();
+                        // Stellen Sie sicher, dass settings nicht null ist, bevor Sie darauf zugreifen
+                        if (settings != null) {
+                            if (!storeName.equals(settings.getStoreName())) {
+                                System.out.println(storeName + " " + settings.getStoreName());
+                                sendSettings(SettingManager.Parameter.STORE_NAME, storeName);
+                            }
 
-                if (!storeName.equals(settings.getStoreName())) {
-                    System.out.println(storeName + " " + settings.getStoreName());
-                    sendSettings(SettingManager.Parameter.STORE_NAME, storeName);
-                }
+                            if (!owner.equals(settings.getOwner())) {
+                                sendSettings(SettingManager.Parameter.OWNER, owner);
+                            }
 
-                if (!owner.equals(settings.getOwner())) {
-                    sendSettings(SettingManager.Parameter.OWNER, owner);
-                }
+                            Address oldAddress = settings.getAddress();
+                            if (!street.equals(oldAddress.getStreet()) || !houseNumber.equals(oldAddress.getHouseNumber()) ||
+                                    !zip.equals(oldAddress.getZip())) {
 
-                Address oldAddress = settings.getAddress();
-                if (!street.equals(oldAddress.getStreet()) || !houseNumber.equals(oldAddress.getHouseNumber()) ||
-                        !zip.equals(oldAddress.getZip())) {
-
-                    Address address = new Address(street, houseNumber, zip);
-                    SetAddress toSendAddress = new SetAddress(address);
-                    Gson gson = new Gson();
-                    String jsonString = gson.toJson(address);
-                    System.out.println("json to send: "+jsonString);
-                    if (SettingManager.setAddress(toSendAddress)) {
-                        showSuccessPopup();
-                    }else {
-                        showErrorPopup();
+                                Address address = new Address(street, houseNumber, zip);
+                                SetAddress toSendAddress = new SetAddress(address);
+                                Gson gson = new Gson();
+                                String jsonString = gson.toJson(address);
+                                System.out.println("json to send: "+jsonString);
+                                if (SettingManager.setAddress(toSendAddress)) {
+                                    showSuccessPopup();
+                                } else {
+                                    showErrorPopup();
+                                }
+                            }
+                            if (!telephone.equals(settings.getTelephone())) {
+                                sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
+                            }
+                            if (!email.equals(settings.getEmail())) {
+                                sendSettings(SettingManager.Parameter.EMAIL, email);
+                            }
+                        } else {
+                            // settings ist null, handhaben Sie diesen Fall nach Bedarf
+                            Toast.makeText(requireContext(), "Keine Internet Verbindung", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // Hier können Sie den Fehler protokollieren oder dem Benutzer eine Fehlermeldung anzeigen.
+                        // Zum Beispiel: Toast.makeText(requireContext(), "Ein Fehler ist aufgetreten", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (!telephone.equals(settings.getTelephone())) {
-                    sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
+            });
+
+            builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
-                if (!email.equals(settings.getEmail())) {
-                    sendSettings(SettingManager.Parameter.EMAIL, email);
-                }
+            });
 
-            }
-        });
-
-        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Hier können Sie den Fehler protokollieren oder dem Benutzer eine Fehlermeldung anzeigen.
+            // Zum Beispiel: Toast.makeText(requireContext(), "Ein Fehler ist aufgetreten", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void sendSettings(String parameter, String value) {
         try {
