@@ -1,6 +1,7 @@
-package com.example.sellapplingen;
+package sellapp.models;
 
-public class Settings {
+public class StoreDetails
+{
 
     private String storeName;
     private String owner;
@@ -11,8 +12,9 @@ public class Settings {
     private String backgroundImage;
 
     // Konstruktor
-    public Settings( String storeName, String owner, Address address,
-                     String telephone, String email, String logo, String backgroundImage) {
+    public StoreDetails(String storeName, String owner, Address address,
+                        String telephone, String email, String logo, String backgroundImage)
+    {
         this.storeName = storeName;
         this.owner = owner;
         this.address = address;
@@ -25,59 +27,73 @@ public class Settings {
     // Getter und Setter
 
 
-    public String getStoreName() {
+    public String getStoreName()
+    {
         return storeName;
     }
 
-    public void setStoreName(String storeName) {
+    public void setStoreName(String storeName)
+    {
         this.storeName = storeName;
     }
 
-    public String getOwner() {
+    public String getOwner()
+    {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(String owner)
+    {
         this.owner = owner;
     }
 
-    public Address getAddress() {
+    public Address getAddress()
+    {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Address address)
+    {
         this.address = address;
     }
 
-    public String getTelephone() {
+    public String getTelephone()
+    {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+    public void setTelephone(String telephone)
+    {
         this.telephone = telephone;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getLogo() {
+    public String getLogo()
+    {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(String logo)
+    {
         this.logo = logo;
     }
 
-    public String getBackgroundImage() {
+    public String getBackgroundImage()
+    {
         return backgroundImage;
     }
 
-    public void setBackgroundImage(String backgroundImage) {
+    public void setBackgroundImage(String backgroundImage)
+    {
         this.backgroundImage = backgroundImage;
     }
 }

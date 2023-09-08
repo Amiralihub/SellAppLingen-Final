@@ -1,7 +1,5 @@
-package com.example.sellapplingen;
+package sellapp.fragments;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import sellapp.models.NetworkManager;
+import sellapp.models.Order;
+import com.example.sellapplingen.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,26 +24,28 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
-public class DeliveryDetailsFragment extends Fragment {
-
+public class DeliveryDetailsFragment extends Fragment
+{
     private Order order;
-
     public String orderId;
-
     private String token;
 
-    public DeliveryDetailsFragment() {
+    public DeliveryDetailsFragment()
+    {
         // Required empty public constructor
     }
 
-    public static DeliveryDetailsFragment newInstance(Order order) {
+    public static DeliveryDetailsFragment newInstance(Order order)
+    {
         DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable("order", order);
         fragment.setArguments(args);
         return fragment;
     }
-    private Order createTestOrder() {
+
+    private Order createTestOrder()
+    {
         Order testOrder = new Order();
         testOrder.setOrderID("Test-Token");
         testOrder.setTimestamp("2023-08-03 12:34:56");
@@ -49,33 +53,37 @@ public class DeliveryDetailsFragment extends Fragment {
     }
 
 
-
-    private void sendOrderDataToServer() {
+    private void sendOrderDataToServer()
+    {
 
         CompletableFuture<String> sendOrderFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.ORDER.getUrl(), order);
         String response = sendOrderFuture.join();
 
-        try {
-            if (response != null) {
+        try
+        {
+            if (response != null)
+            {
                 JSONObject responseJson = new JSONObject(response);
                 orderId = responseJson.getString("orderID");
                 showOrderIdPopup(orderId);
-            } else {
+            } else
+            {
                 showErrorPopup("Fehler bei der Kommunikation mit dem Server");
             }
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             showErrorPopup("Fehler bei der Verarbeitung der Antwort");
             e.printStackTrace();
         }
-
-
-
     }
 
-    private void showSuccessMessage() {
-        requireActivity().runOnUiThread(new Runnable() {
+    private void showSuccessMessage()
+    {
+        requireActivity().runOnUiThread(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 // Show the success message using a Toast on the main UI thread
                 Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
 
@@ -89,10 +97,13 @@ public class DeliveryDetailsFragment extends Fragment {
     }
 
     // Füge diese Methode zum Anzeigen des Popups hinzu
-    private void showOrderIdPopup(String orderId) {
-        requireActivity().runOnUiThread(new Runnable() {
+    private void showOrderIdPopup(String orderId)
+    {
+        requireActivity().runOnUiThread(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 View popupView = getLayoutInflater().inflate(R.layout.popup_success_deliverydetail, null);
 
                 TextView successMessageTextView = popupView.findViewById(R.id.successMessageTextView);
@@ -105,9 +116,11 @@ public class DeliveryDetailsFragment extends Fragment {
                         .setView(popupView)
                         .create();
 
-                backToScannerButton.setOnClickListener(new View.OnClickListener() {
+                backToScannerButton.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         alertDialog.dismiss();
                         // Hier kannst du zum ScannerFragment wechseln
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -124,20 +137,24 @@ public class DeliveryDetailsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_delivery_details, container, false);
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 // Generiere den Timestamp
                 String myFormat = "dd-MM-yyyy:HH-mm-ss.SSS";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                 String getTime = dateFormat.format(Calendar.getInstance().getTime());
 
-                if (order != null) {
+                if (order != null)
+                {
                     order.setTimestamp(getTime);
                 }
 
@@ -145,19 +162,16 @@ public class DeliveryDetailsFragment extends Fragment {
             }
         });
 
-
-
-
-
-
         // Hole das Order-Objekt aus den Fragment-Argumenten
         Bundle args = getArguments();
-        if (args != null && args.containsKey("order")) {
+        if (args != null && args.containsKey("order"))
+        {
             order = (Order) args.getSerializable("order");
         }
 
         // Zeige die Order-Informationen in den entsprechenden TextViews an
-        if (order != null) {
+        if (order != null)
+        {
             createTestOrder();
 
 
@@ -165,7 +179,7 @@ public class DeliveryDetailsFragment extends Fragment {
             employeeIdValue.setText(order.getEmployeeName());
 
             TextView firstNameValue = view.findViewById(R.id.firstNameValue);
-            firstNameValue.setText(order.getRecipient().getFirstName() +" ");
+            firstNameValue.setText(order.getRecipient().getFirstName() + " ");
 
             TextView lastNameValue = view.findViewById(R.id.lastNameValue);
             lastNameValue.setText(order.getRecipient().getLastName());
@@ -183,7 +197,7 @@ public class DeliveryDetailsFragment extends Fragment {
             deliveryDateValue.setText(order.getDeliveryDate());
 
             TextView streetNameValue = view.findViewById(R.id.streetNameValue);
-            streetNameValue.setText(order.getRecipient().getAddress().getStreet() +" ");
+            streetNameValue.setText(order.getRecipient().getAddress().getStreet() + " ");
 
             TextView housenNumberValue = view.findViewById(R.id.houseNumberValue);
             housenNumberValue.setText(order.getRecipient().getAddress().getHouseNumber());
@@ -206,15 +220,16 @@ public class DeliveryDetailsFragment extends Fragment {
         return view;
     }
 
-    private void showErrorPopup(String msg) {
-        requireActivity().runOnUiThread(new Runnable() {
+    private void showErrorPopup(String msg)
+    {
+        requireActivity().runOnUiThread(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 
 }

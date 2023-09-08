@@ -1,51 +1,67 @@
-package com.example.sellapplingen;
+package sellapp.fragments;
 
-import static com.example.sellapplingen.FragmentManagerHelper.goBackToPreviousFragment;
+import static customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.example.sellapplingen.R;
+
+import sellapp.models.Order;
 
 
-public class OrderHistoryDetailsFragment extends Fragment {
+public class OrderHistoryDetailsFragment extends Fragment
+{
     private Order order;
-    TextView deliveryDetailsTextView, addressDetailsTextView;
-    TextView orderNumberTextView, recipientOrderNumberTextView;
-    TextView orderDateTextView, recipientOrderDateTextView;
-    TextView employeeTextView, employeeOrderTextView;
-    TextView orderPackageTextView, recipientOrderPackageTextView;
-    TextView orderDropPlaceTextView, recipientOrderDropPlaceTextView;
-    TextView recipientTextView, recipientOrderTextView;
-    TextView recipientOrderDropPlaceDateTextView;
-    TextView recipientStreetTextView, orderStreetTextView;
-    TextView recipientCityTextView, orderCityTextView;
-    ImageView deliveryImageView, homeImageView;
-    ImageButton backToHistoryButton;
+    public TextView deliveryDetailsTextView;
+    public TextView addressDetailsTextView;
+    public TextView orderNumberTextView;
+    public TextView recipientOrderNumberTextView;
+    public TextView orderDateTextView;
+    public TextView recipientOrderDateTextView;
+    public TextView employeeTextView;
+    public TextView employeeOrderTextView;
+    public TextView orderPackageTextView;
+    public TextView recipientOrderPackageTextView;
+    public TextView orderDropPlaceTextView;
+    public TextView recipientOrderDropPlaceTextView;
+    public TextView recipientTextView;
+    public TextView recipientOrderTextView;
+    public TextView recipientOrderDropPlaceDateTextView;
+    public TextView recipientStreetTextView;
+    public TextView orderStreetTextView;
+    public TextView recipientCityTextView;
+    public TextView orderCityTextView;
+    public ImageView deliveryImageView;
+    public ImageView homeImageView;
+    public ImageButton backToHistoryButton;
 
-    public OrderHistoryDetailsFragment() {
-        // Required empty public constructor
+    public OrderHistoryDetailsFragment()
+    {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_order_history_details, container, false);
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             order = (Order) getArguments().getSerializable("selected_order");
         }
 
@@ -72,7 +88,8 @@ public class OrderHistoryDetailsFragment extends Fragment {
         recipientOrderDropPlaceDateTextView = view.findViewById(R.id.recipientOrderDropPlaceDateTextView);
 
 
-        if (order != null) {
+        if (order != null)
+        {
             recipientOrderNumberTextView.setText(order.getOrderID());
             recipientOrderDateTextView.setText(dateFormater(order.getTimestamp()));
             recipientOrderDropPlaceDateTextView.setText(dateFormater(order.getDeliveryDate()));
@@ -86,7 +103,8 @@ public class OrderHistoryDetailsFragment extends Fragment {
 
 
         backToHistoryButton = view.findViewById(R.id.backToHistoryButton);
-        backToHistoryButton.setOnClickListener(v -> {
+        backToHistoryButton.setOnClickListener(v ->
+        {
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             goBackToPreviousFragment(fragmentManager);
         });
@@ -94,8 +112,9 @@ public class OrderHistoryDetailsFragment extends Fragment {
         return view;
     }
 
-    public String dateFormater(String update) {
-        String newFormat[] = update.split(":");
+    public String dateFormater(String update)
+    {
+        String newFormat [] = update.split(":");
         return newFormat[0];
     }
 

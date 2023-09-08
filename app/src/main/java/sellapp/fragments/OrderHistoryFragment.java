@@ -1,4 +1,4 @@
-package com.example.sellapplingen;
+package sellapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,6 +22,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import sellapp.models.LogInData;
+import sellapp.models.NetworkManager;
+import sellapp.models.Order;
+import sellapp.adapters.OrderHistoryAdapter;
+import com.example.sellapplingen.R;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -34,20 +39,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class OrderHistoryFragment extends Fragment {
+public class OrderHistoryFragment extends Fragment
+{
     private ArrayList<Order> placedOrders;
     private OrderHistoryAdapter orderHistoryAdapter;
-    EditText serachOrder;
+    private EditText serachOrder;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         placedOrders = new ArrayList<>();
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), placedOrders);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -57,23 +65,29 @@ public class OrderHistoryFragment extends Fragment {
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), placedOrders);
         recyclerView.setAdapter(orderHistoryAdapter);
 
-        //TODO: refactor
-        if (isNetworkAvailable()) {
-            executorService.execute(() -> {
+        if (isNetworkAvailable())
+        {
+            executorService.execute(() ->
+            {
                 ArrayList<Order> result = downloadData("http://131.173.65.77:8080/api/allOrders");
-                if (result != null) {
+                if (result != null)
+                {
                     requireActivity().runOnUiThread(() -> updateUI(result));
-                } else {
+                } else
+                {
                     requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Die Verbindung zum Server ist fehlgeschlagen", Toast.LENGTH_LONG).show());
                 }
             });
-        } else {
+        } else
+        {
             requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Keine Netzwerkverbindung", Toast.LENGTH_LONG).show());
         }
 
         serachOrder = view.findViewById(R.id.serachOrder);
-        serachOrder.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+        serachOrder.setOnEditorActionListener((v, actionId, event) ->
+        {
+            if (actionId == EditorInfo.IME_ACTION_DONE)
+            {
                 orderHistoryAdapter.filter(serachOrder.getText().toString());
                 hideKeyboard(v);
                 return true;
@@ -82,28 +96,36 @@ public class OrderHistoryFragment extends Fragment {
         });
 
 
-        serachOrder.addTextChangedListener(new TextWatcher() {
+        serachOrder.addTextChangedListener(new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
                 // Die Filtermethode mit dem aktuellen Text aufrufen
                 orderHistoryAdapter.filter(charSequence.toString());
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable)
+            {
+            }
         });
 
         return view;
     }
 
 
-    private ArrayList<Order> downloadData(String urlStr) {
+    private ArrayList<Order> downloadData(String urlStr)
+    {
         ArrayList<Order> allOrders = new ArrayList<>();
 
-        try {
+        try
+        {
 
             CompletableFuture<String> placedOrderFuture = NetworkManager.sendGetRequest(NetworkManager.APIEndpoints.PLACED_ORDERS.getUrl());
             String response = placedOrderFuture.join();
@@ -111,39 +133,46 @@ public class OrderHistoryFragment extends Fragment {
 
             Gson gson = new Gson();
 
-            for (int storeIndex = 0; storeIndex < jsonArray.length(); storeIndex++) {
+            for (int storeIndex = 0; storeIndex < jsonArray.length(); storeIndex++)
+            {
                 JSONObject jsonObject = jsonArray.getJSONObject(storeIndex);
                 Order placedOrder = gson.fromJson(jsonObject.toString(), Order.class);
                 allOrders.add(placedOrder);
             }
             return allOrders;
-            } catch (JSONException ex) {
+            } catch (JSONException ex)
+        {
             throw new RuntimeException(ex);
         }
     }
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateUI(ArrayList<Order> result) {
+    private void updateUI(ArrayList<Order> result)
+    {
         placedOrders.clear();
         placedOrders.addAll(result);
-        if (orderHistoryAdapter != null) {
+        if (orderHistoryAdapter != null)
+        {
             orderHistoryAdapter.notifyDataSetChanged();
         }
     }
 
-    private boolean isNetworkAvailable() {
+    private boolean isNetworkAvailable()
+    {
         ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
     }
 
-    private String getSavedToken() {
+    private String getSavedToken()
+    {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString("token", null);
     }
 
-    private void hideKeyboard(View view) {
+    private void hideKeyboard(View view)
+    {
         InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }

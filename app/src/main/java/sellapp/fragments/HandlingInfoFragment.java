@@ -1,4 +1,4 @@
-package com.example.sellapplingen;
+package sellapp.fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -17,59 +17,84 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import sellapp.models.Order;
+import com.example.sellapplingen.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class HandlingInfoFragment extends Fragment {
-
-    CheckBox chkOption1, chkOption2, chkOption3, chkOption4, chkOption5, S, M, L, XL;
-    Button confirmButton, backToScannerFragmentButton;
+public class HandlingInfoFragment extends Fragment
+{
+    private CheckBox chkOption1;
+    private CheckBox chkOption2;
+    private CheckBox chkOption3;
+    private CheckBox chkOption4;
+    private CheckBox chkOption5;
+    private CheckBox S;
+    private CheckBox M;
+    private CheckBox L;
+    private CheckBox XL;
+    private Button confirmButton;
+    private Button backToScannerFragmentButton;
     final Calendar myCalendar = Calendar.getInstance();
-
-    EditText reciptname;
+    private EditText reciptname;
     private final StringBuilder selectedInfo = new StringBuilder();
     private final StringBuilder packageSizeInfo = new StringBuilder();
 
     private EditText customDropOffEditText;
     private Order order;
-    Button date,time;
-    String setDate = "";
-    String getTime = "";
+    private Button date;
+    private Button time;
+    private String setDate = "";
+    private String getTime = "";
+    private Order clientInfo;
 
-    Order clientInfo;
 
-
-    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes) {
-        return (buttonView, isChecked) -> {
-            if (isChecked) {
-                if (packageSizeInfo.indexOf(size) == -1) {
+    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes)
+    {
+        return (buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (packageSizeInfo.indexOf(size) == -1)
+                {
                     packageSizeInfo.append(size);
                 }
-                for (CheckBox checkBox : otherCheckBoxes) {
+                for (CheckBox checkBox : otherCheckBoxes)
+                {
                     checkBox.setChecked(false);
                 }
-            } else {
+            } else
+            {
                 int index = packageSizeInfo.indexOf(size);
-                if (index != -1) {
+                if (index != -1)
+                {
                     packageSizeInfo.delete(index, index + size.length());
                 }
             }
         };
     }
 
-    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String optionText) {
-        return (buttonView, isChecked) -> {
-            if (isChecked) {
-                if (selectedInfo.indexOf(optionText) == -1) {
+    private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String optionText)
+    {
+        return (buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (selectedInfo.indexOf(optionText) == -1)
+                {
                     selectedInfo.append(optionText).append("&");
                 }
-                if (chkOption4.isChecked()) {
+                if (chkOption4.isChecked())
+                {
                     chkOption4.setChecked(false);
                 }
-            } else {
+            } else
+            {
                 int startIndex = selectedInfo.indexOf(optionText);
-                if (startIndex != -1) {
+                if (startIndex != -1)
+                {
                     int endIndex = startIndex + optionText.length();
                     selectedInfo.replace(startIndex, endIndex + 1, "");
                 }
@@ -79,12 +104,14 @@ public class HandlingInfoFragment extends Fragment {
 
 
 
-    public HandlingInfoFragment() {
-        // Required empty public constructor
+    public HandlingInfoFragment()
+    {
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
         View view = inflater.inflate(R.layout.fragment_handling_info, container, false);
 
@@ -101,65 +128,85 @@ public class HandlingInfoFragment extends Fragment {
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
 
-        S.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (packageSizeInfo.indexOf("S") == -1) {
+        S.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (packageSizeInfo.indexOf("S") == -1)
+                {
                     packageSizeInfo.append("S");
                 }
                 M.setChecked(false);
                 L.setChecked(false);
                 XL.setChecked(false);
-            } else {
+            } else
+            {
                 int index = packageSizeInfo.indexOf("S");
-                if (index != -1) {
+                if (index != -1)
+                {
                     packageSizeInfo.delete(index, index + 1);
                 }
             }
         });
 
-        M.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (packageSizeInfo.indexOf("M") == -1) {
+        M.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (packageSizeInfo.indexOf("M") == -1)
+                {
                     packageSizeInfo.append("M");
                 }
                 S.setChecked(false);
                 L.setChecked(false);
                 XL.setChecked(false);
-            } else {
+            } else
+            {
                 int index = packageSizeInfo.indexOf("M");
-                if (index != -1) {
+                if (index != -1)
+                {
                     packageSizeInfo.delete(index, index + 1);
                 }
             }
         });
 
-        L.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (packageSizeInfo.indexOf("L") == -1) {
+        L.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (packageSizeInfo.indexOf("L") == -1)
+                {
                     packageSizeInfo.append("L");
                 }
                 S.setChecked(false);
                 M.setChecked(false);
                 XL.setChecked(false);
-            } else {
+            } else
+            {
                 int index = packageSizeInfo.indexOf("L");
-                if (index != -1) {
+                if (index != -1)
+                {
                     packageSizeInfo.delete(index, index + 1);
                 }
             }
         });
 
-        XL.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (packageSizeInfo.indexOf("XL") == -1) {
+        XL.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            if (isChecked)
+            {
+                if (packageSizeInfo.indexOf("XL") == -1)
+                {
                     packageSizeInfo.append("XL");
                 }
                 S.setChecked(false);
                 M.setChecked(false);
                 L.setChecked(false);
-            } else {
+            } else
+            {
                 int index = packageSizeInfo.indexOf("XL");
-                if (index != -1) {
+                if (index != -1)
+                {
                     packageSizeInfo.delete(index, index + 2);
                 }
             }
@@ -173,31 +220,35 @@ public class HandlingInfoFragment extends Fragment {
         chkOption5 = view.findViewById(R.id.heavy);
         confirmButton = view.findViewById(R.id.confirmButton);
 
-
-
-
-        date.setOnClickListener(new View.OnClickListener() {
+        date.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), new DatePickerDialog.OnDateSetListener() {
+            public void onClick(View v)
+            {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(), new DatePickerDialog.OnDateSetListener()
+                {
                     @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                    public void onDateSet(DatePicker view, int year, int month, int day)
+                    {
                         Calendar selectedCalendar = Calendar.getInstance();
                         selectedCalendar.set(year, month, day);
 
                         Calendar todayCalendar = Calendar.getInstance();
 
                         // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
-                        if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) &&
-                                selectedCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
-                                selectedCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH) &&
-                                todayCalendar.get(Calendar.HOUR_OF_DAY) >= 13) {
+                        if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
+                                && selectedCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
+                                && selectedCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH)
+                                && todayCalendar.get(Calendar.HOUR_OF_DAY) >= 13)
+                        {
                             // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
                             Toast.makeText(requireContext(), "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.", Toast.LENGTH_SHORT).show();
-                        } else if (selectedCalendar.before(todayCalendar)) {
+                        } else if (selectedCalendar.before(todayCalendar))
+                        {
                             // Ausgewähltes Datum liegt in der Vergangenheit
                             Toast.makeText(requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else
+                        {
                             myCalendar.set(Calendar.YEAR, year);
                             myCalendar.set(Calendar.MONTH, month);
                             myCalendar.set(Calendar.DAY_OF_MONTH, day);
@@ -218,9 +269,6 @@ public class HandlingInfoFragment extends Fragment {
 
         });
 
-
-
-        //backToScannerFragmentButton = view.findViewById(R.id.backToScannerFragmentButton);
         S.setOnCheckedChangeListener(createCheckedChangeListener("S", packageSizeInfo, M, L, XL));
 
         M.setOnCheckedChangeListener(createCheckedChangeListener("M", packageSizeInfo, S, L, XL));
@@ -233,20 +281,21 @@ public class HandlingInfoFragment extends Fragment {
         chkOption2.setOnCheckedChangeListener(createCheckedChangeListener("Zerbrechlich"));
         chkOption3.setOnCheckedChangeListener(createCheckedChangeListener("Glas"));
         chkOption4.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
+            if (isChecked)
+            {
                 selectedInfo.setLength(0); // Entferne alle anderen ausgewählten Handlungsinformationen
                 selectedInfo.append("Keine besondere Eigenschaft").append("&");
 
-                // Deaktiviere alle anderen CheckBoxen
                 chkOption1.setChecked(false);
                 chkOption2.setChecked(false);
                 chkOption3.setChecked(false);
                 chkOption5.setChecked(false);
-            } else {
+            } else
+            {
                 selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 1, "");
             }
 
-            // Deaktiviere die anderen Optionen, wenn "Keine besondere Eigenschaft" ausgewählt ist
+
             boolean keineBesondereEigenschaftSelected = selectedInfo.indexOf("Keine besondere Eigenschaft") != -1;
             chkOption1.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption2.setEnabled(!keineBesondereEigenschaftSelected);
@@ -256,25 +305,24 @@ public class HandlingInfoFragment extends Fragment {
 
         chkOption5.setOnCheckedChangeListener(createCheckedChangeListener("Schwer"));
 
-
-
-
-
-
-
-        confirmButton.setOnClickListener(v -> {
+        confirmButton.setOnClickListener(v ->
+        {
             String customDropOffPlace = customDropOffEditText.getText().toString();
-            if (packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty()) {
+            if (packageSizeInfo.toString().isEmpty() || selectedInfo.toString().isEmpty() || setDate.isEmpty())
+            {
                 Toast.makeText(requireContext(), "Bitte füllen Sie alle erforderlichen Felder aus.", Toast.LENGTH_SHORT).show();
-            } else {
+            } else
+            {
 
                 clientInfo.setEmployeeName(reciptname.getText().toString());
 
                 clientInfo.setPackageSize(packageSizeInfo.toString());
-                if (selectedInfo.length() > 0) {
+                if (selectedInfo.length() > 0)
+                {
                     selectedInfo.setLength(selectedInfo.length() - 1); // Entferne das letzte "&"
                     clientInfo.setHandlingInfo(selectedInfo.toString());
-                } else {
+                } else
+                {
                     clientInfo.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
                 }
                 String myFormat = "hh:mm";
@@ -311,28 +359,32 @@ public class HandlingInfoFragment extends Fragment {
             showScannerFragment(); // Wechsle zurück zum ScannerFragment
         });*/
 
-        if(getArguments()!=null){
-            clientInfo= (Order) getArguments().getSerializable("order");
+        if (getArguments() != null)
+        {
+            clientInfo = (Order) getArguments().getSerializable("order");
         }
-        Log.i("tariq", "onCreateView: check "+clientInfo);
+        Log.i("tariq", "onCreateView: check " + clientInfo);
 
         return view;
     }
 
-    private void showScannerFragment() {
+    private void showScannerFragment()
+    {
         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, new ScannerFragment());
         transaction.commit();
     }
 
 
-    public void speichereOrderDaten() {
+    public void speichereOrderDaten()
+    {
         Log.d("Test", "Handling Info: " + order.getHandlingInfo());
         // Hier könntest du auch Toast-Nachrichten verwenden, um die Werte anzuzeigen
     }
 
 
-    private void showToast(String message) {
+    private void showToast(String message)
+    {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

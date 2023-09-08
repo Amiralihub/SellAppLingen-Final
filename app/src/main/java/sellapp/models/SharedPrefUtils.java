@@ -1,4 +1,4 @@
-package com.example.sellapplingen;
+package sellapp.models;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -12,60 +12,71 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SharedPrefUtils {
+public class SharedPrefUtils
+{
     public static final String MY_PREFS_NAME = "MiVetPlatForm";
 
     private final Context activity;
 
-    public SharedPrefUtils(Context activity) {
+    public SharedPrefUtils(Context activity)
+    {
         this.activity = activity;
     }
 
-    public void save(String key, String name) {
+    public void save(String key, String name)
+    {
         SharedPreferences.Editor editor = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString(key, name);
         editor.apply();
     }
 
-    public String get(String key) {
+    public String get(String key)
+    {
         SharedPreferences prefs = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         return prefs.getString(key, null);
     }
 
-    public void setBool(String key, boolean name) {
+    public void setBool(String key, boolean name)
+    {
         SharedPreferences.Editor editor = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(key, name);
         editor.apply();
     }
 
-    public boolean getBool(String key) {
+    public boolean getBool(String key)
+    {
         SharedPreferences prefs = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(key, false);
     }
 
-    public void setInt(String key, int value) {
+    public void setInt(String key, int value)
+    {
         SharedPreferences.Editor editor = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.putInt(key, value);
         editor.apply();
     }
 
-    public int getInt(String key, int defVal) {
+    public int getInt(String key, int defVal)
+    {
         SharedPreferences prefs = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         return prefs.getInt(key, defVal);
     }
 
-    public void setString(String key, String value) {
+    public void setString(String key, String value)
+    {
         SharedPreferences.Editor editor = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    public String getString(String key, String defVal) {
+    public String getString(String key, String defVal)
+    {
         SharedPreferences prefs = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         return prefs.getString(key, defVal);
     }
 
-    public void setMap(String key, Map<String, Object> value){
+    public void setMap(String key, Map<String, Object> value)
+    {
         JSONObject jsonObject = new JSONObject(value);
         String jsonString = jsonObject.toString();
         SharedPreferences.Editor editor = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
@@ -73,20 +84,24 @@ public class SharedPrefUtils {
         editor.apply();
     }
 
-    public Map<String, Object> getMap(String key){
+    public Map<String, Object> getMap(String key)
+    {
         Map<String, Object> outputMap = new HashMap<>();
         SharedPreferences prefs = activity.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String map = prefs.getString(key, (new JSONObject()).toString());
         JSONObject jsonObject = null;
-        try {
+        try
+        {
             assert map != null;
             jsonObject = new JSONObject(map);
             Iterator<String> keysItr = jsonObject.keys();
-            while (keysItr.hasNext()) {
+            while (keysItr.hasNext())
+            {
                 String mKey = keysItr.next();
                 outputMap.put(mKey, jsonObject.get(mKey));
             }
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             e.printStackTrace();
         }
         return outputMap;

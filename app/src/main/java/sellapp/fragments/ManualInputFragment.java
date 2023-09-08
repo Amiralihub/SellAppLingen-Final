@@ -1,5 +1,4 @@
-package com.example.sellapplingen;
-import android.app.AlertDialog;
+package sellapp.fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,62 +12,77 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import sellapp.models.Address;
+import sellapp.models.Order;
+import com.example.sellapplingen.R;
+import sellapp.models.Recipient;
 import com.example.sellapplingen.databinding.FragmentManualInputBinding;
 
-public class ManualInputFragment extends Fragment {
-
+public class ManualInputFragment extends Fragment
+{
     private FragmentManualInputBinding binding;
     private Order currentOrder;
-
     private String selectedZipCode = "";
     private String[] zipCodes = {"49808", "49809", "49811"}; // Array der verfügbaren PLZ-Optionen
 
-    public ManualInputFragment() {
+    public ManualInputFragment()
+    {
         // Required empty public constructor
     }
 
-    public void setCurrentOrder(Order order) {
+    public void setCurrentOrder(Order order)
+    {
         currentOrder = order;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
         return binding.getRoot();
     }
 
-    private void setupViews() {
+    private void setupViews()
+    {
         binding.confirmManualInputButton.setOnClickListener(v -> saveManualInput());
 
         // Initialisiere den Spinner
         ArrayAdapter<String> zipAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, zipCodes);
         binding.zipSpinner.setAdapter(zipAdapter);
 
-        binding.zipSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.zipSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
                 // Setze den ausgewählten Wert im Spinner
                 selectedZipCode = zipCodes[position];
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
                 // Handle nichts ausgewählt
             }
         });
 
         // Fügen Sie den TextWatcher zum houseNumberEditText hinzu
-        binding.houseNumberEditText.addTextChangedListener(new TextWatcher() {
+        binding.houseNumberEditText.addTextChangedListener(new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
                 // Nicht benötigt, vor der Textänderung
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
                 // Überprüfen Sie die Länge der eingegebenen Hausnummer
-                if (charSequence.length() > 5) {
+                if (charSequence.length() > 5)
+                {
                     // Schneiden Sie den Text auf 5 Zeichen ab
                     binding.houseNumberEditText.setText(charSequence.subSequence(0, 5));
                     binding.houseNumberEditText.setSelection(5); // Setzen Sie den Cursor am Ende
@@ -76,7 +90,8 @@ public class ManualInputFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable editable)
+            {
                 // Nicht benötigt, nach der Textänderung
             }
         });
@@ -84,9 +99,11 @@ public class ManualInputFragment extends Fragment {
 
 
 
-    private void saveManualInput() {
+    private void saveManualInput()
+    {
         // Überprüfe, ob alle Felder ausgefüllt sind oder Daten eingegeben wurden
-        if (isInputValid()) {
+        if (isInputValid())
+        {
             // Speichere die manuell eingegebenen Order-Informationen im currentOrder-Objekt
             Address address = new Address(binding.streetEditText.getText().toString(), binding.houseNumberEditText.getText().toString(), selectedZipCode);
             Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(), binding.lastNameEditText.getText().toString(), address);
@@ -106,13 +123,15 @@ public class ManualInputFragment extends Fragment {
             transaction.replace(R.id.frame_layout, handlingInfoFragment, "handlingInfoFragment");
             transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
             transaction.commit();
-        } else {
+        } else
+        {
             // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
             Toast.makeText(requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean isInputValid() {
+    private boolean isInputValid()
+    {
         String lastName = binding.lastNameEditText.getText().toString();
         String firstName = binding.firstNameEditText.getText().toString();
         String street = binding.streetEditText.getText().toString();
@@ -121,9 +140,4 @@ public class ManualInputFragment extends Fragment {
         // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
         return !lastName.isEmpty() && !firstName.isEmpty() && !street.isEmpty() && !houseNumber.isEmpty() && !selectedZipCode.isEmpty();
     }
-
-
-
-
-
 }

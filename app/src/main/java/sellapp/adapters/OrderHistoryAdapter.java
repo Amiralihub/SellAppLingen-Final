@@ -1,14 +1,12 @@
-package com.example.sellapplingen;
+package sellapp.adapters;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
+import static customerapp.models.customerapp.FragmentManagerHelper.goToFragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,29 +14,37 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sellapplingen.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
+import sellapp.fragments.OrderHistoryDetailsFragment;
+import sellapp.models.Order;
 
+public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder>
+{
     private Context context;
     private List<Order> orderList;
 
 
-    public OrderHistoryAdapter(Context context, List<Order> orderList) {
+    public OrderHistoryAdapter(Context context, List<Order> orderList)
+    {
         this.context = context;
         this.orderList = orderList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.item_order_history, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+    {
         Order order = orderList.get(position);
         holder.orderID.setText(order.getOrderID());
         holder.recipient.setText(String.format("%s%s", order.getRecipient().getFirstName(), order.getRecipient().getLastName()));
@@ -47,14 +53,19 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return orderList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView orderID, recipient, deliveryDateRecipient;
-        LinearLayout openDetails;
-        public ViewHolder(@NonNull View itemView) {
+    public class ViewHolder extends RecyclerView.ViewHolder
+    {
+        private TextView orderID;
+        private TextView recipient;
+        private TextView deliveryDateRecipient;
+        private LinearLayout openDetails;
+        public ViewHolder(@NonNull View itemView)
+        {
             super(itemView);
             orderID = itemView.findViewById(R.id.orderID);
             recipient = itemView.findViewById(R.id.recipient);
@@ -63,13 +74,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         }
     }
 
-    private void goToOrderHistoryDetailsFragment(Order selectedOrder) {
+    private void goToOrderHistoryDetailsFragment(Order selectedOrder)
+    {
         OrderHistoryDetailsFragment fragment = new OrderHistoryDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("selected_order", selectedOrder);
         fragment.setArguments(bundle);
 
-        FragmentManagerHelper.goToFragment(
+        goToFragment(
                 ((AppCompatActivity) context).getSupportFragmentManager(),
                 R.id.frame_layout,
                 fragment,
@@ -79,13 +91,16 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         );
     }
 
-    public void filter(String query) {
+    public void filter(String query)
+    {
         List<Order> filteredList = new ArrayList<>();
-        for (Order order : orderList) {
+        for (Order order : orderList)
+        {
             if (order.getRecipient().getFirstName().toLowerCase().contains(query.toLowerCase())
                     || order.getRecipient().getLastName().toLowerCase().contains(query.toLowerCase())
                     || order.getOrderID().toLowerCase().contains(query.toLowerCase())
-                    || order.getDeliveryDate().toLowerCase().contains(query.toLowerCase())) {
+                    || order.getDeliveryDate().toLowerCase().contains(query.toLowerCase()))
+            {
                 filteredList.add(order);
             }
         }

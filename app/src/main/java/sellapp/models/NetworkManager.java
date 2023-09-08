@@ -1,4 +1,4 @@
-package com.example.sellapplingen;
+package sellapp.models;
 import static android.content.ContentValues.TAG;
 
 import android.util.Log;
@@ -14,11 +14,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
-public class NetworkManager {
-
+public class NetworkManager
+{
     private static final Gson gson = new Gson();
 
-    public enum APIEndpoints {
+    public enum APIEndpoints
+    {
         LOGIN("http://131.173.65.77:8080/auth/login"),
         ORDER("http://131.173.65.77:8080/api/order"),
         PLACED_ORDERS("http://131.173.65.77:8080/api/allOrders"),
@@ -28,18 +29,23 @@ public class NetworkManager {
 
         private final String url;
 
-        APIEndpoints(String url) {
+        APIEndpoints(String url)
+        {
             this.url = url;
         }
 
-        public String getUrl() {
+        public String getUrl()
+        {
             return url;
         }
     }
 
-    public static CompletableFuture<String> sendPostRequest(String apiUrl, Object dataObject) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
+    public static CompletableFuture<String> sendPostRequest(String apiUrl, Object dataObject)
+    {
+        return CompletableFuture.supplyAsync(() ->
+        {
+            try
+            {
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -52,16 +58,19 @@ public class NetworkManager {
                 System.out.println("json to send: " + jsonString);
                 byte[] postData = jsonString.getBytes(StandardCharsets.UTF_8);
 
-                try (DataOutputStream os = new DataOutputStream(conn.getOutputStream())) {
+                try (DataOutputStream os = new DataOutputStream(conn.getOutputStream()))
+                {
                     os.write(postData);
                     os.flush();
                 }
 
                 StringBuilder responseBuilder = new StringBuilder();
                 try (InputStream inputStream = conn.getInputStream();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)))
+                {
                     String line;
-                    while ((line = reader.readLine()) != null) {
+                    while ((line = reader.readLine()) != null)
+                    {
                         responseBuilder.append(line);
                     }
                 }
@@ -69,18 +78,20 @@ public class NetworkManager {
                 conn.disconnect();
 
                 return responseBuilder.toString();
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 e.printStackTrace();
                 return null;
             }
         });
     }
 
-    public static CompletableFuture<String> sendGetRequest(String apiUrl) {
-
-        return CompletableFuture.supplyAsync(() -> {
-
-            try {
+    public static CompletableFuture<String> sendGetRequest(String apiUrl)
+    {
+        return CompletableFuture.supplyAsync(() ->
+        {
+            try
+            {
 
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -90,23 +101,27 @@ public class NetworkManager {
 
                 int responseCode = conn.getResponseCode();
 
-                if (responseCode == 200) {
+                if (responseCode == 200)
+                {
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                     StringBuilder response = new StringBuilder();
                     String line;
-                    while ((line = reader.readLine()) != null) {
+                    while ((line = reader.readLine()) != null)
+                    {
                         response.append(line);
                     }
                     reader.close();
 
                     return response.toString();
 
-                } else {
+                } else
+                {
                     Log.e(TAG, "Server returned status code: " + responseCode);
                     return null;
                 }
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 Log.e(TAG, "Error downloading or decoding JSON data", e);
                 e.printStackTrace();
                 return null;
