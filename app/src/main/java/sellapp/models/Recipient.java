@@ -8,7 +8,7 @@ public class Recipient implements Serializable
     private String lastName;
     private Address address;
 
-    Recipient(String firstName, String lastName, Address address)
+    public Recipient(String firstName, String lastName, Address address)
     {
 
         this.firstName = firstName;
