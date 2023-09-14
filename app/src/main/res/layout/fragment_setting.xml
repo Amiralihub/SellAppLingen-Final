@@ -16,7 +16,7 @@
         android:id="@+id/editStoreName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Geschäftsname bearbeiten"
+        android:hint="Geschäftsname eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:enabled="false" />
@@ -30,7 +30,7 @@
         android:id="@+id/editOwner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Eigentümer*Innen bearbeiten"
+        android:hint="Eigentümer*Innen eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:enabled="false" />
@@ -44,12 +44,10 @@
         android:id="@+id/editStreet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Straße bearbeiten"
+        android:hint="Straße eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:enabled="false" />
-
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,7 +58,7 @@
         android:id="@+id/editHouseNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Hausnummer bearbeiten"
+        android:hint="Hausnummer eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:enabled="false" />
@@ -76,7 +74,7 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="Plz bearbeiten"
+        android:hint="PLZ eingeben"
         android:enabled="false" />
 
     <TextView
@@ -90,7 +88,7 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="TelefoneNr. bearbeiten"
+        android:hint="Telefonnummer eingeben"
         android:enabled="false" />
 
     <TextView
@@ -105,18 +103,16 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="Email bearbeiten"
+        android:hint="Email eingeben"
         android:enabled="false"
         tools:ignore="TextFields" />
-
-
 
     <Button
         android:id="@+id/saveData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lavender"
-        android:text="Daten Aktualisieren" />
+        android:text="Daten aktualisieren" />
 
     <Button
         android:id="@+id/editDataButton"
@@ -124,8 +120,6 @@
         android:backgroundTint="@color/lavender"
         android:layout_height="wrap_content"
         android:text="Daten bearbeiten" />
-
-
 
     <Button
         android:id="@+id/logoutButton"
@@ -136,14 +130,9 @@
         android:text="Abmelden"
         android:textColor="#DA0D0D" />
 
-
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
-
 
 </LinearLayout>

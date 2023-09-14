@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -214,24 +215,22 @@ public class SettingFragment extends Fragment {
 
     private void updateAddressIfNeeded(String street, String houseNumber, String zip) {
         Address oldAddress = settings.getAddress();
+        Address newAddress = new Address(street, houseNumber, zip);
 
-        if (!street.equals(oldAddress.getStreet()) ||
-                !houseNumber.equals(oldAddress.getHouseNumber()) ||
-                !zip.equals(oldAddress.getZip())) {
-
-            Address address = new Address(street, houseNumber, zip);
-            SetAddress toSendAddress = new SetAddress(address);
+        if (!oldAddress.equals(newAddress)) {
+            SetAddress toSendAddress = new SetAddress(newAddress);
             Gson gson = new Gson();
-            String jsonString = gson.toJson(address);
+            String jsonString = gson.toJson(newAddress);
             System.out.println("json to send: " + jsonString);
 
             if (SettingManager.setAddress(toSendAddress)) {
-                Toast.makeText(requireContext(), "Die Adresse wurde erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Die Adresse wurde auch erfolgreich übermittelt!", Toast.LENGTH_SHORT).show();  //GET Adress vom server vllt Sinnig?
             } else {
                 Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen oder es ist ein Fehler aufgetreten. Bitte kontaktieren Sie das Entwicklungsteam.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
 
 
@@ -261,9 +260,6 @@ public class SettingFragment extends Fragment {
                             sendSettings(SettingManager.Parameter.OWNER, owner);
                         }
 
-                        updateAddressIfNeeded(street, houseNumber, zip);
-
-
                         if (!telephone.equals(settings.getTelephone())) {
                             sendSettings(SettingManager.Parameter.TELEPHONE, telephone);
                         }
@@ -271,13 +267,15 @@ public class SettingFragment extends Fragment {
                         if (!email.equals(settings.getEmail())) {
                             sendSettings(SettingManager.Parameter.EMAIL, email);
                         }
+                        updateAddressIfNeeded(street, houseNumber, zip);
+
                         saveData.setEnabled(false);
                         enableEditMode(false);
                     } else {
                         Toast.makeText(requireContext(), "Keine Internetverbindung", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Bitte überprüfen Sie Ihre Eingabe", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Bitte folgen Sie die Anweisungen.", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
