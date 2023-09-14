@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ImageView loginImageView = findViewById(R.id.loginImageView);
-        ImageView logobigImageView = findViewById(R.id.logobigImageView);
+        //ImageView logobigImageView = findViewById(R.id.logobigImageView);
         Button loginButton = findViewById(R.id.buttonLogin);
         usernameEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
