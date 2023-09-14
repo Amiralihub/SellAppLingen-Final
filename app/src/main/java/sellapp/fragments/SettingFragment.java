@@ -1,14 +1,11 @@
 package sellapp.fragments;
 
 import sellapp.models.ValidationManager;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -224,7 +221,7 @@ public class SettingFragment extends Fragment {
             System.out.println("json to send: " + jsonString);
 
             if (SettingManager.setAddress(toSendAddress)) {
-                Toast.makeText(requireContext(), "Die Adresse wurde auch erfolgreich übermittelt!", Toast.LENGTH_SHORT).show();  //GET Adress vom server vllt Sinnig?
+                Toast.makeText(requireContext(), "Die Adresse wurde erfolgreich übermittelt!", Toast.LENGTH_SHORT).show();  //GET Adress vom server vllt Sinnig?
             } else {
                 Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen oder es ist ein Fehler aufgetreten. Bitte kontaktieren Sie das Entwicklungsteam.", Toast.LENGTH_SHORT).show();
             }
