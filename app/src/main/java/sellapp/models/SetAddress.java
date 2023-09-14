@@ -1,11 +1,17 @@
 package sellapp.models;
 
-public class SetAddress
-{
-    public Address address;
+public class SetAddress {
+    private Address address;
 
-    public SetAddress(Address address)
-    {
+    public SetAddress(Address address) {
+        this.address = address;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
         this.address = address;
     }
 }
