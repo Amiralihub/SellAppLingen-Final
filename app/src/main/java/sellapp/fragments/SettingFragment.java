@@ -1,6 +1,5 @@
 package sellapp.fragments;
 
-import sellapp.models.ValidationManager;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,20 +18,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
-
-import sellapp.models.Address;
-import sellapp.models.LogInData;
-import sellapp.activities.LoginActivity;
 import com.example.sellapplingen.R;
-import sellapp.models.SetAddress;
-import sellapp.models.SettingManager;
-import sellapp.models.StoreDetails;
-
 import com.google.gson.Gson;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
+import sellapp.activities.LoginActivity;
+import sellapp.models.Address;
+import sellapp.models.LogInData;
+import sellapp.models.SetAddress;
+import sellapp.models.SettingManager;
+import sellapp.models.StoreDetails;
+import sellapp.models.ValidationManager;
 
 public class SettingFragment extends Fragment {
     private EditText editStoreName;
@@ -66,6 +63,7 @@ public class SettingFragment extends Fragment {
         saveData = view.findViewById(R.id.saveData);
 
 
+
         editStoreName.setEnabled(false);
         editOwner.setEnabled(false);
         editStreet.setEnabled(false);
@@ -74,8 +72,6 @@ public class SettingFragment extends Fragment {
         editTelephone.setEnabled(false);
         editEmail.setEnabled(false);
         saveData.setEnabled(false);
-
-
 
         settings = SettingManager.getSettings();
 
@@ -89,6 +85,8 @@ public class SettingFragment extends Fragment {
         setupInputFilters();
         setupTextWatchers();
 
+
+
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
 
@@ -97,7 +95,10 @@ public class SettingFragment extends Fragment {
         logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
 
         return view;
+
     }
+
+
 
     private void initializeFieldsWithSettings() {
         requireActivity().runOnUiThread(() -> {
