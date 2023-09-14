@@ -25,7 +25,7 @@ public class SettingManager
     }
 
 
-    public static StoreDetails getSettings(String token)
+    public static StoreDetails getSettings()
     {
 
         CompletableFuture<String> getSettingsFuture = NetworkManager.sendGetRequest(NetworkManager.APIEndpoints.SETTINGS.getUrl());
