@@ -21,14 +21,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.change_password);  // Assuming the layout file is named change_password.xml
-
-        System.out.println("Waaaaas");
+        setContentView(R.layout.change_password);
 
 
-        oldPasswordEditText = findViewById(R.id.oldPasswordEditText);  // Replace with the actual ID
-        newPasswordEditText = findViewById(R.id.newPasswordEditText);  // Replace with the actual ID
-        Button changePasswordButton = findViewById(R.id.btnChangePassword);  // Replace with the actual ID
+        oldPasswordEditText = findViewById(R.id.oldPasswordEditText);
+        newPasswordEditText = findViewById(R.id.newPasswordEditText);
+        Button changePasswordButton = findViewById(R.id.btnChangePassword);
 
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +42,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         SetPassword setPasswordObject = new SetPassword();
         setPasswordObject.setOldPassword(oldPassword);
         setPasswordObject.setNewPassword(newPassword);
-        setPasswordObject.setToken("Joooooo");  // Replace with the actual method to get the token
+
 
         try {
             CompletableFuture<String> setPasswordFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.SET_PASSWORD.getUrl(), setPasswordObject);

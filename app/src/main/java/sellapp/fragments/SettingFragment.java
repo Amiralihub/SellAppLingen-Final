@@ -89,9 +89,6 @@ public class SettingFragment extends Fragment {
             }
         });
 
-
-
-
         saveData.setOnClickListener(v -> showConfirmationDialog());
 
         Button logoutButton = view.findViewById(R.id.logoutButton);
