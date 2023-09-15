@@ -27,13 +27,28 @@ public class ChangePasswordActivity extends AppCompatActivity {
         oldPasswordEditText = findViewById(R.id.oldPasswordEditText);
         newPasswordEditText = findViewById(R.id.newPasswordEditText);
         Button changePasswordButton = findViewById(R.id.btnChangePassword);
+        Button cancelButton = findViewById(R.id.btnCancel);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hier können Sie die Aktionen definieren, die beim Klicken auf den "Abbrechen"-Button ausgeführt werden sollen.
+                // Zum Beispiel, die Aktivität schließen oder zurück zur vorherigen Ansicht wechseln.
+                finish(); // Dies schließt die Aktivität (geht zurück zur vorherigen Ansicht).
+            }
+        });
+
 
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String oldPassword = oldPasswordEditText.getText().toString();
                 String newPassword = newPasswordEditText.getText().toString();
-                setPassword(oldPassword, newPassword);
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    Toast.makeText(ChangePasswordActivity.this, "Bitte füllen Sie beide Felder aus", Toast.LENGTH_SHORT).show();
+                } else {
+                    setPassword(oldPassword, newPassword);
+                }
             }
         });
     }
@@ -49,11 +64,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
             setPasswordFuture.thenAccept(result -> {
                 if (result != null && result.equals("Password updated")) {
                     runOnUiThread(() -> {
-                        Toast.makeText(ChangePasswordActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, "Passwort erfolgreich geändert!", Toast.LENGTH_SHORT).show();
                     });
                 } else {
                     runOnUiThread(() -> {
-                        Toast.makeText(ChangePasswordActivity.this, "Failed to change password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, "Das alte Passwort ist nicht korrekt", Toast.LENGTH_SHORT).show();
                     });
                 }
             });
