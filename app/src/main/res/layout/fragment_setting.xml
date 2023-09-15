@@ -7,106 +7,149 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/settingpic"
     android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Geschäftsname:" />
+        android:text="Geschäftsname:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editStoreName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
         android:hint="Geschäftsname eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eigentümer*Innen:" />
+        android:text="Eigentümer*Innen:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editOwner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
         android:hint="Eigentümer*Innen eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Straße:" />
+        android:text="Straße:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editStreet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#070707"
+        android:drawableTint="#000000"
+        android:enabled="false"
         android:hint="Straße eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HausNr.:" />
+        android:text="HausNr.:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editHouseNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
         android:hint="Hausnummer eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLZ:" />
+        android:text="PLZ:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editZip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
+        android:hint="PLZ eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="PLZ eingeben"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TelefoneNr.:" />
+        android:text="TelefoneNr.:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTelephone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
+        android:hint="Telefonnummer eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="Telefonnummer eingeben"
-        android:enabled="false" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email:"
+        android:textSize="16sp"
+        android:textStyle="bold"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
+        android:enabled="false"
+        android:hint="Email eingeben"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:hint="Email eingeben"
-        android:enabled="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
         tools:ignore="TextFields" />
 
     <Button
@@ -127,6 +170,7 @@
         android:id="@+id/changePasswordButton"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/lavender"
         android:text="Passwort ändern" />
 
     <Button
