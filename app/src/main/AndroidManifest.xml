@@ -26,6 +26,8 @@
         tools:targetApi="31" >
 
         <!-- LoginActivity -->
+
+
         <activity
             android:name="sellapp.activities.LoginActivity"
             android:exported="false"
@@ -40,6 +42,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- CaptureActivity for QR Code Scanner -->
+
+        <activity
+            android:name="sellapp.fragments.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:replace="android:screenOrientation,android:theme" />
+
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"

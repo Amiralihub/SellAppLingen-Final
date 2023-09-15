@@ -1,5 +1,4 @@
 package sellapp.fragments;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,8 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.CompletionException;
 import sellapp.activities.LoginActivity;
 import sellapp.models.Address;
+import sellapp.models.EmojiExcludeFilter;
 import sellapp.models.LogInData;
 import sellapp.models.SetAddress;
 import sellapp.models.SettingManager;
@@ -40,10 +38,12 @@ public class SettingFragment extends Fragment {
     private EditText editTelephone;
     private EditText editEmail;
     private Button saveData;
+
     private String token;
 
     private StoreDetails settings;
     private ValidationManager validationManager;
+
 
     private boolean isEditMode = false;
     private DataEditWatcher dataEditWatcher;
@@ -63,7 +63,6 @@ public class SettingFragment extends Fragment {
         saveData = view.findViewById(R.id.saveData);
 
 
-
         editStoreName.setEnabled(false);
         editOwner.setEnabled(false);
         editStreet.setEnabled(false);
@@ -79,13 +78,25 @@ public class SettingFragment extends Fragment {
             initializeFieldsWithSettings();
         }
 
+        Button changePasswordButton = view.findViewById(R.id.changePasswordButton);
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(requireContext(), ChangePasswordActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
+
+
+
         saveData.setOnClickListener(v -> showConfirmationDialog());
 
         Button logoutButton = view.findViewById(R.id.logoutButton);
         setupInputFilters();
         setupTextWatchers();
-
-
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(LogInData.PREF_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
@@ -115,14 +126,19 @@ public class SettingFragment extends Fragment {
 
     private void setupInputFilters() {
         InputFilter emojiFilter = new EmojiExcludeFilter();
-        editStoreName.setFilters(new InputFilter[]{emojiFilter});
-        editOwner.setFilters(new InputFilter[]{emojiFilter});
-        editStreet.setFilters(new InputFilter[]{emojiFilter});
-        editTelephone.setFilters(new InputFilter[]{emojiFilter});
-        editZip.setFilters(new InputFilter[]{emojiFilter});
-        editEmail.setFilters(new InputFilter[]{emojiFilter});
-        editHouseNumber.setFilters(new InputFilter[]{emojiFilter});
+        setEditTextFilters(editStoreName, emojiFilter);
+        setEditTextFilters(editOwner, emojiFilter);
+        setEditTextFilters(editStreet, emojiFilter);
+        setEditTextFilters(editTelephone, emojiFilter);
+        setEditTextFilters(editZip, emojiFilter);
+        setEditTextFilters(editEmail, emojiFilter);
+        setEditTextFilters(editHouseNumber, emojiFilter);
     }
+
+    private void setEditTextFilters(EditText editText, InputFilter filter) {
+        editText.setFilters(new InputFilter[]{filter});
+    }
+
 
     private void setupEditDataButton(View view) {
         Button editDataButton = view.findViewById(R.id.editDataButton);
@@ -228,9 +244,6 @@ public class SettingFragment extends Fragment {
             }
         }
     }
-
-
-
 
 
     private void showConfirmationDialog() {
@@ -342,20 +355,6 @@ public class SettingFragment extends Fragment {
                 }
             }
             return false;
-        }
-    }
-
-    public static class EmojiExcludeFilter implements InputFilter {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            StringBuilder filtered = new StringBuilder();
-            for (int i = start; i < end; i++) {
-                int type = Character.getType(source.charAt(i));
-                if (type != Character.SURROGATE && type != Character.OTHER_SYMBOL) {
-                    filtered.append(source.charAt(i));
-                }
-            }
-            return (source instanceof Spanned) ? new SpannableString(filtered) : filtered.toString();
         }
     }
 }

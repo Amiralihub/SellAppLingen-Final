@@ -124,6 +124,12 @@
         android:text="Daten bearbeiten" />
 
     <Button
+        android:id="@+id/changePasswordButton"
+        android:layout_width="379dp"
+        android:layout_height="wrap_content"
+        android:text="Passwort ändern" />
+
+    <Button
         android:id="@+id/logoutButton"
         android:layout_width="382dp"
         android:layout_height="60dp"
