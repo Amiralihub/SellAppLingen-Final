@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/settingpic"
+    android:background="@drawable/settingback"
+
     android:padding="16dp">
 
     <TextView
@@ -157,21 +158,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lavender"
-        android:text="Daten aktualisieren" />
+        android:text="Daten aktualisieren"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/editDataButton"
         android:layout_width="379dp"
-        android:backgroundTint="@color/lavender"
         android:layout_height="wrap_content"
-        android:text="Daten bearbeiten" />
+        android:backgroundTint="@color/lavender"
+        android:text="Daten bearbeiten"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/changePasswordButton"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lavender"
-        android:text="Passwort ändern" />
+        android:text="Passwort ändern"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/logoutButton"

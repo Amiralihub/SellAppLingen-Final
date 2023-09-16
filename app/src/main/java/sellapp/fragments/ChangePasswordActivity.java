@@ -32,9 +32,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hier können Sie die Aktionen definieren, die beim Klicken auf den "Abbrechen"-Button ausgeführt werden sollen.
-                // Zum Beispiel, die Aktivität schließen oder zurück zur vorherigen Ansicht wechseln.
-                finish(); // Dies schließt die Aktivität (geht zurück zur vorherigen Ansicht).
+
+                finish();
             }
         });
 
@@ -64,7 +63,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
             setPasswordFuture.thenAccept(result -> {
                 if (result != null && result.equals("Password updated")) {
                     runOnUiThread(() -> {
-                        Toast.makeText(ChangePasswordActivity.this, "Passwort erfolgreich geändert!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, "Passwort erfolgreich geändert!", Toast.LENGTH_LONG).show();
+                        finish();
                     });
                 } else {
                     runOnUiThread(() -> {
