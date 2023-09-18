@@ -44,7 +44,6 @@ public class SettingFragment extends Fragment {
     private StoreDetails settings;
     private ValidationManager validationManager;
 
-
     private boolean isEditMode = false;
     private DataEditWatcher dataEditWatcher;
 
