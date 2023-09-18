@@ -227,7 +227,7 @@ public class SettingFragment extends Fragment {
         requireActivity().finish();
     }
 
-    private void updateAddressIfNeeded(String street, String houseNumber, String zip) {
+    private boolean updateAddressIfNeeded(String street, String houseNumber, String zip) {
         Address oldAddress = settings.getAddress();
         Address newAddress = new Address(street, houseNumber, zip);
 
@@ -239,10 +239,13 @@ public class SettingFragment extends Fragment {
 
             if (SettingManager.setAddress(toSendAddress)) {
                 Toast.makeText(requireContext(), "Die Adresse wurde erfolgreich übermittelt!", Toast.LENGTH_SHORT).show();  //GET Adress vom server vllt Sinnig?
+                return true;
             } else {
-                Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen! ", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen, Bitte korigieren Sie Ihre eingabe.", Toast.LENGTH_LONG).show();
+                return false;
             }
         }
+        return true;
     }
 
 
@@ -250,7 +253,6 @@ public class SettingFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Bestätigung");
         builder.setMessage("Möchten Sie die Änderungen speichern?");
-
 
         builder.setPositiveButton("Ja", (dialog, which) -> {
             try {
@@ -262,7 +264,6 @@ public class SettingFragment extends Fragment {
                     String zip = editZip.getText().toString().trim();
                     String telephone = editTelephone.getText().toString().trim();
                     String email = editEmail.getText().toString().trim();
-
 
                     if (settings != null) {
                         if (!storeName.equals(settings.getStoreName())) {
@@ -280,10 +281,10 @@ public class SettingFragment extends Fragment {
                         if (!email.equals(settings.getEmail())) {
                             sendSettings(SettingManager.Parameter.EMAIL, email);
                         }
-                        updateAddressIfNeeded(street, houseNumber, zip);
-
+                        boolean needsUpdate = updateAddressIfNeeded(street, houseNumber, zip);
                         saveData.setEnabled(false);
-                        enableEditMode(false);
+                        if (needsUpdate)
+                            enableEditMode(false);
                     } else {
                         Toast.makeText(requireContext(), "Keine Internetverbindung", Toast.LENGTH_SHORT).show();
                     }
@@ -292,7 +293,7 @@ public class SettingFragment extends Fragment {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(requireContext(), "Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie das Entwicklungsteam.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie das Entwicklungsteam.", Toast.LENGTH_LONG).show();
             }
         });
 
