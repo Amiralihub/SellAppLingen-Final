@@ -106,7 +106,6 @@ public class SettingFragment extends Fragment {
     }
 
 
-
     private void initializeFieldsWithSettings() {
         requireActivity().runOnUiThread(() -> {
             editStoreName.setText(settings.getStoreName());
