@@ -100,6 +100,6 @@ public class ValidationManager {
     }
 
     private static boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?"); // Prüft, ob die Zeichenfolge eine Zahl ist
+        return str.matches("-?\\d+(\\.\\d+)?");
     }
 }

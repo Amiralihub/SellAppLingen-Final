@@ -1,4 +1,5 @@
 package sellapp.fragments;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,12 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+
 import com.example.sellapplingen.R;
 import com.google.gson.Gson;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
+
 import sellapp.activities.LoginActivity;
 import sellapp.models.Address;
 import sellapp.models.EmojiExcludeFilter;
@@ -235,7 +240,7 @@ public class SettingFragment extends Fragment {
             if (SettingManager.setAddress(toSendAddress)) {
                 Toast.makeText(requireContext(), "Die Adresse wurde erfolgreich übermittelt!", Toast.LENGTH_SHORT).show();  //GET Adress vom server vllt Sinnig?
             } else {
-                Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen oder es ist ein Fehler aufgetreten. Bitte kontaktieren Sie das Entwicklungsteam.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Die Adresse existiert nicht in Lingen! ", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -245,6 +250,7 @@ public class SettingFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Bestätigung");
         builder.setMessage("Möchten Sie die Änderungen speichern?");
+
 
         builder.setPositiveButton("Ja", (dialog, which) -> {
             try {
@@ -256,6 +262,7 @@ public class SettingFragment extends Fragment {
                     String zip = editZip.getText().toString().trim();
                     String telephone = editTelephone.getText().toString().trim();
                     String email = editEmail.getText().toString().trim();
+
 
                     if (settings != null) {
                         if (!storeName.equals(settings.getStoreName())) {
