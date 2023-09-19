@@ -1,5 +1,4 @@
 package sellapp.fragments;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -47,7 +46,6 @@ public class SettingFragment extends Fragment {
 
     private StoreDetails settings;
     private ValidationManager validationManager;
-
     private boolean isEditMode = false;
     private DataEditWatcher dataEditWatcher;
 
@@ -59,12 +57,10 @@ public class SettingFragment extends Fragment {
      * @param savedInstanceState The saved instance state.
      * @return The View of the inflated fragment.
      */
-
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
-
 
         if (!isNetworkAvailable()) {
             showNoConnectionPopup();
