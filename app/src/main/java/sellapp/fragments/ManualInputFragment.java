@@ -23,6 +23,9 @@ import com.example.sellapplingen.databinding.FragmentManualInputBinding;
 
 public class ManualInputFragment extends Fragment
 {
+
+    private boolean isEditingAddress = false;
+
     private FragmentManualInputBinding binding;
     private Order currentOrder;
     private String selectedZipCode = "";
@@ -43,33 +46,13 @@ public class ManualInputFragment extends Fragment
     {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
-        setupActionBar();
+
         return binding.getRoot();
+
+
     }
 
-    private void setupActionBar()
-    {
-        // Aktivieren Sie die ActionBar für dieses Fragment
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if (activity != null)
-        {
-            activity.setSupportActionBar(binding.toolbar);
 
-            ActionBar actionBar = activity.getSupportActionBar();
-            if (actionBar != null)
-            {
-                actionBar.setDisplayHomeAsUpEnabled(true); // Zeigen Sie den Zurück-Pfeil an
-                actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24); // Setzen Sie das Zurück-Pfeil-Symbol
-            }
-        }
-
-        // Fügen Sie einen Klicklistener zum Zurück-Pfeil hinzu
-        binding.toolbar.setNavigationOnClickListener(v -> {
-            // Hier können Sie die Aktion festlegen, die beim Klicken auf den Zurück-Pfeil ausgeführt wird
-            // Zum Beispiel, um zum vorherigen Fragment zurückzukehren
-            goBackToPreviousFragment();
-        });
-    }
 
     private void goBackToPreviousFragment()
     {
@@ -134,36 +117,49 @@ public class ManualInputFragment extends Fragment
 
 
 
-    private void saveManualInput()
-    {
-        // Überprüfe, ob alle Felder ausgefüllt sind oder Daten eingegeben wurden
-        if (isInputValid())
-        {
-            // Speichere die manuell eingegebenen Order-Informationen im currentOrder-Objekt
+    private void saveManualInput() {
+        // Schritt 3: Überprüfen des Statusflags isEditingAddress
+        if (isEditingAddress) {
+            // Speichern Sie die bearbeitete Adresse in Ihren Datenstrukturen (z. B. order)
             Address address = new Address(binding.streetEditText.getText().toString(), binding.houseNumberEditText.getText().toString(), selectedZipCode);
             Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(), binding.lastNameEditText.getText().toString(), address);
             currentOrder.setRecipient(recipient);
 
-            // Erstelle das Bundle für die Übergabe der Order-Daten
-            Bundle args = new Bundle();
-            args.putSerializable("order", currentOrder);
+            // Schritt 4: Zurücksetzen des Statusflags
+            isEditingAddress = false;
 
-            // Erstelle das HandlingInfoFragment und setze die Argumente
-            HandlingInfoFragment handlingInfoFragment = new HandlingInfoFragment();
-            handlingInfoFragment.setArguments(args);
+            // Schritt 5: Navigieren Sie zurück zu DeliveryDetailsFragment
+            navigateBackToDeliveryDetailsFragment();
+        } else {
+            // Normaler Ablauf - speichern Sie die Daten wie zuvor
+            // Überprüfen Sie, ob alle Felder ausgefüllt sind
+            if (isInputValid()) {
+                // Speichern Sie die manuell eingegebenen Order-Informationen im currentOrder-Objekt
+                Address address = new Address(binding.streetEditText.getText().toString(), binding.houseNumberEditText.getText().toString(), selectedZipCode);
+                Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(), binding.lastNameEditText.getText().toString(), address);
+                currentOrder.setRecipient(recipient);
 
-            // Wechsle zum HandlingInfoFragment
-            FragmentManager fragmentManager = requireFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.frame_layout, handlingInfoFragment, "handlingInfoFragment");
-            transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
-            transaction.commit();
-        } else
-        {
-            // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
-            Toast.makeText(requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT).show();
+                // Erstelle das Bundle für die Übergabe der Order-Daten
+                Bundle args = new Bundle();
+                args.putSerializable("order", currentOrder);
+
+                // Erstelle das HandlingInfoFragment und setze die Argumente
+                HandlingInfoFragment handlingInfoFragment = new HandlingInfoFragment();
+                handlingInfoFragment.setArguments(args);
+
+                // Wechsle zum HandlingInfoFragment
+                FragmentManager fragmentManager = requireFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_layout, handlingInfoFragment, "handlingInfoFragment");
+                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
+                transaction.commit();
+            } else {
+                // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
+                Toast.makeText(requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     private boolean isInputValid()
     {
@@ -175,4 +171,13 @@ public class ManualInputFragment extends Fragment
         // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
         return !lastName.isEmpty() && !firstName.isEmpty() && !street.isEmpty() && !houseNumber.isEmpty() && !selectedZipCode.isEmpty();
     }
+
+    private void navigateBackToDeliveryDetailsFragment() {
+        // Erstellen Sie das DeliveryDetailsFragment und setzen Sie die Argumente
+        DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(currentOrder);
+
+        // Verwenden Sie die FragmentManagerHelper-Klasse für den Fragment-Übergang
+        customerapp.models.customerapp.FragmentManagerHelper.replace(requireFragmentManager(), R.id.frame_layout, deliveryDetailsFragment);
+    }
+
 }

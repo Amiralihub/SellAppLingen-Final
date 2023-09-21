@@ -31,6 +31,8 @@ import java.util.concurrent.CompletableFuture;
 public class DeliveryDetailsFragment extends Fragment
 {
     private Order order;
+
+    private boolean isEditingAddress = false;
     public String orderId;
     private String token;
 
@@ -152,6 +154,18 @@ public class DeliveryDetailsFragment extends Fragment
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
 
+        Button editAddressButton = view.findViewById(R.id.editAddressButton); // Button zum Bearbeiten der Adresse
+
+        // Wenn der "Adresse bearbeiten" Button geklickt wird
+        editAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Schritt 2: Setzen des Statusflags und Navigation zu ManualInputFragment
+                isEditingAddress = true;
+                navigateToManualInputFragment();
+            }
+        });
+
 
 
         confirmButton.setOnClickListener(new View.OnClickListener()
@@ -188,6 +202,9 @@ public class DeliveryDetailsFragment extends Fragment
 
             TextView employeeIdValue = view.findViewById(R.id.employeeIdValue);
             employeeIdValue.setText(order.getEmployeeName());
+
+            TextView deliveryDateValue = view.findViewById(R.id.deliveryDateValue);
+            deliveryDateValue.setText(order.getDeliveryDate());
 
             TextView firstNameValue = view.findViewById(R.id.firstNameValue);
             firstNameValue.setText(order.getRecipient().getFirstName() + " ");
@@ -241,6 +258,15 @@ public class DeliveryDetailsFragment extends Fragment
             }
         });
     }
+
+    private void navigateToManualInputFragment() {
+        ManualInputFragment manualInputFragment = new ManualInputFragment();
+        manualInputFragment.setCurrentOrder(order);
+
+        // Verwenden Sie die FragmentManagerHelper-Klasse für den Fragment-Übergang
+        customerapp.models.customerapp.FragmentManagerHelper.replace(requireFragmentManager(), R.id.frame_layout, manualInputFragment);
+    }
+
 
 
 

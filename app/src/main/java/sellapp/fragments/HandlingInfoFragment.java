@@ -339,28 +339,25 @@ public class HandlingInfoFragment extends Fragment
                 String info = selectedInfo.toString();
                 System.out.println(customDropOffPlace);
                 Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
-                DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
+
+                FragmentManager fragmentManager = requireFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+// Erstelle ein neues DeliveryDetailsFragment und übergebe das currentOrder-Objekt
+                DeliveryDetailsFragment deliveryDetailsFragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("order", clientInfo);
-                fragment.setArguments(args);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame_layout, fragment);
+                deliveryDetailsFragment.setArguments(args);
+
+                transaction.replace(R.id.frame_layout, deliveryDetailsFragment, "deliveryDetailsFragment");
+                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
                 transaction.commit();
-/*            if (!info.isEmpty()) {
-                info = info.substring(0, info.length() - 2); // Entferne das letzte Trennzeichen ", "
-                order.setHandlingInfo(info); // Speichere die ausgewählten Informationen in handlingInfo der Order-Instanz
-                showToast(info);
-                // Wechsle zum HandlingInfo2Fragment
-            } else {
-                showToast("No option was selected yet.");
-            }*/
+
+
+
             }
         });
 
-/*        backToScannerFragmentButton.setOnClickListener(v -> {
-            showScannerFragment(); // Wechsle zurück zum ScannerFragment
-        });*/
 
         if (getArguments() != null)
         {
@@ -372,24 +369,4 @@ public class HandlingInfoFragment extends Fragment
     }
 
 
-
-    private void showScannerFragment()
-    {
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, new ScannerFragment());
-        transaction.commit();
-    }
-
-
-    public void speichereOrderDaten()
-    {
-        Log.d("Test", "Handling Info: " + order.getHandlingInfo());
-        // Hier könntest du auch Toast-Nachrichten verwenden, um die Werte anzuzeigen
-    }
-
-
-    private void showToast(String message)
-    {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
 }
