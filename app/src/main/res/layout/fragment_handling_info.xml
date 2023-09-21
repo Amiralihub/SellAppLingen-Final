@@ -11,6 +11,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+
+
         <!-- Paket Größe auswählen -->
         <TextView
             android:layout_width="wrap_content"
@@ -219,5 +228,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
+
 
 </ScrollView>

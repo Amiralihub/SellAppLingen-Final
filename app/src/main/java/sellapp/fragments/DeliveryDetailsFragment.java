@@ -2,12 +2,16 @@ package sellapp.fragments;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -50,6 +54,11 @@ public class DeliveryDetailsFragment extends Fragment
         testOrder.setOrderID("Test-Token");
         testOrder.setTimestamp("2023-08-03 12:34:56");
         return testOrder;
+    }
+
+    private void navigateBackToPreviousFragment() {
+        // Verwende die FragmentManagerHelper-Klasse, um zum vorherigen Fragment zurückzukehren
+        customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment(getFragmentManager());
     }
 
 
@@ -143,6 +152,8 @@ public class DeliveryDetailsFragment extends Fragment
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
 
+
+
         confirmButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -193,8 +204,6 @@ public class DeliveryDetailsFragment extends Fragment
             TextView customDropOffValue = view.findViewById(R.id.customDropOffValue);
             customDropOffValue.setText(order.getCustomDropOffPlace());
 
-            TextView deliveryDateValue = view.findViewById(R.id.deliveryDateValue);
-            deliveryDateValue.setText(order.getDeliveryDate());
 
             TextView streetNameValue = view.findViewById(R.id.streetNameValue);
             streetNameValue.setText(order.getRecipient().getAddress().getStreet() + " ");
@@ -217,6 +226,7 @@ public class DeliveryDetailsFragment extends Fragment
             // additionalInfoValue.setText(order.getAdditionalInfo());
         }
 
+
         return view;
     }
 
@@ -231,5 +241,8 @@ public class DeliveryDetailsFragment extends Fragment
             }
         });
     }
+
+
+
 
 }

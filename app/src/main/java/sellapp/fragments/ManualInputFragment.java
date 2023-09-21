@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -41,7 +43,40 @@ public class ManualInputFragment extends Fragment
     {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
+        setupActionBar();
         return binding.getRoot();
+    }
+
+    private void setupActionBar()
+    {
+        // Aktivieren Sie die ActionBar für dieses Fragment
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null)
+        {
+            activity.setSupportActionBar(binding.toolbar);
+
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null)
+            {
+                actionBar.setDisplayHomeAsUpEnabled(true); // Zeigen Sie den Zurück-Pfeil an
+                actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24); // Setzen Sie das Zurück-Pfeil-Symbol
+            }
+        }
+
+        // Fügen Sie einen Klicklistener zum Zurück-Pfeil hinzu
+        binding.toolbar.setNavigationOnClickListener(v -> {
+            // Hier können Sie die Aktion festlegen, die beim Klicken auf den Zurück-Pfeil ausgeführt wird
+            // Zum Beispiel, um zum vorherigen Fragment zurückzukehren
+            goBackToPreviousFragment();
+        });
+    }
+
+    private void goBackToPreviousFragment()
+    {
+        // Hier können Sie den Code hinzufügen, um zum vorherigen Fragment zurückzukehren
+        // Zum Beispiel, indem Sie die FragmentTransaction verwenden
+        FragmentManager fragmentManager = requireFragmentManager();
+        fragmentManager.popBackStack(); // Dies entfernt das aktuelle Fragment und kehrt zum vorherigen zurück
     }
 
     private void setupViews()
