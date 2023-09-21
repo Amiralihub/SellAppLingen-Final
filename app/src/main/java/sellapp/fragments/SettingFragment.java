@@ -1,5 +1,4 @@
 package sellapp.fragments;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,16 +14,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import androidx.fragment.app.Fragment;
-
 import com.example.sellapplingen.R;
 import com.google.gson.Gson;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
-
 import sellapp.activities.LoginActivity;
 import sellapp.models.Address;
 import sellapp.models.EmojiExcludeFilter;
@@ -48,38 +46,54 @@ public class SettingFragment extends Fragment {
 
     private StoreDetails settings;
     private ValidationManager validationManager;
-
     private boolean isEditMode = false;
     private DataEditWatcher dataEditWatcher;
 
+    /**
+     * Inflates the fragment layout and initializes UI elements.
+     *
+     * @param inflater           The LayoutInflater to inflate the layout.
+     * @param container          The ViewGroup container.
+     * @param savedInstanceState The saved instance state.
+     * @return The View of the inflated fragment.
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        editStoreName = view.findViewById(R.id.editStoreName);
-        editOwner = view.findViewById(R.id.editOwner);
-        editStreet = view.findViewById(R.id.editStreet);
-        editHouseNumber = view.findViewById(R.id.editHouseNumber);
-        editZip = view.findViewById(R.id.editZip);
-        editTelephone = view.findViewById(R.id.editTelephone);
-        editEmail = view.findViewById(R.id.editEmail);
-        saveData = view.findViewById(R.id.saveData);
+        if (!isNetworkAvailable()) {
+            showNoConnectionPopup();
+            return view;
+        }
+            editStoreName = view.findViewById(R.id.editStoreName);
+            editOwner = view.findViewById(R.id.editOwner);
+            editStreet = view.findViewById(R.id.editStreet);
+            editHouseNumber = view.findViewById(R.id.editHouseNumber);
+            editZip = view.findViewById(R.id.editZip);
+            editTelephone = view.findViewById(R.id.editTelephone);
+            editEmail = view.findViewById(R.id.editEmail);
+            saveData = view.findViewById(R.id.saveData);
 
 
-        editStoreName.setEnabled(false);
-        editOwner.setEnabled(false);
-        editStreet.setEnabled(false);
-        editHouseNumber.setEnabled(false);
-        editZip.setEnabled(false);
-        editTelephone.setEnabled(false);
-        editEmail.setEnabled(false);
-        saveData.setEnabled(false);
+            editStoreName.setEnabled(false);
+            editOwner.setEnabled(false);
+            editStreet.setEnabled(false);
+            editHouseNumber.setEnabled(false);
+            editZip.setEnabled(false);
+            editTelephone.setEnabled(false);
+            editEmail.setEnabled(false);
+            saveData.setEnabled(false);
 
-        settings = SettingManager.getSettings();
+            settings = SettingManager.getSettings();
 
-        if (settings != null) {
-            initializeFieldsWithSettings();
+            if (settings != null) {
+
+                initializeFieldsWithSettings();
+            }
+            else  {
+
+            Toast.makeText(requireContext(), "Keine Daten vom Server empfangen oder keine Internetverbindung.", Toast.LENGTH_LONG).show();
         }
 
         Button changePasswordButton = view.findViewById(R.id.changePasswordButton);
@@ -108,9 +122,42 @@ public class SettingFragment extends Fragment {
 
         return view;
 
+
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
     }
 
 
+    private void showNoConnectionPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Keine Internetverbindung");
+        builder.setMessage("Es besteht keine Verbindung zum Internet. Die Daten können nicht abgerufen werden.");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Initializes UI fields with user settings if available.
+     */
     private void initializeFieldsWithSettings() {
         requireActivity().runOnUiThread(() -> {
             editStoreName.setText(settings.getStoreName());
@@ -134,6 +181,13 @@ public class SettingFragment extends Fragment {
         setEditTextFilters(editEmail, emojiFilter);
         setEditTextFilters(editHouseNumber, emojiFilter);
     }
+
+    /**
+     * Sets an input filter for an EditText field.
+     *
+     * @param editText The EditText to set the filter for.
+     * @param filter   The InputFilter to apply.
+     */
 
     private void setEditTextFilters(EditText editText, InputFilter filter) {
         editText.setFilters(new InputFilter[]{filter});
@@ -248,7 +302,20 @@ public class SettingFragment extends Fragment {
         return true;
     }
 
-
+    /**
+     * Displays a confirmation dialog to prompt the user for saving data changes.
+     * If the user chooses to save the changes, this method validates the input provided
+     * by the user, including the store name, owner's name, street address, house number,
+     * ZIP code, telephone number, and email address. If all input fields are valid, it
+     * proceeds to update the user settings accordingly. It sends the updated settings to
+     * the server for synchronization.
+     *
+     * @implNote This method ensures that the user's input adheres to specific validation
+     *           criteria using the {@link ValidationManager} class. If any of the input
+     *           fields fail validation, an error message is displayed to the user.
+     *
+     * @see ValidationManager
+     */
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Bestätigung");
@@ -306,6 +373,26 @@ public class SettingFragment extends Fragment {
     private boolean successPopupShown = false;
 
 
+    /**
+     * Sends updated user settings to the server for synchronization.
+     * This method is responsible for sending specific user settings to the server based on
+     * the provided parameter and value. It communicates with the {@link SettingManager} to
+     * perform the setting update operation and handles success and error scenarios.
+     *
+     * @param parameter The parameter representing the setting to be updated (e.g., "STORE_NAME").
+     * @param value     The new value to be set for the specified setting parameter.
+     *
+     * @implNote This method uses the {@link SettingManager} class to update user settings on
+     *           the server. It checks the result of the operation and displays success or
+     *           error messages accordingly. In case of a successful setting update, a success
+     *           message is displayed using the {@link #showSuccessPopup()} method. In case of
+     *           an error or failure, an error message is displayed using the {@link #showErrorPopup()}
+     *           method.
+     *
+     * @see SettingManager
+     * @see #showSuccessPopup()
+     * @see #showErrorPopup()
+     */
     private void sendSettings(String parameter, String value) {
         try {
             Boolean setSettingSuccess = SettingManager.setSettings(parameter, value);
@@ -351,6 +438,24 @@ public class SettingFragment extends Fragment {
         public void afterTextChanged(Editable editable) {
         }
 
+        /**
+         * Checks if any of the monitored EditText fields have been edited by the user.
+         * This method examines a set of EditText fields that have been monitored for changes
+         * by the {@link DataEditWatcher} and determines whether any of them have been modified
+         * from their initial values.
+         *
+         * @return {@code true} if any of the monitored EditText fields have been edited by
+         *         the user; {@code false} otherwise.
+         *
+         * @implNote This method is used to determine whether there are unsaved changes in the
+         *           user's input. It compares the current text in each monitored EditText field
+         *           to its initial value (tag), and if any field has been modified, it returns
+         *           {@code true} to indicate that unsaved changes are present.
+         *
+         * @see DataEditWatcher
+         */
+
+
         public boolean anyFieldEdited() {
             for (EditText editText : watchedFields) {
                 if (!editText.getText().toString().equals(editText.getTag())) {
@@ -360,4 +465,5 @@ public class SettingFragment extends Fragment {
             return false;
         }
     }
+
 }
