@@ -26,7 +26,6 @@ public class OrderSuccessFragment extends Fragment
 
         TextView orderIdTextView = view.findViewById(R.id.orderIdTextView);
 
-        // Hol die Bestellungs-ID aus den Fragment-Argumenten
         Bundle args = getArguments();
         if (args != null && args.containsKey("orderId"))
         {

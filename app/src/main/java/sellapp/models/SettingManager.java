@@ -19,21 +19,25 @@ public class SettingManager {
         public static final String OWNER = "owner";
         public static final String TELEPHONE = "telephone";
         public static final String EMAIL = "email";
-        public static final String LOGO = "logo";
-        public static final String BACKGROUND_IMAGE = "backgroundImage";
-        public static final String PASSWORD = "password";
     }
 
     public static StoreDetails getSettings() {
         CompletableFuture<String> getSettingsFuture = NetworkManager.sendGetRequest(NetworkManager.APIEndpoints.SETTINGS.getUrl());
         String jsonResponse = getSettingsFuture.join();
-        try {
-            return gson.fromJson(jsonResponse, StoreDetails.class);
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
+
+        if (jsonResponse != null) {
+            try {
+                return gson.fromJson(jsonResponse, StoreDetails.class);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+
             return null;
         }
     }
+
 
     public static Boolean setSettings(String parameter, String value) {
         try {

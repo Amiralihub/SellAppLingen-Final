@@ -11,12 +11,22 @@ import java.util.concurrent.CompletableFuture;
 import sellapp.models.NetworkManager;
 import sellapp.models.SetPassword;
 
+/**
+ * This activity allows users to change their password.
+ * Users can enter their old password and set a new password.
+ * The new password is sent to the server via the NetworkManager class.
+ */
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
 
+    /**
+     * Initializes the activity and sets the layout.
+     *
+     * @param savedInstanceState The saved state bundle, if available.
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Sends a request to the server to change the password.
+     *
+     * @param oldPassword The user's old password.
+     * @param newPassword The new password to be set.
+     */
 
     private void setPassword(String oldPassword, String newPassword) {
         SetPassword setPasswordObject = new SetPassword();

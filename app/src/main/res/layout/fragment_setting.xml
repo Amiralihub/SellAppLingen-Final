@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Geschäftsname:"
+        android:text="Geschäftsname:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eigentümer*Innen:"
+        android:text="Eigentümer*Innen:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Straße:"
+        android:text="Straße:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -72,7 +72,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HausNr.:"
+        android:text="HausNr.:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLZ:"
+        android:text="PLZ:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TelefoneNr.:"
+        android:text="TelefoneNr.:*"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -144,7 +144,7 @@
         android:backgroundTint="#000000"
         android:drawableTint="#000000"
         android:enabled="false"
-        android:hint="Email eingeben"
+        android:hint="Email eingeben*"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:textSize="20sp"
