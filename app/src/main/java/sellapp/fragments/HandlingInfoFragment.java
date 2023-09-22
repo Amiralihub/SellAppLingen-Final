@@ -339,13 +339,17 @@ public class HandlingInfoFragment extends Fragment
                 String info = selectedInfo.toString();
                 System.out.println(customDropOffPlace);
                 Log.i("tariq", "onCreateView: " + info + "\n" + packageSizeInfo + "\n" + setDate);
-                DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
+                FragmentManager fragmentManager = requireFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+// Erstelle ein neues DeliveryDetailsFragment und übergebe das currentOrder-Objekt
+                DeliveryDetailsFragment deliveryDetailsFragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("order", clientInfo);
-                fragment.setArguments(args);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame_layout, fragment);
+                deliveryDetailsFragment.setArguments(args);
+
+                transaction.replace(R.id.frame_layout, deliveryDetailsFragment, "deliveryDetailsFragment");
+                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
                 transaction.commit();
 /*            if (!info.isEmpty()) {
                 info = info.substring(0, info.length() - 2); // Entferne das letzte Trennzeichen ", "
