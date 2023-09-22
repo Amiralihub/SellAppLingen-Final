@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,9 +13,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -57,9 +53,7 @@ public class HandlingInfoFragment extends Fragment
 
 
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(
-            String size,
-            StringBuilder packageSizeInfo,
-            CheckBox... otherCheckBoxes
+            String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes
                                                                               )
         {
         return (buttonView, isChecked) ->
@@ -121,9 +115,7 @@ public class HandlingInfoFragment extends Fragment
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
                             )
         {
 
@@ -243,66 +235,98 @@ public class HandlingInfoFragment extends Fragment
             @Override
             public void onClick(View v)
                 {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        requireActivity(), new DatePickerDialog.OnDateSetListener()
-                    {
-                    @Override
-                    public void onDateSet(
-                            DatePicker view,
-                            int year,
-                            int month,
-                            int day
-                                         )
-                        {
-                        Calendar selectedCalendar = Calendar.getInstance();
-                        selectedCalendar.set(
-                                year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
+                                                                         new DatePickerDialog.OnDateSetListener()
+                                                                             {
+                                                                             @Override
+                                                                             public void onDateSet(
+                                                                                     DatePicker view,
+                                                                                     int year,
+                                                                                     int month,
+                                                                                     int day
+                                                                                                  )
+                                                                                 {
+                                                                                 Calendar
+                                                                                         selectedCalendar
+                                                                                         = Calendar.getInstance();
+                                                                                 selectedCalendar.set(
+                                                                                         year,
+                                                                                         month, day
+                                                                                                     );
 
-                        Calendar todayCalendar = Calendar.getInstance();
+                                                                                 Calendar
+                                                                                         todayCalendar
+                                                                                         = Calendar.getInstance();
 
-                        // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
-                        if (selectedCalendar.get(Calendar.YEAR) ==
-                            todayCalendar.get(Calendar.YEAR) &&
-                            selectedCalendar.get(Calendar.MONTH) ==
-                            todayCalendar.get(Calendar.MONTH) &&
-                            selectedCalendar.get(Calendar.DAY_OF_MONTH) ==
-                            todayCalendar.get(Calendar.DAY_OF_MONTH) &&
-                            todayCalendar.get(Calendar.HOUR_OF_DAY) >=
-                            13)
-                            {
-                            // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
-                            Toast.makeText(
-                                    requireContext(),
-                                    "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.",
-                                    Toast.LENGTH_SHORT
-                                          ).show();
-                            }
-                        else if (selectedCalendar.before(todayCalendar))
-                            {
-                            // Ausgewähltes Datum liegt in der Vergangenheit
-                            Toast.makeText(
-                                    requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.",
-                                    Toast.LENGTH_SHORT
-                                          ).show();
-                            }
-                        else
-                            {
-                            myCalendar.set(
-                                    Calendar.YEAR, year);
-                            myCalendar.set(
-                                    Calendar.MONTH, month);
-                            myCalendar.set(
-                                    Calendar.DAY_OF_MONTH, day);
+                                                                                 // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
+                                                                                 if (selectedCalendar.get(
+                                                                                         Calendar.YEAR) ==
+                                                                                     todayCalendar.get(
+                                                                                             Calendar.YEAR) &&
+                                                                                     selectedCalendar.get(
+                                                                                             Calendar.MONTH) ==
+                                                                                     todayCalendar.get(
+                                                                                             Calendar.MONTH) &&
+                                                                                     selectedCalendar.get(
+                                                                                             Calendar.DAY_OF_MONTH) ==
+                                                                                     todayCalendar.get(
+                                                                                             Calendar.DAY_OF_MONTH) &&
+                                                                                     todayCalendar.get(
+                                                                                             Calendar.HOUR_OF_DAY) >=
+                                                                                     13)
+                                                                                     {
+                                                                                     // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
+                                                                                     Toast.makeText(
+                                                                                                  requireContext(),
+                                                                                                  "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.",
+                                                                                                  Toast.LENGTH_SHORT
+                                                                                                   )
+                                                                                          .show();
+                                                                                     }
+                                                                                 else if (selectedCalendar.before(
+                                                                                         todayCalendar))
+                                                                                     {
+                                                                                     // Ausgewähltes Datum liegt in der Vergangenheit
+                                                                                     Toast.makeText(
+                                                                                                  requireContext(),
+                                                                                                  "Bitte wählen Sie ein zukünftiges Datum aus.",
+                                                                                                  Toast.LENGTH_SHORT
+                                                                                                   )
+                                                                                          .show();
+                                                                                     }
+                                                                                 else
+                                                                                     {
+                                                                                     myCalendar.set(
+                                                                                             Calendar.YEAR,
+                                                                                             year
+                                                                                                   );
+                                                                                     myCalendar.set(
+                                                                                             Calendar.MONTH,
+                                                                                             month
+                                                                                                   );
+                                                                                     myCalendar.set(
+                                                                                             Calendar.DAY_OF_MONTH,
+                                                                                             day
+                                                                                                   );
 
-                            String myFormat = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
-                            SimpleDateFormat dateFormat = new SimpleDateFormat(
-                                    myFormat, Locale.US);
-                            setDate = dateFormat.format(myCalendar.getTime());
-                            date.setText(setDate);
-                            }
-                        }
-                    }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)
+                                                                                     String myFormat
+                                                                                             = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
+                                                                                     SimpleDateFormat
+                                                                                             dateFormat
+                                                                                             = new SimpleDateFormat(
+                                                                                             myFormat,
+                                                                                             Locale.US
+                                                                                     );
+                                                                                     setDate
+                                                                                             = dateFormat.format(
+                                                                                             myCalendar.getTime());
+                                                                                     date.setText(
+                                                                                             setDate);
+                                                                                     }
+                                                                                 }
+                                                                             }, myCalendar.get(
+                        Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(
+                        Calendar.DAY_OF_MONTH)
                 );
 
                 // Setze den minimalen Tag des DatePickerDialog auf heute
@@ -341,13 +365,12 @@ public class HandlingInfoFragment extends Fragment
                                                       }
                                                   else
                                                       {
-                                                      selectedInfo.replace(
-                                                              selectedInfo.indexOf(
-                                                                      "Keine besondere Eigenschaft"),
-                                                              selectedInfo.indexOf(
-                                                                      "Keine besondere Eigenschaft") +
-                                                              "Keine besondere Eigenschaft".length() +
-                                                              1, ""
+                                                      selectedInfo.replace(selectedInfo.indexOf(
+                                                                                   "Keine besondere Eigenschaft"),
+                                                                           selectedInfo.indexOf(
+                                                                                   "Keine besondere Eigenschaft") +
+                                                                           "Keine besondere Eigenschaft".length() +
+                                                                           1, ""
                                                                           );
                                                       }
 
@@ -417,8 +440,7 @@ public class HandlingInfoFragment extends Fragment
                                                  String info = selectedInfo.toString();
                                                  System.out.println(customDropOffPlace);
                                                  Log.i(
-                                                         "tariq", "onCreateView: "
-                                                                  +
+                                                         "tariq", "onCreateView: " +
                                                                   info +
                                                                   "\n" +
                                                                   packageSizeInfo +

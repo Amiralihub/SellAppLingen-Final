@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -86,19 +85,9 @@ public class SettingFragment extends Fragment
     private Button saveData;
 
     /**
-     * The user's authentication token.
-     */
-    private String token;
-
-    /**
      * Stores the user's current settings.
      */
     private StoreDetails settings;
-
-    /**
-     * Manages user input validation.
-     */
-    private ValidationManager validationManager;
 
     /**
      * Flag indicating whether the fragment is in edit mode.
@@ -169,16 +158,11 @@ public class SettingFragment extends Fragment
             }
 
         Button changePasswordButton = view.findViewById(R.id.changePasswordButton);
-        changePasswordButton.setOnClickListener(new View.OnClickListener()
-            {
-            @Override
-            public void onClick(View v)
-                {
-                Intent intent = new Intent(requireContext(), ChangePasswordActivity.class);
-
-                startActivity(intent);
-                }
-            });
+        changePasswordButton.setOnClickListener(v ->
+                                                    {
+                                                    Intent intent = new Intent(requireContext(), ChangePasswordActivity.class);
+                                                    startActivity(intent);
+                                                    });
 
         saveData.setOnClickListener(v -> showConfirmationDialog());
 
@@ -188,7 +172,8 @@ public class SettingFragment extends Fragment
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(
                 LogInData.PREF_NAME, Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token", null);
+
+        sharedPreferences.getString("token", null);
 
         setupEditDataButton(view);
 
@@ -217,13 +202,9 @@ public class SettingFragment extends Fragment
         builder.setMessage(
                 "Es besteht keine Verbindung zum Internet. Die Daten können nicht abgerufen werden.");
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+        builder.setPositiveButton("OK", (dialog, which) ->
             {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-                {
 
-                }
             });
 
         AlertDialog dialog = builder.create();
@@ -245,10 +226,9 @@ public class SettingFragment extends Fragment
                                             editZip.setText(settings.getAddress().getZip());
                                             editTelephone.setText(settings.getTelephone());
                                             editEmail.setText(settings.getEmail());
-                                            validationManager = new ValidationManager(
-                                                    editStoreName, editOwner, editStreet,
-                                                    editHouseNumber, editZip, editTelephone,
-                                                    editEmail
+                                            new ValidationManager(editStoreName, editOwner,
+                                                                  editStreet, editHouseNumber,
+                                                                  editZip, editTelephone, editEmail
                                             );
                                             });
         }

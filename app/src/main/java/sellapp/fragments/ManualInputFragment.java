@@ -30,7 +30,7 @@ public class ManualInputFragment extends Fragment
     private FragmentManualInputBinding binding;
     private Order currentOrder;
     private String selectedZipCode = "";
-    private String[] zipCodes = {"49808", "49809", "49811"}; // Array der verfügbaren PLZ-Optionen
+    private final String[] zipCodes = {"49808", "49809", "49811"};
 
     public ManualInputFragment()
         {
