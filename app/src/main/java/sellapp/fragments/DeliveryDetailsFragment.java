@@ -1,23 +1,21 @@
 package sellapp.fragments;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import sellapp.models.NetworkManager;
 import sellapp.models.Order;
+
 import com.example.sellapplingen.R;
 
 import org.json.JSONException;
@@ -29,160 +27,169 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class DeliveryDetailsFragment extends Fragment
-{
+    {
     private Order order;
     public String orderId;
     private String token;
 
     public DeliveryDetailsFragment()
-    {
+        {
         // Required empty public constructor
-    }
+        }
 
     public static DeliveryDetailsFragment newInstance(Order order)
-    {
+        {
         DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable("order", order);
         fragment.setArguments(args);
         return fragment;
-    }
+        }
 
     private Order createTestOrder()
-    {
+        {
         Order testOrder = new Order();
         testOrder.setOrderID("Test-Token");
         testOrder.setTimestamp("2023-08-03 12:34:56");
         return testOrder;
-    }
+        }
 
-    private void navigateBackToPreviousFragment() {
+    private void navigateBackToPreviousFragment()
+        {
         // Verwende die FragmentManagerHelper-Klasse, um zum vorherigen Fragment zurückzukehren
-        customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment(getFragmentManager());
-    }
+        customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment(
+                getFragmentManager());
+        }
 
 
     private void sendOrderDataToServer()
-    {
+        {
 
-        CompletableFuture<String> sendOrderFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.ORDER.getUrl(), order);
+        CompletableFuture<String> sendOrderFuture = NetworkManager.sendPostRequest(
+                NetworkManager.APIEndpoints.ORDER.getUrl(), order);
         String response = sendOrderFuture.join();
 
         try
-        {
-            if (response != null)
             {
+            if (response != null)
+                {
                 JSONObject responseJson = new JSONObject(response);
                 orderId = responseJson.getString("orderID");
                 showOrderIdPopup(orderId);
-            } else
-            {
+                }
+            else
+                {
                 showErrorPopup("Fehler bei der Kommunikation mit dem Server");
-            }
-        } catch (JSONException e)
-        {
+                }
+            } catch (JSONException e)
+            {
             showErrorPopup("Fehler bei der Verarbeitung der Antwort");
             e.printStackTrace();
+            }
         }
-    }
 
     private void showSuccessMessage()
-    {
-        requireActivity().runOnUiThread(new Runnable()
         {
+        requireActivity().runOnUiThread(new Runnable()
+            {
             @Override
             public void run()
-            {
+                {
                 // Show the success message using a Toast on the main UI thread
-                Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        requireContext(), "Daten erfolgreich an den Server gesendet.",
+                        Toast.LENGTH_SHORT
+                              ).show();
 
                 // Here you switch to the ScannerFragment
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_layout, ScannerFragment.newInstance(order));
                 transaction.commit();
-            }
-        });
-    }
+                }
+            });
+        }
 
     // Füge diese Methode zum Anzeigen des Popups hinzu
     private void showOrderIdPopup(String orderId)
-    {
-        requireActivity().runOnUiThread(new Runnable()
         {
+        requireActivity().runOnUiThread(new Runnable()
+            {
             @Override
             public void run()
-            {
-                View popupView = getLayoutInflater().inflate(R.layout.popup_success_deliverydetail, null);
+                {
+                View popupView = getLayoutInflater().inflate(
+                        R.layout.popup_success_deliverydetail, null);
 
-                TextView successMessageTextView = popupView.findViewById(R.id.successMessageTextView);
+                TextView successMessageTextView = popupView.findViewById(
+                        R.id.successMessageTextView);
                 TextView orderIdTextView = popupView.findViewById(R.id.orderIdTextView);
                 Button backToScannerButton = popupView.findViewById(R.id.backToScannerButton);
 
                 orderIdTextView.setText("Bestellungs-ID: " + orderId);
 
-                AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
-                        .setView(popupView)
-                        .create();
+                AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).setView(
+                        popupView).create();
 
                 backToScannerButton.setOnClickListener(new View.OnClickListener()
-                {
+                    {
                     @Override
                     public void onClick(View v)
-                    {
+                        {
                         alertDialog.dismiss();
                         // Hier kannst du zum ScannerFragment wechseln
-                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                        FragmentManager fragmentManager
+                                = requireActivity().getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.replace(R.id.frame_layout, ScannerFragment.newInstance(order));
                         transaction.commit();
-                    }
-                });
+                        }
+                    });
 
                 alertDialog.show();
-            }
-        });
-    }
+                }
+            });
+        }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
+                            )
+        {
         View view = inflater.inflate(R.layout.fragment_delivery_details, container, false);
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
 
 
-
         confirmButton.setOnClickListener(new View.OnClickListener()
-        {
+            {
             @Override
             public void onClick(View v)
-            {
+                {
                 // Generiere den Timestamp
                 String myFormat = "dd-MM-yyyy:HH-mm-ss.SSS";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                 String getTime = dateFormat.format(Calendar.getInstance().getTime());
 
                 if (order != null)
-                {
+                    {
                     order.setTimestamp(getTime);
-                }
+                    }
 
                 sendOrderDataToServer();
-            }
-        });
+                }
+            });
 
         // Hole das Order-Objekt aus den Fragment-Argumenten
         Bundle args = getArguments();
         if (args != null && args.containsKey("order"))
-        {
+            {
             order = (Order) args.getSerializable("order");
-        }
+            }
 
         // Zeige die Order-Informationen in den entsprechenden TextViews an
         if (order != null)
-        {
+            {
             createTestOrder();
 
 
@@ -218,31 +225,28 @@ public class DeliveryDetailsFragment extends Fragment
             zipLabel.setText(order.getRecipient().getAddress().getZip() + " ");
 
 
-
             // Weitere TextViews für andere Order-Informationen hinzufügen
             // Hier kannst du weitere TextViews hinzufügen, um andere Order-Informationen anzuzeigen
             // Beispiel:
             // TextView additionalInfoValue = view.findViewById(R.id.additionalInfoValue);
             // additionalInfoValue.setText(order.getAdditionalInfo());
-        }
+            }
 
 
         return view;
-    }
+        }
 
     private void showErrorPopup(String msg)
-    {
-        requireActivity().runOnUiThread(new Runnable()
         {
+        requireActivity().runOnUiThread(new Runnable()
+            {
             @Override
             public void run()
-            {
+                {
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+                }
+            });
+        }
+
+
     }
-
-
-
-
-}
