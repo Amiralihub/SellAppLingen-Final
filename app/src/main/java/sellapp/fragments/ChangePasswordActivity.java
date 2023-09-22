@@ -1,13 +1,18 @@
 package sellapp.fragments;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.sellapplingen.R;
+
 import java.util.concurrent.CompletableFuture;
+
 import sellapp.models.NetworkManager;
 import sellapp.models.SetPassword;
 
@@ -17,7 +22,8 @@ import sellapp.models.SetPassword;
  * The new password is sent to the server via the NetworkManager class.
  */
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ChangePasswordActivity extends AppCompatActivity
+    {
 
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
@@ -29,7 +35,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
      */
     @SuppressLint("MissingInflatedId")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+        {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
 
@@ -39,28 +46,38 @@ public class ChangePasswordActivity extends AppCompatActivity {
         Button changePasswordButton = findViewById(R.id.btnChangePassword);
         Button cancelButton = findViewById(R.id.btnCancel);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener()
+            {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+                {
 
                 finish();
-            }
-        });
+                }
+            });
 
 
-        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+        changePasswordButton.setOnClickListener(new View.OnClickListener()
+            {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+                {
                 String oldPassword = oldPasswordEditText.getText().toString();
                 String newPassword = newPasswordEditText.getText().toString();
-                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
-                    Toast.makeText(ChangePasswordActivity.this, "Bitte füllen Sie beide Felder aus", Toast.LENGTH_SHORT).show();
-                } else {
+                if (oldPassword.isEmpty() || newPassword.isEmpty())
+                    {
+                    Toast.makeText(
+                            ChangePasswordActivity.this, "Bitte füllen Sie beide Felder aus",
+                            Toast.LENGTH_SHORT
+                                  ).show();
+                    }
+                else
+                    {
                     setPassword(oldPassword, newPassword);
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 
     /**
      * Sends a request to the server to change the password.
@@ -69,28 +86,47 @@ public class ChangePasswordActivity extends AppCompatActivity {
      * @param newPassword The new password to be set.
      */
 
-    private void setPassword(String oldPassword, String newPassword) {
+    private void setPassword(String oldPassword, String newPassword)
+        {
         SetPassword setPasswordObject = new SetPassword();
         setPasswordObject.setOldPassword(oldPassword);
         setPasswordObject.setNewPassword(newPassword);
 
 
-        try {
-            CompletableFuture<String> setPasswordFuture = NetworkManager.sendPostRequest(NetworkManager.APIEndpoints.SET_PASSWORD.getUrl(), setPasswordObject);
-            setPasswordFuture.thenAccept(result -> {
-                if (result != null && result.equals("Password updated")) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(ChangePasswordActivity.this, "Passwort erfolgreich geändert!", Toast.LENGTH_LONG).show();
-                        finish();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(ChangePasswordActivity.this, "Das alte Passwort ist nicht korrekt", Toast.LENGTH_SHORT).show();
-                    });
-                }
-            });
-        } catch (Exception e) {
+        try
+            {
+            CompletableFuture<String> setPasswordFuture = NetworkManager.sendPostRequest(
+                    NetworkManager.APIEndpoints.SET_PASSWORD.getUrl(), setPasswordObject);
+            setPasswordFuture.thenAccept(result ->
+                                             {
+                                             if (result != null && result.equals(
+                                                     "Password updated"))
+                                                 {
+                                                 runOnUiThread(() ->
+                                                                   {
+                                                                   Toast.makeText(
+                                                                           ChangePasswordActivity.this,
+                                                                           "Passwort erfolgreich geändert!",
+                                                                           Toast.LENGTH_LONG
+                                                                                 ).show();
+                                                                   finish();
+                                                                   });
+                                                 }
+                                             else
+                                                 {
+                                                 runOnUiThread(() ->
+                                                                   {
+                                                                   Toast.makeText(
+                                                                           ChangePasswordActivity.this,
+                                                                           "Das alte Passwort ist nicht korrekt",
+                                                                           Toast.LENGTH_SHORT
+                                                                                 ).show();
+                                                                   });
+                                                 }
+                                             });
+            } catch (Exception e)
+            {
             e.printStackTrace();
+            }
         }
     }
-}
