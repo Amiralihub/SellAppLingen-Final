@@ -161,8 +161,9 @@ public class ValidationManager
 
     private static boolean isNumeric(String str)
         {
-        return str.matches("[a-zA-Z]+") || str.matches("-?\\d+(\\.\\d+)?");
+        return str.matches("^[\\p{L} \\p{Zs}]+$");
         }
+
 
 
     private static boolean isMixNumeric(String str)
