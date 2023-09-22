@@ -1,5 +1,7 @@
 package sellapp.fragments;
 
+import static sellapp.models.ValidationManager.isMixNumeric;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,9 +49,7 @@ public class ManualInputFragment extends Fragment
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
                             )
         {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
@@ -82,10 +82,7 @@ public class ManualInputFragment extends Fragment
             {
             @Override
             public void onItemSelected(
-                    AdapterView<?> parentView,
-                    View selectedItemView,
-                    int position,
-                    long id
+                    AdapterView<?> parentView, View selectedItemView, int position, long id
                                       )
                 {
                 // Setze den ausgewählten Wert im Spinner
@@ -127,19 +124,19 @@ public class ManualInputFragment extends Fragment
                 }
             });
         }
+
     private void saveManualInput()
         {
-        // Schritt 3: Überprüfen des Statusflags isEditingAddress
         if (isEditingAddress)
             {
             // Speichern Sie die bearbeitete Adresse in Ihren Datenstrukturen (z. B. order)
-            Address address = new Address(
-                    binding.streetEditText.getText().toString(),
-                    binding.houseNumberEditText.getText().toString(), selectedZipCode
+            Address address = new Address(binding.streetEditText.getText().toString(),
+                                          binding.houseNumberEditText.getText().toString(),
+                                          selectedZipCode
             );
-            Recipient recipient = new Recipient(
-                    binding.firstNameEditText.getText().toString(),
-                    binding.lastNameEditText.getText().toString(), address
+            Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(),
+                                                binding.lastNameEditText.getText().toString(),
+                                                address
             );
             currentOrder.setRecipient(recipient);
 
@@ -156,13 +153,13 @@ public class ManualInputFragment extends Fragment
             if (isInputValid())
                 {
                 // Speichern Sie die manuell eingegebenen Order-Informationen im currentOrder-Objekt
-                Address address = new Address(
-                        binding.streetEditText.getText().toString(),
-                        binding.houseNumberEditText.getText().toString(), selectedZipCode
+                Address address = new Address(binding.streetEditText.getText().toString(),
+                                              binding.houseNumberEditText.getText().toString(),
+                                              selectedZipCode
                 );
-                Recipient recipient = new Recipient(
-                        binding.firstNameEditText.getText().toString(),
-                        binding.lastNameEditText.getText().toString(), address
+                Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(),
+                                                    binding.lastNameEditText.getText().toString(),
+                                                    address
                 );
                 currentOrder.setRecipient(recipient);
 
@@ -186,7 +183,7 @@ public class ManualInputFragment extends Fragment
                 {
                 // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
                 Toast.makeText(
-                             requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT)
+                             requireContext(), "Bitte Überprüfen Sie Ihre eingaben.", Toast.LENGTH_SHORT)
                      .show();
                 }
             }
@@ -200,21 +197,53 @@ public class ManualInputFragment extends Fragment
         String street = binding.streetEditText.getText().toString();
         String houseNumber = binding.houseNumberEditText.getText().toString();
 
-        // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
-        return !lastName.isEmpty() &&
+        boolean isValid = true;
+
+
+        if (firstName.trim().isEmpty() || !isNumeric(firstName.trim()))
+            {
+            isValid = false;
+            binding.firstNameEditText.setError("Bitte geben Sie einen gültigen Vorname ein");
+            }
+
+        if (lastName.trim().isEmpty() || !isNumeric(lastName.trim()))
+            {
+            isValid = false;
+            binding.lastNameEditText.setError("Bitte geben Sie einen gültigen Nachname ein");
+            }
+
+        if (street.trim().isEmpty() || !isNumeric(street.trim()))
+            {
+            isValid = false;
+            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein");
+            }
+
+        if (houseNumber.trim().isEmpty())
+            {
+            isValid = false;
+            binding.houseNumberEditText.setError("Bitte geben Sie eine gültige Hausnummer ein");
+            }
+
+        return isValid &&
+               !lastName.isEmpty() &&
                !firstName.isEmpty() &&
                !street.isEmpty() &&
                !houseNumber.isEmpty() &&
                !selectedZipCode.isEmpty();
         }
 
+    private static boolean isNumeric(String str)
+        {
+        return str.matches("^[\\p{L} \\p{Zs}]+$");
+        }
+
+
+
     private void navigateBackToDeliveryDetailsFragment()
         {
-        // Erstellen Sie das DeliveryDetailsFragment und setzen Sie die Argumente
         DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(
                 currentOrder);
 
-        // Verwenden Sie die FragmentManagerHelper-Klasse für den Fragment-Übergang
         customerapp.models.customerapp.FragmentManagerHelper.replace(
                 requireFragmentManager(), R.id.frame_layout, deliveryDetailsFragment);
         }
