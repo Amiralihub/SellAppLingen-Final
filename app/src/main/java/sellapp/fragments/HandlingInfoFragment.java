@@ -54,7 +54,14 @@ public class HandlingInfoFragment extends Fragment
     private String getTime = "";
     private Order clientInfo;
 
-
+    /**
+     * Creates a CompoundButton.OnCheckedChangeListener that handles the selection of a specific package size.
+     *
+     * @param size             The package size associated with this listener.
+     * @param packageSizeInfo  The StringBuilder used to track selected package sizes.
+     * @param otherCheckBoxes  Other CheckBoxes to be unchecked when this one is checked.
+     * @return A CompoundButton.OnCheckedChangeListener instance for package size selection.
+     */
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes)
     {
         return (buttonView, isChecked) ->
@@ -80,6 +87,12 @@ public class HandlingInfoFragment extends Fragment
         };
     }
 
+    /**
+     * Creates a CompoundButton.OnCheckedChangeListener for handling the selection of a specific option text.
+     *
+     * @param optionText The text associated with the option to be selected.
+     * @return A CompoundButton.OnCheckedChangeListener instance for option selection.
+     */
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String optionText)
     {
         return (buttonView, isChecked) ->
@@ -112,14 +125,20 @@ public class HandlingInfoFragment extends Fragment
     {
     }
 
-
+    /**
+     * Called when the fragment's UI is being created. Inflates the layout for this fragment and initializes UI elements.
+     * Set up listeners for package size checkboxes.
+     * Find and initialize checkboxes.
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState The saved state of the fragment (not used in this case).
+     * @return A View representing the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
 
-
         View view = inflater.inflate(R.layout.fragment_handling_info, container, false);
-//        order = ((MainActivity) requireActivity()).getCurrentOrder();
 
         reciptname = view.findViewById(R.id.recipientNameEditText);
         EditText customDropOffEditText = view.findViewById(R.id.customDropOffEditText);
@@ -130,6 +149,8 @@ public class HandlingInfoFragment extends Fragment
         M = view.findViewById(R.id.medium);
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
+
+        // Set up listeners for package size checkboxes
 
         S.setOnCheckedChangeListener((buttonView, isChecked) ->
         {
@@ -214,7 +235,6 @@ public class HandlingInfoFragment extends Fragment
                 }
             }
         });
-//        clientInfo = (Order) requireActivity().getIntent().getSerializableExtra("order");
 
         chkOption1 = view.findViewById(R.id.fluentOption);
         chkOption2 = view.findViewById(R.id.fragileOption);
@@ -223,6 +243,15 @@ public class HandlingInfoFragment extends Fragment
         chkOption5 = view.findViewById(R.id.heavy);
         confirmButton = view.findViewById(R.id.confirmButton);
 
+        /**
+         * OnClickListener for the date selection button.
+         *
+         * This method displays a DatePickerDialog allowing the user to select a date for delivery.
+         * It also handles validation to ensure that the selected date is not in the past and not on the same day after 13:00.
+         * The selected date is then formatted and displayed in the date TextView.
+         *
+         * @param v The View that was clicked (the date selection button).
+         */
         date.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -235,20 +264,16 @@ public class HandlingInfoFragment extends Fragment
                     {
                         Calendar selectedCalendar = Calendar.getInstance();
                         selectedCalendar.set(year, month, day);
-
                         Calendar todayCalendar = Calendar.getInstance();
 
-                        // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
                         if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
                                 && selectedCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
                                 && selectedCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH)
                                 && todayCalendar.get(Calendar.HOUR_OF_DAY) >= 13)
                         {
-                            // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
                             Toast.makeText(requireContext(), "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.", Toast.LENGTH_SHORT).show();
                         } else if (selectedCalendar.before(todayCalendar))
                         {
-                            // Ausgewähltes Datum liegt in der Vergangenheit
                             Toast.makeText(requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.", Toast.LENGTH_SHORT).show();
                         } else
                         {
@@ -264,7 +289,6 @@ public class HandlingInfoFragment extends Fragment
                     }
                 }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
 
-                // Setze den minimalen Tag des DatePickerDialog auf heute
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
                 datePickerDialog.show();
@@ -297,17 +321,19 @@ public class HandlingInfoFragment extends Fragment
             {
                 selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 1, "");
             }
-
-
             boolean keineBesondereEigenschaftSelected = selectedInfo.indexOf("Keine besondere Eigenschaft") != -1;
             chkOption1.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption2.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption3.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption5.setEnabled(!keineBesondereEigenschaftSelected);
         });
-
         chkOption5.setOnCheckedChangeListener(createCheckedChangeListener("Schwer"));
 
+        /**
+         * Sets an OnClickListener for the confirmation button. When the button is clicked, this method performs several checks
+         * and updates the client information with selected data. If all required fields are filled, it navigates to the
+         * DeliveryDetailsFragment and passes the client information.
+         */
         confirmButton.setOnClickListener(v ->
         {
             String customDropOffPlace = customDropOffEditText.getText().toString();
@@ -322,11 +348,11 @@ public class HandlingInfoFragment extends Fragment
                 clientInfo.setPackageSize(packageSizeInfo.toString());
                 if (selectedInfo.length() > 0)
                 {
-                    selectedInfo.setLength(selectedInfo.length() - 1); // Entferne das letzte "&"
+                    selectedInfo.setLength(selectedInfo.length() - 1);
                     clientInfo.setHandlingInfo(selectedInfo.toString());
                 } else
                 {
-                    clientInfo.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
+                    clientInfo.setHandlingInfo("");
                 }
                 String myFormat = "hh:mm";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -342,29 +368,17 @@ public class HandlingInfoFragment extends Fragment
                 FragmentManager fragmentManager = requireFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-// Erstelle ein neues DeliveryDetailsFragment und übergebe das currentOrder-Objekt
+
                 DeliveryDetailsFragment deliveryDetailsFragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("order", clientInfo);
                 deliveryDetailsFragment.setArguments(args);
-
                 transaction.replace(R.id.frame_layout, deliveryDetailsFragment, "deliveryDetailsFragment");
-                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
+                transaction.addToBackStack(null);
                 transaction.commit();
-/*            if (!info.isEmpty()) {
-                info = info.substring(0, info.length() - 2); // Entferne das letzte Trennzeichen ", "
-                order.setHandlingInfo(info); // Speichere die ausgewählten Informationen in handlingInfo der Order-Instanz
-                showToast(info);
-                // Wechsle zum HandlingInfo2Fragment
-            } else {
-                showToast("No option was selected yet.");
-            }*/
             }
         });
 
-/*        backToScannerFragmentButton.setOnClickListener(v -> {
-            showScannerFragment(); // Wechsle zurück zum ScannerFragment
-        });*/
 
         if (getArguments() != null)
         {
@@ -376,24 +390,4 @@ public class HandlingInfoFragment extends Fragment
     }
 
 
-
-    private void showScannerFragment()
-    {
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, new ScannerFragment());
-        transaction.commit();
-    }
-
-
-    public void speichereOrderDaten()
-    {
-        Log.d("Test", "Handling Info: " + order.getHandlingInfo());
-        // Hier könntest du auch Toast-Nachrichten verwenden, um die Werte anzuzeigen
-    }
-
-
-    private void showToast(String message)
-    {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
 }

@@ -2,10 +2,7 @@ package sellapp.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,13 +25,12 @@ public class LogInData
     private static LogInData instance;
     private static Context context;
 
-    // Privater Konstruktor, um die Instanz nur einmal zu erstellen
     private LogInData(Context context)
         {
         this.context = context;
         }
 
-    // Statische Methode zum Erhalten der einzigen Instanz des LoginManagers
+
     public static LogInData getInstance(Context context)
         {
         if (instance == null)
@@ -44,7 +40,7 @@ public class LogInData
         return instance;
         }
 
-    //jsonwebtoken muss immer mit geschickt werden, z.b bei settings usw
+
     public void saveLoginDetails(String username, String password)
         {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -88,8 +84,7 @@ public class LogInData
         }
 
 
-    // Beispiel-Implementierung für die Überprüfung der Login-Daten mit dem Server
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public boolean sendPost(LogInData loginData)
         {
         showFailMSG = false;
@@ -97,11 +92,7 @@ public class LogInData
         boolean success = false;
         CompletableFuture<String> loginFuture = NetworkManager.sendPostRequest(
                 NetworkManager.APIEndpoints.LOGIN.getUrl(), loginData);
-        String response = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            {
-            response = loginFuture.join();
-            }
+        String response = loginFuture.join();
 
         if (response != null)
             {

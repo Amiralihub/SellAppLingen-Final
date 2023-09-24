@@ -51,6 +51,14 @@ public class ScannerFragment extends Fragment
         currentOrder = order;
     }
 
+    /**
+     * Fragment for scanning QR codes and processing the results.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState The saved state of the fragment (not used in this case).
+     * @return A View representing the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -61,14 +69,19 @@ public class ScannerFragment extends Fragment
         return binding.getRoot();
     }
 
+    /**
+     * Initializes the UI views and their click listeners.
+     */
     private void setupViews()
     {
         binding.btnScan.setOnClickListener(v -> scanCode());
-        // Füge diesen Code in setupViews() im ScannerFragment hinzu
         binding.btnEnterAddress.setOnClickListener(v -> openManualInputFragment());
 
     }
 
+    /**
+     * Initializes the barcode scanner and sets up the result handling.
+     */
     private void setupBarcodeScanner()
     {
         barLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->
@@ -77,12 +90,16 @@ public class ScannerFragment extends Fragment
             {
                 String contents = result.getData().getStringExtra("SCAN_RESULT");
                 showResultDialog(contents);
-                // Speichere die gescannten Informationen in Order
                 saveScanResultToOrder(contents);
             }
         });
     }
 
+    /**
+     * Saves the scan result to the current order.
+     *
+     * @param scanResult The scanned QR code result.
+     */
     private void saveScanResultToOrder(String scanResult)
     {
         String[] scanResultArray = scanResult.split("&");
@@ -94,45 +111,49 @@ public class ScannerFragment extends Fragment
         }
     }
 
-
+    /**
+     * Initiates the QR code scanning process.
+     */
     private void scanCode()
     {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
         {
-            // Wenn die Kameraerlaubnis erteilt wurde, starte den QR-Code-Scanner
             Intent intent = new Intent(requireContext(), CaptureActivity.class);
             barLauncher.launch(intent);
         } else
         {
-            // Wenn die Kameraerlaubnis nicht erteilt wurde, frage den Benutzer nach der Erlaubnis
             requestCameraPermission();
         }
     }
 
+    /**
+     * Requests camera permission from the user.
+     */
     private void requestCameraPermission()
     {
         if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA))
         {
-            // Zeige eine Erklärung, warum die Kameraerlaubnis benötigt wird
-        new AlertDialog.Builder(requireContext()).setTitle("Kameraerlaubnis erforderlich")
-                                                 .setMessage(
-                                                         "Die Kameraerlaubnis wird benötigt, um den QR-Code zu scannen.")
-                                                 .setPositiveButton("OK", (dialog, which) ->
-            {
-                        requestPermission();
-                    }).setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss()).create().show();
-        } else
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Kameraerlaubnis erforderlich")
+                    .setMessage("Die Kameraerlaubnis wird benötigt, um den QR-Code zu scannen.")
+                    .setPositiveButton("OK", (dialog, which) -> ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE))
+                    .setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss())
+                    .create()
+                    .show();
+        }
+        else
         {
-            // Frage den Benutzer nach der Kameraerlaubnis
-            requestPermission();
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 
-    private void requestPermission()
-    {
-        ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-    }
-
+    /**
+     * Callback method called when the user responds to a permission request.
+     *
+     * @param requestCode  The request code specified when requesting permission.
+     * @param permissions  The requested permissions.
+     * @param grantResults The results of the permission request indicating whether the permissions were granted or not.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
@@ -141,17 +162,20 @@ public class ScannerFragment extends Fragment
         {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                // Wenn die Kameraerlaubnis erteilt wurde, starte den QR-Code-Scanner
                 Intent intent = new Intent(requireContext(), CaptureActivity.class);
                 barLauncher.launch(intent);
             } else
             {
-                // Wenn die Kameraerlaubnis nicht erteilt wurde, zeige eine Fehlermeldung
                 Toast.makeText(requireContext(), "Kameraerlaubnis wurde nicht erteilt.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    /**
+     * Displays a dialog with the scanned QR code result and handles the result data.
+     *
+     * @param contents The scanned QR code result as a string.
+     */
     private void showResultDialog(String contents)
     {
         String[] res = contents.split("&");
@@ -191,11 +215,11 @@ public class ScannerFragment extends Fragment
 
 }
 
-
-
+    /**
+     * Opens the ManualInputFragment and passes the current order data to it.
+     */
     private void openManualInputFragment()
     {
-        // Erstelle das ManualInputFragment
         ManualInputFragment manualInputFragment = new ManualInputFragment();
         manualInputFragment.setCurrentOrder(currentOrder);
 
