@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password))
         {
-            // Behandlung von leerem Benutzernamen oder Passwort
+
             Toast.makeText(this, "Benutzername und Passwort sind erforderlich", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity
     }
 
 
-//refactor, use gotofragment methode from fragmentmanagerhelper
+
     private void goToScannerFragment()
     {
         Intent mainIntent = new Intent(this, MainActivity.class);
