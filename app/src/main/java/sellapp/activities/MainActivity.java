@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
 
         loginManager = LogInData.getInstance(getApplicationContext());
 
-        if (!loginManager.isLoggedIn())
+        if (loginManager.isLoggedIn())
         {
 
             Intent loginIntent = new Intent(this, LoginActivity.class);

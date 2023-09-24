@@ -33,11 +33,10 @@ public class ManualInputFragment extends Fragment
     private FragmentManualInputBinding binding;
     private Order currentOrder;
     private String selectedZipCode = "";
-    private String[] zipCodes = {"49808", "49809", "49811"}; // Array der verfügbaren PLZ-Optionen
+    private String[] zipCodes = {"49808", "49809", "49811"};
 
     public ManualInputFragment()
         {
-        // Required empty public constructor
         }
 
     public void setCurrentOrder(Order order)
@@ -55,25 +54,36 @@ public class ManualInputFragment extends Fragment
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
 
+            Bundle args = getArguments();
+            if (args != null) {
+                currentOrder = (Order) args.getSerializable("order");
+                isEditingAddress = args.getBoolean("isEditingAddress", false);
+
+                if (currentOrder != null && currentOrder.getRecipient() != null) {
+                    Recipient recipient = currentOrder.getRecipient();
+                    binding.firstNameEditText.setText(recipient.getFirstName());
+                    binding.lastNameEditText.setText(recipient.getLastName());
+
+                    // Setzen Sie die Adresse, falls verfügbar
+                    if (recipient.getAddress() != null) {
+                        binding.streetEditText.setText(recipient.getAddress().getStreet());
+                        binding.houseNumberEditText.setText(recipient.getAddress().getHouseNumber());
+                    }
+                }
+            }
+
         return binding.getRoot();
 
 
         }
-
-
-    private void goBackToPreviousFragment()
-        {
-        // Hier können Sie den Code hinzufügen, um zum vorherigen Fragment zurückzukehren
-        // Zum Beispiel, indem Sie die FragmentTransaction verwenden
-        FragmentManager fragmentManager = requireFragmentManager();
-        fragmentManager.popBackStack(); // Dies entfernt das aktuelle Fragment und kehrt zum vorherigen zurück
-        }
-
+        /**
+         * Initializes and sets up the views for the ManualInputFragment.
+         * This method sets up the confirmation button click listener, initializes a Spinner with
+         * three selectable zip codes, and handles the selection of a zip code.
+         */
     private void setupViews()
         {
         binding.confirmManualInputButton.setOnClickListener(v -> saveManualInput());
-
-        // Initialisiere den Spinner
         ArrayAdapter<String> zipAdapter = new ArrayAdapter<>(
                 requireContext(), android.R.layout.simple_spinner_dropdown_item, zipCodes);
         binding.zipSpinner.setAdapter(zipAdapter);
@@ -88,51 +98,52 @@ public class ManualInputFragment extends Fragment
                     long id
                                       )
                 {
-                // Setze den ausgewählten Wert im Spinner
                 selectedZipCode = zipCodes[position];
                 }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
                 {
-                // Handle nichts ausgewählt
                 }
             });
 
-        // Fügen Sie den TextWatcher zum houseNumberEditText hinzu
+            /**
+             * TextWatcher to limit the maximum length of the input in the houseNumberEditText field.
+             * This TextWatcher ensures that the user cannot enter more than 5 characters in the house number field.
+             */
         binding.houseNumberEditText.addTextChangedListener(new TextWatcher()
             {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Nicht benötigt, vor der Textänderung
                 }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Überprüfen Sie die Länge der eingegebenen Hausnummer
                 if (charSequence.length() > 5)
                     {
-                    // Schneiden Sie den Text auf 5 Zeichen ab
                     binding.houseNumberEditText.setText(charSequence.subSequence(0, 5));
-                    binding.houseNumberEditText.setSelection(5); // Setzen Sie den Cursor am Ende
+                    binding.houseNumberEditText.setSelection(5);
                     }
                 }
 
             @Override
             public void afterTextChanged(Editable editable)
                 {
-                // Nicht benötigt, nach der Textänderung
                 }
             });
         }
+
+        /**
+         * Save the manually entered order information.
+         * Depending on the status flag 'isEditingAddress', this method either saves the edited address or
+         * navigates back to the 'DeliveryDetailsFragment' after saving the order details.
+         */
     private void saveManualInput()
         {
-        // Schritt 3: Überprüfen des Statusflags isEditingAddress
         if (isEditingAddress)
             {
-            // Speichern Sie die bearbeitete Adresse in Ihren Datenstrukturen (z. B. order)
             Address address = new Address(
                     binding.streetEditText.getText().toString(),
                     binding.houseNumberEditText.getText().toString(), selectedZipCode
@@ -142,20 +153,14 @@ public class ManualInputFragment extends Fragment
                     binding.lastNameEditText.getText().toString(), address
             );
             currentOrder.setRecipient(recipient);
-
-            // Schritt 4: Zurücksetzen des Statusflags
             isEditingAddress = false;
-
-            // Schritt 5: Navigieren Sie zurück zu DeliveryDetailsFragment
             navigateBackToDeliveryDetailsFragment();
             }
         else
             {
-            // Normaler Ablauf - speichern Sie die Daten wie zuvor
-            // Überprüfen Sie, ob alle Felder ausgefüllt sind
+
             if (isInputValid())
                 {
-                // Speichern Sie die manuell eingegebenen Order-Informationen im currentOrder-Objekt
                 Address address = new Address(
                         binding.streetEditText.getText().toString(),
                         binding.houseNumberEditText.getText().toString(), selectedZipCode
@@ -165,26 +170,21 @@ public class ManualInputFragment extends Fragment
                         binding.lastNameEditText.getText().toString(), address
                 );
                 currentOrder.setRecipient(recipient);
-
-                // Erstelle das Bundle für die Übergabe der Order-Daten
                 Bundle args = new Bundle();
                 args.putSerializable("order", currentOrder);
 
-                // Erstelle das HandlingInfoFragment und setze die Argumente
                 HandlingInfoFragment handlingInfoFragment = new HandlingInfoFragment();
                 handlingInfoFragment.setArguments(args);
 
-                // Wechsle zum HandlingInfoFragment
                 FragmentManager fragmentManager = requireFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(
                         R.id.frame_layout, handlingInfoFragment, "handlingInfoFragment");
-                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
+                transaction.addToBackStack(null);
                 transaction.commit();
                 }
             else
                 {
-                // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
                 Toast.makeText(
                              requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT)
                      .show();
@@ -192,7 +192,11 @@ public class ManualInputFragment extends Fragment
             }
         }
 
-
+        /**
+         * Check if the input provided by the user is valid.
+         *
+         * @return True if all required fields are filled, otherwise false.
+         */
     private boolean isInputValid()
         {
         String lastName = binding.lastNameEditText.getText().toString();
@@ -200,7 +204,6 @@ public class ManualInputFragment extends Fragment
         String street = binding.streetEditText.getText().toString();
         String houseNumber = binding.houseNumberEditText.getText().toString();
 
-        // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
         return !lastName.isEmpty() &&
                !firstName.isEmpty() &&
                !street.isEmpty() &&
@@ -208,13 +211,15 @@ public class ManualInputFragment extends Fragment
                !selectedZipCode.isEmpty();
         }
 
+        /**
+         * Navigate back to the 'DeliveryDetailsFragment'.
+         * This method creates the 'DeliveryDetailsFragment' and sets the arguments for the fragment transition.
+         */
     private void navigateBackToDeliveryDetailsFragment()
         {
-        // Erstellen Sie das DeliveryDetailsFragment und setzen Sie die Argumente
         DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(
                 currentOrder);
 
-        // Verwenden Sie die FragmentManagerHelper-Klasse für den Fragment-Übergang
         customerapp.models.customerapp.FragmentManagerHelper.replace(
                 requireFragmentManager(), R.id.frame_layout, deliveryDetailsFragment);
         }
