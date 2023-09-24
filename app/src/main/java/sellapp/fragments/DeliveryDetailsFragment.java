@@ -32,9 +32,11 @@ public class DeliveryDetailsFragment extends Fragment
     public String orderId;
     private String token;
 
+    private boolean isEditingAddress = false;
+
     public DeliveryDetailsFragment()
         {
-        // Required empty public constructor
+
         }
 
     public static DeliveryDetailsFragment newInstance(Order order)
@@ -52,13 +54,6 @@ public class DeliveryDetailsFragment extends Fragment
         testOrder.setOrderID("Test-Token");
         testOrder.setTimestamp("2023-08-03 12:34:56");
         return testOrder;
-        }
-
-    private void navigateBackToPreviousFragment()
-        {
-        // Verwende die FragmentManagerHelper-Klasse, um zum vorherigen Fragment zurückzukehren
-        customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment(
-                getFragmentManager());
         }
 
 
@@ -95,13 +90,11 @@ public class DeliveryDetailsFragment extends Fragment
             @Override
             public void run()
                 {
-                // Show the success message using a Toast on the main UI thread
                 Toast.makeText(
                         requireContext(), "Daten erfolgreich an den Server gesendet.",
                         Toast.LENGTH_SHORT
                               ).show();
 
-                // Here you switch to the ScannerFragment
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_layout, ScannerFragment.newInstance(order));
@@ -110,7 +103,7 @@ public class DeliveryDetailsFragment extends Fragment
             });
         }
 
-    // Füge diese Methode zum Anzeigen des Popups hinzu
+
     private void showOrderIdPopup(String orderId)
         {
         requireActivity().runOnUiThread(new Runnable()
@@ -160,13 +153,25 @@ public class DeliveryDetailsFragment extends Fragment
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
 
+        Button editButton = view.findViewById(R.id.editAddressButton);
+
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Schritt 1: Setzen des Statusflags und Navigation zu ManualInputFragment
+                    isEditingAddress = true;
+                    System.out.println(isEditingAddress);
+                    navigateToManualInputFragment();
+                }
+            });
+
 
         confirmButton.setOnClickListener(new View.OnClickListener()
             {
             @Override
             public void onClick(View v)
                 {
-                // Generiere den Timestamp
+
                 String myFormat = "dd-MM-yyyy:HH-mm-ss.SSS";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                 String getTime = dateFormat.format(Calendar.getInstance().getTime());
@@ -187,7 +192,6 @@ public class DeliveryDetailsFragment extends Fragment
             order = (Order) args.getSerializable("order");
             }
 
-        // Zeige die Order-Informationen in den entsprechenden TextViews an
         if (order != null)
             {
             createTestOrder();
@@ -211,6 +215,8 @@ public class DeliveryDetailsFragment extends Fragment
             TextView customDropOffValue = view.findViewById(R.id.customDropOffValue);
             customDropOffValue.setText(order.getCustomDropOffPlace());
 
+            TextView deliveryDateValue = view.findViewById(R.id.deliveryDateValue);
+            deliveryDateValue.setText(order.getDeliveryDate());
 
             TextView streetNameValue = view.findViewById(R.id.streetNameValue);
             streetNameValue.setText(order.getRecipient().getAddress().getStreet() + " ");
@@ -247,6 +253,28 @@ public class DeliveryDetailsFragment extends Fragment
                 }
             });
         }
+
+        private void navigateToManualInputFragment() {
+
+
+            FragmentManager fragmentManager = requireFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+
+            ManualInputFragment manualInputFragment = new ManualInputFragment();
+            Bundle args = new Bundle();
+            args.putSerializable("order", order);
+            args.putBoolean("isEditingAddress", isEditingAddress);
+            manualInputFragment.setArguments(args);
+
+            customerapp.models.customerapp.FragmentManagerHelper.replace(
+                    requireFragmentManager(), R.id.frame_layout, manualInputFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        }
+
+
 
 
     }
