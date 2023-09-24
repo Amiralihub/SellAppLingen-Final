@@ -25,13 +25,12 @@ public class LogInData
     private static LogInData instance;
     private static Context context;
 
-    // Privater Konstruktor, um die Instanz nur einmal zu erstellen
     private LogInData(Context context)
         {
         this.context = context;
         }
 
-    // Statische Methode zum Erhalten der einzigen Instanz des LoginManagers
+
     public static LogInData getInstance(Context context)
         {
         if (instance == null)
@@ -41,7 +40,7 @@ public class LogInData
         return instance;
         }
 
-    //jsonwebtoken muss immer mit geschickt werden, z.b bei settings usw
+
     public void saveLoginDetails(String username, String password)
         {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -85,7 +84,7 @@ public class LogInData
         }
 
 
-    // Beispiel-Implementierung für die Überprüfung der Login-Daten mit dem Server
+
     public boolean sendPost(LogInData loginData)
         {
         showFailMSG = false;

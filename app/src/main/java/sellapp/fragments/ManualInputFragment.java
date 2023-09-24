@@ -30,6 +30,7 @@ public class ManualInputFragment extends Fragment
 
     private boolean isEditingAddress = false;
 
+
     private FragmentManualInputBinding binding;
     private Order currentOrder;
     private String selectedZipCode = "";
@@ -37,7 +38,7 @@ public class ManualInputFragment extends Fragment
 
     public ManualInputFragment()
         {
-        // Required empty public constructor
+
         }
 
     public void setCurrentOrder(Order order)
@@ -46,14 +47,28 @@ public class ManualInputFragment extends Fragment
         }
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-                            )
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
+
+            Bundle args = getArguments();
+            if (args != null) {
+                currentOrder = (Order) args.getSerializable("order");
+                isEditingAddress = args.getBoolean("isEditingAddress", false);
+
+                if (currentOrder != null && currentOrder.getRecipient() != null) {
+                    Recipient recipient = currentOrder.getRecipient();
+                    binding.firstNameEditText.setText(recipient.getFirstName());
+                    binding.lastNameEditText.setText(recipient.getLastName());
+
+                    if (recipient.getAddress() != null) {
+                        binding.streetEditText.setText(recipient.getAddress().getStreet());
+                        binding.houseNumberEditText.setText(recipient.getAddress().getHouseNumber());
+                    }
+                }
+
+            }
 
         return binding.getRoot();
 
@@ -61,13 +76,6 @@ public class ManualInputFragment extends Fragment
         }
 
 
-    private void goBackToPreviousFragment()
-        {
-        // Hier können Sie den Code hinzufügen, um zum vorherigen Fragment zurückzukehren
-        // Zum Beispiel, indem Sie die FragmentTransaction verwenden
-        FragmentManager fragmentManager = requireFragmentManager();
-        fragmentManager.popBackStack(); // Dies entfernt das aktuelle Fragment und kehrt zum vorherigen zurück
-        }
 
     private void setupViews()
         {
@@ -88,30 +96,25 @@ public class ManualInputFragment extends Fragment
                     long id
                                       )
                 {
-                // Setze den ausgewählten Wert im Spinner
                 selectedZipCode = zipCodes[position];
                 }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
                 {
-                // Handle nichts ausgewählt
                 }
             });
 
-        // Fügen Sie den TextWatcher zum houseNumberEditText hinzu
         binding.houseNumberEditText.addTextChangedListener(new TextWatcher()
             {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Nicht benötigt, vor der Textänderung
                 }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Überprüfen Sie die Länge der eingegebenen Hausnummer
                 if (charSequence.length() > 5)
                     {
                     // Schneiden Sie den Text auf 5 Zeichen ab
@@ -123,16 +126,15 @@ public class ManualInputFragment extends Fragment
             @Override
             public void afterTextChanged(Editable editable)
                 {
-                // Nicht benötigt, nach der Textänderung
                 }
             });
         }
     private void saveManualInput()
         {
-        // Schritt 3: Überprüfen des Statusflags isEditingAddress
+
         if (isEditingAddress)
             {
-            // Speichern Sie die bearbeitete Adresse in Ihren Datenstrukturen (z. B. order)
+
             Address address = new Address(
                     binding.streetEditText.getText().toString(),
                     binding.houseNumberEditText.getText().toString(), selectedZipCode
@@ -143,19 +145,14 @@ public class ManualInputFragment extends Fragment
             );
             currentOrder.setRecipient(recipient);
 
-            // Schritt 4: Zurücksetzen des Statusflags
             isEditingAddress = false;
 
-            // Schritt 5: Navigieren Sie zurück zu DeliveryDetailsFragment
-            navigateBackToDeliveryDetailsFragment();
+                navigateToDeliveryDetailsFragment();
             }
         else
             {
-            // Normaler Ablauf - speichern Sie die Daten wie zuvor
-            // Überprüfen Sie, ob alle Felder ausgefüllt sind
             if (isInputValid())
                 {
-                // Speichern Sie die manuell eingegebenen Order-Informationen im currentOrder-Objekt
                 Address address = new Address(
                         binding.streetEditText.getText().toString(),
                         binding.houseNumberEditText.getText().toString(), selectedZipCode
@@ -166,25 +163,22 @@ public class ManualInputFragment extends Fragment
                 );
                 currentOrder.setRecipient(recipient);
 
-                // Erstelle das Bundle für die Übergabe der Order-Daten
                 Bundle args = new Bundle();
                 args.putSerializable("order", currentOrder);
 
-                // Erstelle das HandlingInfoFragment und setze die Argumente
                 HandlingInfoFragment handlingInfoFragment = new HandlingInfoFragment();
                 handlingInfoFragment.setArguments(args);
 
-                // Wechsle zum HandlingInfoFragment
                 FragmentManager fragmentManager = requireFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(
                         R.id.frame_layout, handlingInfoFragment, "handlingInfoFragment");
-                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
+                transaction.addToBackStack(null);
                 transaction.commit();
                 }
             else
                 {
-                // Zeige eine Benachrichtigung, wenn nicht alle Felder ausgefüllt sind
+                    System.out.println(isEditingAddress + "Das ist Manuelinput");
                 Toast.makeText(
                              requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT)
                      .show();
@@ -200,23 +194,29 @@ public class ManualInputFragment extends Fragment
         String street = binding.streetEditText.getText().toString();
         String houseNumber = binding.houseNumberEditText.getText().toString();
 
-        // Überprüfe, ob die Felder ausgefüllt sind oder Daten eingegeben wurden
         return !lastName.isEmpty() &&
                !firstName.isEmpty() &&
                !street.isEmpty() &&
                !houseNumber.isEmpty() &&
                !selectedZipCode.isEmpty();
         }
+        private void navigateToDeliveryDetailsFragment() {
 
-    private void navigateBackToDeliveryDetailsFragment()
-        {
-        // Erstellen Sie das DeliveryDetailsFragment und setzen Sie die Argumente
-        DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(
-                currentOrder);
+            DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(currentOrder);
 
-        // Verwenden Sie die FragmentManagerHelper-Klasse für den Fragment-Übergang
-        customerapp.models.customerapp.FragmentManagerHelper.replace(
-                requireFragmentManager(), R.id.frame_layout, deliveryDetailsFragment);
+            customerapp.models.customerapp.FragmentManagerHelper.replace(
+                    requireFragmentManager(), R.id.frame_layout, deliveryDetailsFragment);
+
+            FragmentManager fragmentManager = requireFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
+
+
+
+
+
+
 
     }

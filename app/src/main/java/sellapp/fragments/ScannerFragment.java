@@ -64,7 +64,6 @@ public class ScannerFragment extends Fragment
     private void setupViews()
     {
         binding.btnScan.setOnClickListener(v -> scanCode());
-        // Füge diesen Code in setupViews() im ScannerFragment hinzu
         binding.btnEnterAddress.setOnClickListener(v -> openManualInputFragment());
 
     }
@@ -77,7 +76,6 @@ public class ScannerFragment extends Fragment
             {
                 String contents = result.getData().getStringExtra("SCAN_RESULT");
                 showResultDialog(contents);
-                // Speichere die gescannten Informationen in Order
                 saveScanResultToOrder(contents);
             }
         });
@@ -99,12 +97,10 @@ public class ScannerFragment extends Fragment
     {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
         {
-            // Wenn die Kameraerlaubnis erteilt wurde, starte den QR-Code-Scanner
             Intent intent = new Intent(requireContext(), CaptureActivity.class);
             barLauncher.launch(intent);
         } else
         {
-            // Wenn die Kameraerlaubnis nicht erteilt wurde, frage den Benutzer nach der Erlaubnis
             requestCameraPermission();
         }
     }
@@ -113,7 +109,6 @@ public class ScannerFragment extends Fragment
     {
         if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA))
         {
-            // Zeige eine Erklärung, warum die Kameraerlaubnis benötigt wird
         new AlertDialog.Builder(requireContext()).setTitle("Kameraerlaubnis erforderlich")
                                                  .setMessage(
                                                          "Die Kameraerlaubnis wird benötigt, um den QR-Code zu scannen.")
@@ -123,7 +118,6 @@ public class ScannerFragment extends Fragment
                     }).setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss()).create().show();
         } else
         {
-            // Frage den Benutzer nach der Kameraerlaubnis
             requestPermission();
         }
     }
@@ -141,12 +135,10 @@ public class ScannerFragment extends Fragment
         {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                // Wenn die Kameraerlaubnis erteilt wurde, starte den QR-Code-Scanner
                 Intent intent = new Intent(requireContext(), CaptureActivity.class);
                 barLauncher.launch(intent);
             } else
             {
-                // Wenn die Kameraerlaubnis nicht erteilt wurde, zeige eine Fehlermeldung
                 Toast.makeText(requireContext(), "Kameraerlaubnis wurde nicht erteilt.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -195,7 +187,6 @@ public class ScannerFragment extends Fragment
 
     private void openManualInputFragment()
     {
-        // Erstelle das ManualInputFragment
         ManualInputFragment manualInputFragment = new ManualInputFragment();
         manualInputFragment.setCurrentOrder(currentOrder);
 

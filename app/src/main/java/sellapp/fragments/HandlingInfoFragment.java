@@ -119,7 +119,6 @@ public class HandlingInfoFragment extends Fragment
 
 
         View view = inflater.inflate(R.layout.fragment_handling_info, container, false);
-//        order = ((MainActivity) requireActivity()).getCurrentOrder();
 
         reciptname = view.findViewById(R.id.recipientNameEditText);
         EditText customDropOffEditText = view.findViewById(R.id.customDropOffEditText);
@@ -214,12 +213,12 @@ public class HandlingInfoFragment extends Fragment
                 }
             }
         });
-//        clientInfo = (Order) requireActivity().getIntent().getSerializableExtra("order");
+
 
         chkOption1 = view.findViewById(R.id.fluentOption);
         chkOption2 = view.findViewById(R.id.fragileOption);
         chkOption3 = view.findViewById(R.id.glasOption);
-        chkOption4 = view.findViewById(R.id.noOption); // Assuming you have this checkbox in your layout
+        chkOption4 = view.findViewById(R.id.noOption);
         chkOption5 = view.findViewById(R.id.heavy);
         confirmButton = view.findViewById(R.id.confirmButton);
 
@@ -238,17 +237,14 @@ public class HandlingInfoFragment extends Fragment
 
                         Calendar todayCalendar = Calendar.getInstance();
 
-                        // Überprüfe, ob der ausgewählte Tag der aktuelle Tag ist und ob es nach 13:00 Uhr ist
                         if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
                                 && selectedCalendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
                                 && selectedCalendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH)
                                 && todayCalendar.get(Calendar.HOUR_OF_DAY) >= 13)
                         {
-                            // Ausgewählter Tag ist der aktuelle Tag und es ist bereits nach 13:00 Uhr
                             Toast.makeText(requireContext(), "Der aktuelle Tag ist nach 13:00 Uhr nicht mehr auswählbar.", Toast.LENGTH_SHORT).show();
                         } else if (selectedCalendar.before(todayCalendar))
                         {
-                            // Ausgewähltes Datum liegt in der Vergangenheit
                             Toast.makeText(requireContext(), "Bitte wählen Sie ein zukünftiges Datum aus.", Toast.LENGTH_SHORT).show();
                         } else
                         {
@@ -256,7 +252,7 @@ public class HandlingInfoFragment extends Fragment
                             myCalendar.set(Calendar.MONTH, month);
                             myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-                            String myFormat = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
+                            String myFormat = "yyyy-MM-dd";
                             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                             setDate = dateFormat.format(myCalendar.getTime());
                             date.setText(setDate);
@@ -264,7 +260,6 @@ public class HandlingInfoFragment extends Fragment
                     }
                 }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
 
-                // Setze den minimalen Tag des DatePickerDialog auf heute
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
                 datePickerDialog.show();
@@ -286,7 +281,7 @@ public class HandlingInfoFragment extends Fragment
         chkOption4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
             {
-                selectedInfo.setLength(0); // Entferne alle anderen ausgewählten Handlungsinformationen
+                selectedInfo.setLength(0);
                 selectedInfo.append("Keine besondere Eigenschaft").append("&");
 
                 chkOption1.setChecked(false);
@@ -326,7 +321,7 @@ public class HandlingInfoFragment extends Fragment
                     clientInfo.setHandlingInfo(selectedInfo.toString());
                 } else
                 {
-                    clientInfo.setHandlingInfo(""); // Keine ausgewählten HandlungsInformationen
+                    clientInfo.setHandlingInfo("");
                 }
                 String myFormat = "hh:mm";
                 SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -342,29 +337,18 @@ public class HandlingInfoFragment extends Fragment
                 FragmentManager fragmentManager = requireFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-// Erstelle ein neues DeliveryDetailsFragment und übergebe das currentOrder-Objekt
+
                 DeliveryDetailsFragment deliveryDetailsFragment = new DeliveryDetailsFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("order", clientInfo);
                 deliveryDetailsFragment.setArguments(args);
 
                 transaction.replace(R.id.frame_layout, deliveryDetailsFragment, "deliveryDetailsFragment");
-                transaction.addToBackStack(null); // Füge das Fragment zur Rückwärtsnavigation hinzu
-                transaction.commit();
-/*            if (!info.isEmpty()) {
-                info = info.substring(0, info.length() - 2); // Entferne das letzte Trennzeichen ", "
-                order.setHandlingInfo(info); // Speichere die ausgewählten Informationen in handlingInfo der Order-Instanz
-                showToast(info);
-                // Wechsle zum HandlingInfo2Fragment
-            } else {
-                showToast("No option was selected yet.");
-            }*/
+                transaction.addToBackStack(null);
+
             }
         });
 
-/*        backToScannerFragmentButton.setOnClickListener(v -> {
-            showScannerFragment(); // Wechsle zurück zum ScannerFragment
-        });*/
 
         if (getArguments() != null)
         {
@@ -375,25 +359,4 @@ public class HandlingInfoFragment extends Fragment
         return view;
     }
 
-
-
-    private void showScannerFragment()
-    {
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, new ScannerFragment());
-        transaction.commit();
-    }
-
-
-    public void speichereOrderDaten()
-    {
-        Log.d("Test", "Handling Info: " + order.getHandlingInfo());
-        // Hier könntest du auch Toast-Nachrichten verwenden, um die Werte anzuzeigen
-    }
-
-
-    private void showToast(String message)
-    {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
 }
