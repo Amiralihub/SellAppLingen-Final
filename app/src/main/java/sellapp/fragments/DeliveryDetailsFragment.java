@@ -1,6 +1,7 @@
 package sellapp.fragments;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,7 +34,7 @@ public class DeliveryDetailsFragment extends Fragment
     public String orderId;
     private String token;
 
-    private boolean isEditingAddress = false;
+    private boolean isEditingAddress;
 
     public DeliveryDetailsFragment()
         {
@@ -57,6 +59,7 @@ public class DeliveryDetailsFragment extends Fragment
         }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void sendOrderDataToServer()
         {
 
@@ -90,9 +93,8 @@ public class DeliveryDetailsFragment extends Fragment
             @Override
             public void run()
                 {
-                Toast.makeText(
-                        requireContext(), "Daten erfolgreich an den Server gesendet.",
-                        Toast.LENGTH_SHORT
+                Toast.makeText(requireContext(), "Daten erfolgreich an den Server gesendet.",
+                               Toast.LENGTH_SHORT
                               ).show();
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -155,19 +157,22 @@ public class DeliveryDetailsFragment extends Fragment
 
         Button editButton = view.findViewById(R.id.editAddressButton);
 
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Schritt 1: Setzen des Statusflags und Navigation zu ManualInputFragment
-                    isEditingAddress = true;
-                    System.out.println(isEditingAddress);
-                    navigateToManualInputFragment();
+        editButton.setOnClickListener(new View.OnClickListener()
+            {
+            @Override
+            public void onClick(View v)
+                {
+                // Schritt 1: Setzen des Statusflags und Navigation zu ManualInputFragment
+                isEditingAddress = true;
+                System.out.println(isEditingAddress);
+                navigateToManualInputFragment();
                 }
             });
 
 
         confirmButton.setOnClickListener(new View.OnClickListener()
             {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v)
                 {
@@ -254,27 +259,26 @@ public class DeliveryDetailsFragment extends Fragment
             });
         }
 
-        private void navigateToManualInputFragment() {
+    private void navigateToManualInputFragment()
+        {
 
 
-            FragmentManager fragmentManager = requireFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = requireFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
 
-            ManualInputFragment manualInputFragment = new ManualInputFragment();
-            Bundle args = new Bundle();
-            args.putSerializable("order", order);
-            args.putBoolean("isEditingAddress", isEditingAddress);
-            manualInputFragment.setArguments(args);
+        ManualInputFragment manualInputFragment = new ManualInputFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("order", order);
+        args.putBoolean("isEditingAddress", isEditingAddress);
+        manualInputFragment.setArguments(args);
 
-            customerapp.models.customerapp.FragmentManagerHelper.replace(
-                    requireFragmentManager(), R.id.frame_layout, manualInputFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+        customerapp.models.customerapp.FragmentManagerHelper.replace(
+                requireFragmentManager(), R.id.frame_layout, manualInputFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         }
-
-
 
 
     }

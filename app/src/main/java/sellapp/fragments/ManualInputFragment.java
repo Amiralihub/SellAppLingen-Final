@@ -10,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -46,28 +44,28 @@ public class ManualInputFragment extends Fragment
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
                             )
         {
         binding = FragmentManualInputBinding.inflate(inflater, container, false);
         setupViews();
 
-            Bundle args = getArguments();
-            if (args != null) {
-                currentOrder = (Order) args.getSerializable("order");
-                isEditingAddress = args.getBoolean("isEditingAddress", false);
+        Bundle args = getArguments();
+        if (args != null)
+            {
+            currentOrder = (Order) args.getSerializable("order");
+            isEditingAddress = args.getBoolean("isEditingAddress", false);
 
-                if (currentOrder != null && currentOrder.getRecipient() != null) {
-                    Recipient recipient = currentOrder.getRecipient();
-                    binding.firstNameEditText.setText(recipient.getFirstName());
-                    binding.lastNameEditText.setText(recipient.getLastName());
+            if (currentOrder != null && currentOrder.getRecipient() != null)
+                {
+                Recipient recipient = currentOrder.getRecipient();
+                binding.firstNameEditText.setText(recipient.getFirstName());
+                binding.lastNameEditText.setText(recipient.getLastName());
 
-                    // Setzen Sie die Adresse, falls verfügbar
-                    if (recipient.getAddress() != null) {
-                        binding.streetEditText.setText(recipient.getAddress().getStreet());
-                        binding.houseNumberEditText.setText(recipient.getAddress().getHouseNumber());
+                if (recipient.getAddress() != null)
+                    {
+                    binding.streetEditText.setText(recipient.getAddress().getStreet());
+                    binding.houseNumberEditText.setText(recipient.getAddress().getHouseNumber());
                     }
                 }
             }
@@ -76,11 +74,12 @@ public class ManualInputFragment extends Fragment
 
 
         }
-        /**
-         * Initializes and sets up the views for the ManualInputFragment.
-         * This method sets up the confirmation button click listener, initializes a Spinner with
-         * three selectable zip codes, and handles the selection of a zip code.
-         */
+
+    /**
+     * Initializes and sets up the views for the ManualInputFragment.
+     * This method sets up the confirmation button click listener, initializes a Spinner with
+     * three selectable zip codes, and handles the selection of a zip code.
+     */
     private void setupViews()
         {
         binding.confirmManualInputButton.setOnClickListener(v -> saveManualInput());
@@ -92,10 +91,7 @@ public class ManualInputFragment extends Fragment
             {
             @Override
             public void onItemSelected(
-                    AdapterView<?> parentView,
-                    View selectedItemView,
-                    int position,
-                    long id
+                    AdapterView<?> parentView, View selectedItemView, int position, long id
                                       )
                 {
                 selectedZipCode = zipCodes[position];
@@ -107,10 +103,10 @@ public class ManualInputFragment extends Fragment
                 }
             });
 
-            /**
-             * TextWatcher to limit the maximum length of the input in the houseNumberEditText field.
-             * This TextWatcher ensures that the user cannot enter more than 5 characters in the house number field.
-             */
+        /**
+         * TextWatcher to limit the maximum length of the input in the houseNumberEditText field.
+         * This TextWatcher ensures that the user cannot enter more than 5 characters in the house number field.
+         */
         binding.houseNumberEditText.addTextChangedListener(new TextWatcher()
             {
             @Override
@@ -135,22 +131,22 @@ public class ManualInputFragment extends Fragment
             });
         }
 
-        /**
-         * Save the manually entered order information.
-         * Depending on the status flag 'isEditingAddress', this method either saves the edited address or
-         * navigates back to the 'DeliveryDetailsFragment' after saving the order details.
-         */
+    /**
+     * Save the manually entered order information.
+     * Depending on the status flag 'isEditingAddress', this method either saves the edited address or
+     * navigates back to the 'DeliveryDetailsFragment' after saving the order details.
+     */
     private void saveManualInput()
         {
         if (isEditingAddress)
             {
-            Address address = new Address(
-                    binding.streetEditText.getText().toString(),
-                    binding.houseNumberEditText.getText().toString(), selectedZipCode
+            Address address = new Address(binding.streetEditText.getText().toString(),
+                                          binding.houseNumberEditText.getText().toString(),
+                                          selectedZipCode
             );
-            Recipient recipient = new Recipient(
-                    binding.firstNameEditText.getText().toString(),
-                    binding.lastNameEditText.getText().toString(), address
+            Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(),
+                                                binding.lastNameEditText.getText().toString(),
+                                                address
             );
             currentOrder.setRecipient(recipient);
             isEditingAddress = false;
@@ -161,13 +157,13 @@ public class ManualInputFragment extends Fragment
 
             if (isInputValid())
                 {
-                Address address = new Address(
-                        binding.streetEditText.getText().toString(),
-                        binding.houseNumberEditText.getText().toString(), selectedZipCode
+                Address address = new Address(binding.streetEditText.getText().toString(),
+                                              binding.houseNumberEditText.getText().toString(),
+                                              selectedZipCode
                 );
-                Recipient recipient = new Recipient(
-                        binding.firstNameEditText.getText().toString(),
-                        binding.lastNameEditText.getText().toString(), address
+                Recipient recipient = new Recipient(binding.firstNameEditText.getText().toString(),
+                                                    binding.lastNameEditText.getText().toString(),
+                                                    address
                 );
                 currentOrder.setRecipient(recipient);
                 Bundle args = new Bundle();
@@ -192,11 +188,11 @@ public class ManualInputFragment extends Fragment
             }
         }
 
-        /**
-         * Check if the input provided by the user is valid.
-         *
-         * @return True if all required fields are filled, otherwise false.
-         */
+    /**
+     * Check if the input provided by the user is valid.
+     *
+     * @return True if all required fields are filled, otherwise false.
+     */
     private boolean isInputValid()
         {
         String lastName = binding.lastNameEditText.getText().toString();
@@ -204,17 +200,51 @@ public class ManualInputFragment extends Fragment
         String street = binding.streetEditText.getText().toString();
         String houseNumber = binding.houseNumberEditText.getText().toString();
 
-        return !lastName.isEmpty() &&
+        boolean isValid = true;
+
+
+        if (firstName.trim().isEmpty() || !isNumeric(firstName.trim()))
+            {
+            isValid = false;
+            binding.firstNameEditText.setError("Bitte geben Sie einen gültigen Vorname ein");
+            }
+
+        if (lastName.trim().isEmpty() || !isNumeric(lastName.trim()))
+            {
+            isValid = false;
+            binding.lastNameEditText.setError("Bitte geben Sie einen gültigen Nachname ein");
+            }
+
+        if (street.trim().isEmpty() || !isNumeric(street.trim()))
+            {
+            isValid = false;
+            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein");
+            }
+
+        if (houseNumber.trim().isEmpty())
+            {
+            isValid = false;
+            binding.houseNumberEditText.setError("Bitte geben Sie eine gültige Hausnummer ein");
+            }
+
+        return isValid &&
+               !lastName.isEmpty() &&
                !firstName.isEmpty() &&
                !street.isEmpty() &&
                !houseNumber.isEmpty() &&
                !selectedZipCode.isEmpty();
         }
 
-        /**
-         * Navigate back to the 'DeliveryDetailsFragment'.
-         * This method creates the 'DeliveryDetailsFragment' and sets the arguments for the fragment transition.
-         */
+    private static boolean isNumeric(String str)
+        {
+        return str.matches("^[\\p{L} \\p{Zs}]+$");
+        }
+
+
+    /**
+     * Navigate back to the 'DeliveryDetailsFragment'.
+     * This method creates the 'DeliveryDetailsFragment' and sets the arguments for the fragment transition.
+     */
     private void navigateBackToDeliveryDetailsFragment()
         {
         DeliveryDetailsFragment deliveryDetailsFragment = DeliveryDetailsFragment.newInstance(
