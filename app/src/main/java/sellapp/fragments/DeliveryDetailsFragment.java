@@ -1,6 +1,8 @@
 package sellapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -46,12 +49,11 @@ public class DeliveryDetailsFragment extends Fragment
         return fragment;
         }
 
-    private Order createTestOrder()
+    private void createTestOrder()
         {
         Order testOrder = new Order();
         testOrder.setOrderID("Test-Token");
         testOrder.setTimestamp("2023-08-03 12:34:56");
-        return testOrder;
         }
 
     private void navigateBackToPreviousFragment()
@@ -62,6 +64,7 @@ public class DeliveryDetailsFragment extends Fragment
         }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void sendOrderDataToServer()
         {
 
@@ -151,6 +154,7 @@ public class DeliveryDetailsFragment extends Fragment
             });
         }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
@@ -163,6 +167,7 @@ public class DeliveryDetailsFragment extends Fragment
 
         confirmButton.setOnClickListener(new View.OnClickListener()
             {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v)
                 {
