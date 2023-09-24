@@ -55,6 +55,16 @@ public class OrderHistoryDetailsFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Inflates the layout for the Order History Details Fragment and populates its views with data
+     * retrieved from the selected order. It sets up various TextViews to display order details and handles
+     * navigation back to the order history.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate views.
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState A Bundle containing the fragment's previously saved state, if any.
+     * @return The root view of the fragment.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -112,6 +122,12 @@ public class OrderHistoryDetailsFragment extends Fragment
         return view;
     }
 
+    /**
+     * Formats a timestamp string to extract and return the hour portion.
+     *
+     * @param update A timestamp string in a specific format.
+     * @return The hour portion of the timestamp.
+     */
     public String dateFormater(String update)
     {
         String newFormat [] = update.split(":");

@@ -54,7 +54,14 @@ public class HandlingInfoFragment extends Fragment
     private String getTime = "";
     private Order clientInfo;
 
-
+    /**
+     * Creates a CompoundButton.OnCheckedChangeListener that handles the selection of a specific package size.
+     *
+     * @param size             The package size associated with this listener.
+     * @param packageSizeInfo  The StringBuilder used to track selected package sizes.
+     * @param otherCheckBoxes  Other CheckBoxes to be unchecked when this one is checked.
+     * @return A CompoundButton.OnCheckedChangeListener instance for package size selection.
+     */
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String size, StringBuilder packageSizeInfo, CheckBox... otherCheckBoxes)
     {
         return (buttonView, isChecked) ->
@@ -80,6 +87,12 @@ public class HandlingInfoFragment extends Fragment
         };
     }
 
+    /**
+     * Creates a CompoundButton.OnCheckedChangeListener for handling the selection of a specific option text.
+     *
+     * @param optionText The text associated with the option to be selected.
+     * @return A CompoundButton.OnCheckedChangeListener instance for option selection.
+     */
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(String optionText)
     {
         return (buttonView, isChecked) ->
@@ -112,11 +125,18 @@ public class HandlingInfoFragment extends Fragment
     {
     }
 
-
+    /**
+     * Called when the fragment's UI is being created. Inflates the layout for this fragment and initializes UI elements.
+     * Set up listeners for package size checkboxes.
+     * Find and initialize checkboxes.
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState The saved state of the fragment (not used in this case).
+     * @return A View representing the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
 
         View view = inflater.inflate(R.layout.fragment_handling_info, container, false);
 
@@ -129,6 +149,8 @@ public class HandlingInfoFragment extends Fragment
         M = view.findViewById(R.id.medium);
         L = view.findViewById(R.id.large);
         XL = view.findViewById(R.id.xlarge);
+
+        // Set up listeners for package size checkboxes
 
         S.setOnCheckedChangeListener((buttonView, isChecked) ->
         {
@@ -214,14 +236,22 @@ public class HandlingInfoFragment extends Fragment
             }
         });
 
-
         chkOption1 = view.findViewById(R.id.fluentOption);
         chkOption2 = view.findViewById(R.id.fragileOption);
         chkOption3 = view.findViewById(R.id.glasOption);
-        chkOption4 = view.findViewById(R.id.noOption);
+        chkOption4 = view.findViewById(R.id.noOption); // Assuming you have this checkbox in your layout
         chkOption5 = view.findViewById(R.id.heavy);
         confirmButton = view.findViewById(R.id.confirmButton);
 
+        /**
+         * OnClickListener for the date selection button.
+         *
+         * This method displays a DatePickerDialog allowing the user to select a date for delivery.
+         * It also handles validation to ensure that the selected date is not in the past and not on the same day after 13:00.
+         * The selected date is then formatted and displayed in the date TextView.
+         *
+         * @param v The View that was clicked (the date selection button).
+         */
         date.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -234,7 +264,6 @@ public class HandlingInfoFragment extends Fragment
                     {
                         Calendar selectedCalendar = Calendar.getInstance();
                         selectedCalendar.set(year, month, day);
-
                         Calendar todayCalendar = Calendar.getInstance();
 
                         if (selectedCalendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
@@ -252,7 +281,7 @@ public class HandlingInfoFragment extends Fragment
                             myCalendar.set(Calendar.MONTH, month);
                             myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-                            String myFormat = "yyyy-MM-dd";
+                            String myFormat = "yyyy-MM-dd"; // Ändere das Format zu "dd-MM-yyyy"
                             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
                             setDate = dateFormat.format(myCalendar.getTime());
                             date.setText(setDate);
@@ -281,7 +310,7 @@ public class HandlingInfoFragment extends Fragment
         chkOption4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
             {
-                selectedInfo.setLength(0);
+                selectedInfo.setLength(0); // Entferne alle anderen ausgewählten Handlungsinformationen
                 selectedInfo.append("Keine besondere Eigenschaft").append("&");
 
                 chkOption1.setChecked(false);
@@ -292,17 +321,19 @@ public class HandlingInfoFragment extends Fragment
             {
                 selectedInfo.replace(selectedInfo.indexOf("Keine besondere Eigenschaft"), selectedInfo.indexOf("Keine besondere Eigenschaft") + "Keine besondere Eigenschaft".length() + 1, "");
             }
-
-
             boolean keineBesondereEigenschaftSelected = selectedInfo.indexOf("Keine besondere Eigenschaft") != -1;
             chkOption1.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption2.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption3.setEnabled(!keineBesondereEigenschaftSelected);
             chkOption5.setEnabled(!keineBesondereEigenschaftSelected);
         });
-
         chkOption5.setOnCheckedChangeListener(createCheckedChangeListener("Schwer"));
 
+        /**
+         * Sets an OnClickListener for the confirmation button. When the button is clicked, this method performs several checks
+         * and updates the client information with selected data. If all required fields are filled, it navigates to the
+         * DeliveryDetailsFragment and passes the client information.
+         */
         confirmButton.setOnClickListener(v ->
         {
             String customDropOffPlace = customDropOffEditText.getText().toString();
@@ -317,7 +348,7 @@ public class HandlingInfoFragment extends Fragment
                 clientInfo.setPackageSize(packageSizeInfo.toString());
                 if (selectedInfo.length() > 0)
                 {
-                    selectedInfo.setLength(selectedInfo.length() - 1); // Entferne das letzte "&"
+                    selectedInfo.setLength(selectedInfo.length() - 1);
                     clientInfo.setHandlingInfo(selectedInfo.toString());
                 } else
                 {
@@ -342,10 +373,9 @@ public class HandlingInfoFragment extends Fragment
                 Bundle args = new Bundle();
                 args.putSerializable("order", clientInfo);
                 deliveryDetailsFragment.setArguments(args);
-
                 transaction.replace(R.id.frame_layout, deliveryDetailsFragment, "deliveryDetailsFragment");
                 transaction.addToBackStack(null);
-
+                transaction.commit();
             }
         });
 
@@ -358,5 +388,6 @@ public class HandlingInfoFragment extends Fragment
 
         return view;
     }
+
 
 }

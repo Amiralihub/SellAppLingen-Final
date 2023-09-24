@@ -18,6 +18,14 @@ public class OrderSuccessFragment extends Fragment
         {
         }
 
+        /**
+         * Fragment for displaying a success message with an order ID.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+         * @param container          The parent view that the fragment's UI should be attached to.
+         * @param savedInstanceState The saved state of the fragment (not used in this case).
+         * @return A View representing the fragment's UI.
+         */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState

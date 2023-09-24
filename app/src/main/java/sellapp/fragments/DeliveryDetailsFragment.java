@@ -39,6 +39,13 @@ public class DeliveryDetailsFragment extends Fragment
 
         }
 
+
+        /**
+         * Create a new instance of DeliveryDetailsFragment with the given order data.
+         *
+         * @param order The order to be displayed in this fragment.
+         * @return A new instance of DeliveryDetailsFragment with the provided order data.
+         */
     public static DeliveryDetailsFragment newInstance(Order order)
         {
         DeliveryDetailsFragment fragment = new DeliveryDetailsFragment();
@@ -56,7 +63,12 @@ public class DeliveryDetailsFragment extends Fragment
         return testOrder;
         }
 
-
+        /**
+         * Sends the order data to the server and handles the server's response.
+         * This method performs an asynchronous POST request to the server to submit the order data
+         * and processes the server's response, displaying the order ID if successful or showing
+         * an error message in case of communication or response processing issues.
+         */
     private void sendOrderDataToServer()
         {
 
@@ -83,27 +95,11 @@ public class DeliveryDetailsFragment extends Fragment
             }
         }
 
-    private void showSuccessMessage()
-        {
-        requireActivity().runOnUiThread(new Runnable()
-            {
-            @Override
-            public void run()
-                {
-                Toast.makeText(
-                        requireContext(), "Daten erfolgreich an den Server gesendet.",
-                        Toast.LENGTH_SHORT
-                              ).show();
-
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame_layout, ScannerFragment.newInstance(order));
-                transaction.commit();
-                }
-            });
-        }
-
-
+        /**
+         * Displays a popup dialog showing the order ID and an option to navigate back to the ScannerFragment.
+         *
+         * @param orderId The order ID to display in the popup.
+         */
     private void showOrderIdPopup(String orderId)
         {
         requireActivity().runOnUiThread(new Runnable()
@@ -144,6 +140,14 @@ public class DeliveryDetailsFragment extends Fragment
             });
         }
 
+        /**
+         * Called to create and return the view hierarchy associated with the fragment.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+         * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+         * @return The root view of the fragment's layout.
+         */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
@@ -165,7 +169,12 @@ public class DeliveryDetailsFragment extends Fragment
                 }
             });
 
-
+            /**
+             * Click event handler for the "Confirm" button. It generates a timestamp, sets it in the order object,
+             * and sends the order data to the server.
+             *
+             * @param v The View that was clicked (the "Confirm" button).
+             */
         confirmButton.setOnClickListener(new View.OnClickListener()
             {
             @Override
@@ -185,7 +194,18 @@ public class DeliveryDetailsFragment extends Fragment
                 }
             });
 
-        // Hole das Order-Objekt aus den Fragment-Argumenten
+            /**
+             * Inflates the layout for the DeliveryDetailsFragment and initializes UI components
+             * with order information if available.
+             *
+             * @param inflater           The LayoutInflater object that can be used to inflate
+             *                           any views in the fragment.
+             * @param container          If non-null, this is the parent view that the fragment's
+             *                           UI should be attached to. The fragment should not add the view itself,
+             *                           but this can be used to generate the LayoutParams of the view.
+             * @param savedInstanceState A saved instance state if available, null otherwise.
+             * @return The root View for the fragment's UI or null.
+             */
         Bundle args = getArguments();
         if (args != null && args.containsKey("order"))
             {
@@ -230,18 +250,16 @@ public class DeliveryDetailsFragment extends Fragment
             TextView zipLabel = view.findViewById(R.id.zipValue);
             zipLabel.setText(order.getRecipient().getAddress().getZip() + " ");
 
-
-            // Weitere TextViews für andere Order-Informationen hinzufügen
-            // Hier kannst du weitere TextViews hinzufügen, um andere Order-Informationen anzuzeigen
-            // Beispiel:
-            // TextView additionalInfoValue = view.findViewById(R.id.additionalInfoValue);
-            // additionalInfoValue.setText(order.getAdditionalInfo());
             }
-
 
         return view;
         }
 
+        /**
+         * Displays an error message in the form of a Toast on the UI thread.
+         *
+         * @param msg The error message to display.
+         */
     private void showErrorPopup(String msg)
         {
         requireActivity().runOnUiThread(new Runnable()
@@ -254,24 +272,30 @@ public class DeliveryDetailsFragment extends Fragment
             });
         }
 
+        /**
+         * Navigates to the ManualInputFragment, allowing the user to manually input address details.
+         * Sets the necessary arguments for the ManualInputFragment and adds it to the back stack for navigation history.
+         */
         private void navigateToManualInputFragment() {
-
-
             FragmentManager fragmentManager = requireFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-
+            // Create a new instance of ManualInputFragment
             ManualInputFragment manualInputFragment = new ManualInputFragment();
+
+            // Set the arguments for the ManualInputFragment, including the order and editing status
             Bundle args = new Bundle();
             args.putSerializable("order", order);
             args.putBoolean("isEditingAddress", isEditingAddress);
             manualInputFragment.setArguments(args);
 
+            // Replace the current fragment with the ManualInputFragment
             customerapp.models.customerapp.FragmentManagerHelper.replace(
                     requireFragmentManager(), R.id.frame_layout, manualInputFragment);
+
+            // Add the transaction to the back stack for navigation history
             transaction.addToBackStack(null);
             transaction.commit();
-
         }
 
 
