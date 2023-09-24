@@ -1,4 +1,4 @@
-package sellapp.fragments;
+package sellapp.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

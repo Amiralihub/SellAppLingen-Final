@@ -43,7 +43,7 @@
         </activity> <!-- CaptureActivity for QR Code Scanner -->
 
         <activity
-            android:name="sellapp.fragments.ChangePasswordActivity"
+            android:name="sellapp.activities.ChangePasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
             tools:replace="android:screenOrientation,android:theme" />

@@ -145,7 +145,7 @@ public class ValidationManager
             editZip.setError("Bitte geben Sie eine gültige PLZ ein (49808, 49809, 49811)");
             }
 
-        if (houseNumber.trim().isEmpty() || !isMixNumeric(telephone.trim()))
+        if (telephone.trim().isEmpty() || !isMixNumeric(telephone.trim()))
             {
             isValid = false;
             editTelephone.setError("Bitte geben Sie eine gültige Telefonnummer ein");
@@ -166,7 +166,7 @@ public class ValidationManager
 
 
 
-    private static boolean isMixNumeric(String str)
+    public static boolean isMixNumeric(String str)
         {
         return str.matches("-?\\d+(\\.\\d+)?");
         }
