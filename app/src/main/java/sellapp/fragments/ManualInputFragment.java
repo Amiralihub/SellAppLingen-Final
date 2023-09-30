@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,7 +28,7 @@ public class ManualInputFragment extends Fragment
     {
 
     private boolean isEditingAddress = false;
-
+    private AppCompatImageButton backButton;
     private FragmentManualInputBinding binding;
     private Order currentOrder;
     private String selectedZipCode = "";
@@ -69,10 +70,9 @@ public class ManualInputFragment extends Fragment
                     }
                 }
             }
+        binding.backButton.setOnClickListener(v -> customerapp.models.customerapp.FragmentManagerHelper.goBackToPreviousFragment(requireActivity().getSupportFragmentManager()));
 
         return binding.getRoot();
-
-
         }
 
     /**
