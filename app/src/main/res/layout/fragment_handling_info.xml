@@ -11,13 +11,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <!-- Paket Größe auswählen -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Paket Größe auswählen *"
             android:textStyle="bold"
+            style="@style/Text"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
@@ -58,8 +57,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Handling Info *"
+            android:text="Handhabungsinformationen *"
             android:textStyle="bold"
+            style="@style/Text"
             android:layout_marginBottom="8dp" />
 
         <!-- Ablageort -->
@@ -123,7 +123,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ablageort (Optional)"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                style="@style/Text"/>
 
             <EditText
                 android:id="@+id/customDropOffEditText"
@@ -138,12 +139,7 @@
 
         </LinearLayout>
 
-        <View
-            style="@style/View"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+
 
         <!-- Lieferdatum wählen -->
         <LinearLayout
@@ -156,22 +152,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lieferdatum wählen *"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                style="@style/Text"/>
 
             <Button
                 android:id="@+id/calendarView"
                 style="@style/Text"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:backgroundTint="@color/lavender"
                 android:gravity="center"
+                android:drawableRight="@drawable/baseline_calendar_month_24"
                 android:text="Datum festlegen" />
 
         </LinearLayout>
 
-        <!-- Mitarbeiter Kürzel -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -182,7 +181,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mitarbeiter Kürzel (Optional)"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                style="@style/Text"/>
 
             <EditText
                 android:id="@+id/recipientNameEditText"
@@ -197,24 +197,17 @@
 
         </LinearLayout>
 
-        <View
-            style="@style/View"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Bestätigen Button -->
         <Button
             android:id="@+id/confirmButton"
             style="@style/Text"
-            android:layout_width="170dp"
-            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/lavender"
-            android:drawableLeft="@drawable/baseline_check_24"
             android:text="Bestätigen"
+            android:drawableRight="@drawable/baseline_check_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
