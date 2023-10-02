@@ -26,7 +26,7 @@ import com.example.sellapplingen.databinding.FragmentManualInputBinding;
 public class ManualInputFragment extends Fragment
     {
 
-    private boolean isEditingAddress;
+    private boolean isEditingAddress = false;
 
     private FragmentManualInputBinding binding;
     private Order currentOrder;
