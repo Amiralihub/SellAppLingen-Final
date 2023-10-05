@@ -218,7 +218,7 @@ public class ManualInputFragment extends Fragment
         if (street.trim().isEmpty() || !isNumeric(street.trim()))
             {
             isValid = false;
-            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein, Bitte Ohne - oder Zahlen.");
+            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein, Bitte ohne Sonderzeichen oder Zahlen.");
             }
 
         if (houseNumber.trim().isEmpty())
