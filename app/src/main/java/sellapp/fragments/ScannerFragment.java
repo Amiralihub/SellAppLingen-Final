@@ -136,7 +136,8 @@ public class ScannerFragment extends Fragment
             new AlertDialog.Builder(requireContext())
                     .setTitle("Kameraerlaubnis erforderlich")
                     .setMessage("Die Kameraerlaubnis wird benötigt, um den QR-Code zu scannen.")
-                    .setPositiveButton("OK", (dialog, which) -> ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE))
+                    .setPositiveButton("OK", (dialog, which) -> ActivityCompat.requestPermissions(requireActivity(),
+                                                                                                  new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE))
                     .setNegativeButton("Abbrechen", (dialog, which) -> dialog.dismiss())
                     .create()
                     .show();

@@ -14,16 +14,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:backgroundTint="@color/lavender"
-            android:padding="12dp"
-            android:src="@drawable/baseline_arrow_back_24"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
         <ImageView
             android:id="@+id/addressImageView"
             android:layout_width="200dp"

@@ -182,7 +182,7 @@ public class ManualInputFragment extends Fragment
             else
                 {
                 Toast.makeText(
-                             requireContext(), "Bitte füllen Sie alle Felder aus.", Toast.LENGTH_SHORT)
+                             requireContext(), "Bitte füllen Sie alle Felder korrekt aus.", Toast.LENGTH_SHORT)
                      .show();
                 }
             }
@@ -218,7 +218,7 @@ public class ManualInputFragment extends Fragment
         if (street.trim().isEmpty() || !isNumeric(street.trim()))
             {
             isValid = false;
-            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein");
+            binding.streetEditText.setError("Bitte geben Sie eine gültige Straße ein, Bitte Ohne - oder Zahlen.");
             }
 
         if (houseNumber.trim().isEmpty())
