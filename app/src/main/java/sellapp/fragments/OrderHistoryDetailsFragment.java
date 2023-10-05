@@ -20,7 +20,7 @@ import sellapp.models.Order;
 
 
 public class OrderHistoryDetailsFragment extends Fragment
-{
+    {
     private Order order;
     public TextView deliveryDetailsTextView;
     public TextView addressDetailsTextView;
@@ -46,14 +46,14 @@ public class OrderHistoryDetailsFragment extends Fragment
     public ImageButton backToHistoryButton;
 
     public OrderHistoryDetailsFragment()
-    {
-    }
+        {
+        }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
-    {
+        {
         super.onCreate(savedInstanceState);
-    }
+        }
 
     /**
      * Inflates the layout for the Order History Details Fragment and populates its views with data
@@ -67,13 +67,17 @@ public class OrderHistoryDetailsFragment extends Fragment
      */
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+                            )
+        {
         View view = inflater.inflate(R.layout.fragment_order_history_details, container, false);
         if (getArguments() != null)
-        {
+            {
             order = (Order) getArguments().getSerializable("selected_order");
-        }
+            }
 
         deliveryDetailsTextView = view.findViewById(R.id.deliveryDetailsTextView);
         addressDetailsTextView = view.findViewById(R.id.addressDetailsTextView);
@@ -95,32 +99,37 @@ public class OrderHistoryDetailsFragment extends Fragment
         recipientCityTextView = view.findViewById(R.id.recipientCityTextView);
         orderCityTextView = view.findViewById(R.id.orderCityTextView);
         deliveryImageView = view.findViewById(R.id.deliveryImageView);
-        recipientOrderDropPlaceDateTextView = view.findViewById(R.id.recipientOrderDropPlaceDateTextView);
+        recipientOrderDropPlaceDateTextView = view.findViewById(
+                R.id.recipientOrderDropPlaceDateTextView);
 
 
         if (order != null)
-        {
+            {
             recipientOrderNumberTextView.setText(order.getOrderID());
             recipientOrderDateTextView.setText(dateFormater(order.getTimestamp()));
             recipientOrderDropPlaceDateTextView.setText(dateFormater(order.getDeliveryDate()));
             employeeOrderTextView.setText(order.getEmployeeName());
             recipientOrderPackageTextView.setText(order.getPackageSize());
             recipientOrderDropPlaceTextView.setText(order.getCustomDropOffPlace());
-            recipientOrderTextView.setText(order.getRecipient().getFirstName() + " " + order.getRecipient().getLastName());
-            orderStreetTextView.setText(order.getRecipient().getAddress().getStreet() + " " + order.getRecipient().getAddress().getHouseNumber());
+            recipientOrderTextView.setText(
+                    order.getRecipient().getFirstName() + " " + order.getRecipient().getLastName());
+            orderStreetTextView.setText(order.getRecipient().getAddress().getStreet() +
+                                        " " +
+                                        order.getRecipient().getAddress().getHouseNumber());
             orderCityTextView.setText(order.getRecipient().getAddress().getZip() + " Lingen");
-        }
+            }
 
 
         backToHistoryButton = view.findViewById(R.id.backToHistoryButton);
         backToHistoryButton.setOnClickListener(v ->
-        {
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            goBackToPreviousFragment(fragmentManager);
-        });
+                                                   {
+                                                   FragmentManager fragmentManager
+                                                           = requireActivity().getSupportFragmentManager();
+                                                   goBackToPreviousFragment(fragmentManager);
+                                                   });
 
         return view;
-    }
+        }
 
     /**
      * Formats a timestamp string to extract and return the hour portion.
@@ -129,9 +138,9 @@ public class OrderHistoryDetailsFragment extends Fragment
      * @return The hour portion of the timestamp.
      */
     public String dateFormater(String update)
-    {
-        String newFormat [] = update.split(":");
+        {
+        String newFormat[] = update.split(":");
         return newFormat[0];
-    }
+        }
 
-}
+    }

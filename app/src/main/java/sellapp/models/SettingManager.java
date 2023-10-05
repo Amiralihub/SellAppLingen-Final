@@ -1,6 +1,10 @@
 package sellapp.models;
 
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -14,14 +18,34 @@ public class SettingManager
 
     private static final Gson gson = new Gson();
 
+    /**
+     * This class contains constants for parameters that can be used in various contexts.
+     */
     public class Parameter
         {
+
+        /**
+         * The name of the store.
+         */
         public static final String STORE_NAME = "storeName";
+
+        /**
+         * The name of the store owner.
+         */
         public static final String OWNER = "owner";
+
+        /**
+         * The telephone number of the store.
+         */
         public static final String TELEPHONE = "telephone";
+
+        /**
+         * The email address of the store.
+         */
         public static final String EMAIL = "email";
         }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static StoreDetails getSettings()
         {
         CompletableFuture<String> getSettingsFuture = NetworkManager.sendGetRequest(
@@ -47,6 +71,7 @@ public class SettingManager
         }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static Boolean setSettings(String parameter, String value)
         {
         try
@@ -69,6 +94,7 @@ public class SettingManager
             }
         }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static boolean setAddress(SetAddress address)
         {
         try

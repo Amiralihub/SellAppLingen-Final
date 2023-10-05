@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,6 +66,7 @@ public class OrderHistoryFragment extends Fragment
          * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
          * @return The root view of the fragment's layout.
          */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(
             LayoutInflater inflater,
@@ -125,7 +128,6 @@ public class OrderHistoryFragment extends Fragment
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Die Filtermethode mit dem aktuellen Text aufrufen
                 orderHistoryAdapter.filter(charSequence.toString());
                 }
 
@@ -145,6 +147,7 @@ public class OrderHistoryFragment extends Fragment
          * @return An ArrayList containing the downloaded orders as Order objects.
          * @throws RuntimeException If there is an error while parsing JSON data or if no data is received from the server.
          */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private ArrayList<Order> downloadData(String urlStr)
         {
         ArrayList<Order> allOrders = new ArrayList<>();

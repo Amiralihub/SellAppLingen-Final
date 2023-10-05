@@ -1,10 +1,12 @@
 package sellapp.fragments;
 
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.sellapplingen.R;
@@ -108,6 +111,7 @@ public class SettingFragment extends Fragment
      * @param savedInstanceState The saved instance state.
      * @return The View of the inflated fragment.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(
@@ -361,6 +365,7 @@ public class SettingFragment extends Fragment
         requireActivity().finish();
         }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean updateAddressIfNeeded(String street, String houseNumber, String zip)
         {
         Address oldAddress = settings.getAddress();
@@ -378,7 +383,7 @@ public class SettingFragment extends Fragment
                 Toast.makeText(
                         requireContext(), "Die Adresse wurde erfolgreich übermittelt!",
                         Toast.LENGTH_SHORT
-                              ).show();  //GET Adress vom server vllt Sinnig?
+                              ).show();
                 return true;
                 }
             else
@@ -407,6 +412,7 @@ public class SettingFragment extends Fragment
      * fields fail validation, an error message is displayed to the user.
      * @see ValidationManager
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void showConfirmationDialog()
         {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -515,6 +521,7 @@ public class SettingFragment extends Fragment
      * @see #showSuccessPopup()
      * @see #showErrorPopup()
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void sendSettings(String parameter, String value)
         {
         try
