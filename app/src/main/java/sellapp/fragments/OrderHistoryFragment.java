@@ -128,7 +128,6 @@ public class OrderHistoryFragment extends Fragment
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
                 {
-                // Die Filtermethode mit dem aktuellen Text aufrufen
                 orderHistoryAdapter.filter(charSequence.toString());
                 }
 

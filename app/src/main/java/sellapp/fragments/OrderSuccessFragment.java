@@ -33,6 +33,9 @@ public class OrderSuccessFragment extends Fragment
         {
         View view = inflater.inflate(R.layout.fragment_order_success, container, false);
 
+
+
+
         TextView orderIdTextView = view.findViewById(R.id.orderIdTextView);
 
         Bundle args = getArguments();
